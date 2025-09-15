@@ -52,7 +52,7 @@ MRPTRADERS simplifies import/export operations with features for clients, seller
 ## 🧱 Tech Stack
 
 ### 🔹 Frontend
-- **Framework**: Next.js (React)
+- **Framework**: React.js
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 
@@ -62,18 +62,18 @@ MRPTRADERS simplifies import/export operations with features for clients, seller
 - **File Storage**: AWS S3 or Firebase Storage
 
 ### 🔹 Database
-- **Primary**: MongoDB Atlas
+- **Primary**: Firebase 
 - **Secondary**: Firebase (Auth & Notifications)
 
 ### 🔹 Integrations
 - **Payments**: Stripe, Razorpay, PayPal
-- **Messaging**: WhatsApp API, Twilio SMS
+- **Messaging**: WhatsApp API
 - **Maps**: Google Maps API
 
 ### 🔹 Deployment
 - **Frontend**: Vercel or Netlify
 - **Backend**: AWS or DigitalOcean
-- **Database**: MongoDB Atlas Cloud
+- **Database**: FireBase Cloud
 
 ---
 
@@ -135,18 +135,12 @@ MRPTRADERS simplifies import/export operations with features for clients, seller
 
 ---
 
-## 📬 Contact
 
-📧 Email: your-email@example.com  
-🌐 Website: [www.mrptraders.com](https://www.mrptraders.com) *(placeholder)*  
-📱 WhatsApp: [Click to Chat](https://wa.me/your-number)
-
----
 
 ## 🛡 License
 
 This project is licensed under the **MIT License** — feel free to use, modify, and contribute.
 
----
+---.
 
 > © MRPTRADERS — Empowering global trade, one shipment at a time.
