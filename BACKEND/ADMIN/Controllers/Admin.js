@@ -1,5 +1,6 @@
 import db from "../../FirebaseDB/DBConnection.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import { generateToken } from "../../utils/jwt.js";
 // getAllAdmins - fetch all admins from Firestore
 
 const GetAllAdmins = async (req, res) => {
@@ -21,30 +22,30 @@ const GetAllAdmins = async (req, res) => {
 // Create a new admin
 const CreateAdmin = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { username, password, role = "admin" } = req.body;
 
     // Validate required fields
-    if (!email || !password || !role) {
+    if (!username || !password || !role) {
       return res.status(400).json({
         status: "error",
-        message: "Email, password, and role are required.",
+        message: "username and password are required.",
       });
     }
-    // Check if admin with same email already exists
+    // Check if admin with same username already exists
     const existingAdminSnapshot = await db
       .collection("admin")
-      .where("email", "==", email)
+      .where("username", "==", username)
       .get();
 
     if (!existingAdminSnapshot.empty) {
       return res.status(409).json({
         status: "error",
-        message: "Admin with this email already exists.",
+        message: "Admin with this username already exists.",
       });
     }
     const hash = await bcrypt.hash(password, 10);
     const newAdmin = {
-      email,
+      username,
       Hashed_password: hash,
       role,
       createdAt: new Date().toISOString(),
@@ -103,21 +104,21 @@ const DeleteAdmin = async (req, res) => {
 
 // admin login
 const AdminLogin = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!email || !password) {
+  if (!username || !password) {
     return res.status(400).json({
       status: "error",
       errorCode: "MISSING_FIELDS",
-      message: "Email and password are required.",
+      message: "username and password are required.",
     });
   }
 
   try {
-    // Search admin by email
+    // Search admin by username
     const adminQuery = await db
       .collection("admin")
-      .where("email", "==", email)
+      .where("username", "==", username)
       .limit(1)
       .get();
 
@@ -125,7 +126,7 @@ const AdminLogin = async (req, res) => {
       return res.status(401).json({
         status: "error",
         errorCode: "INVALID_CREDENTIALS",
-        message: "Invalid email or password.",
+        message: "Invalid username or password.",
       });
     }
 
@@ -137,22 +138,25 @@ const AdminLogin = async (req, res) => {
       password,
       adminData.Hashed_password
     );
-    console.log(passwordMatch);
 
     if (!passwordMatch) {
       return res.status(401).json({
         status: "error",
         errorCode: "INVALID_CREDENTIALS",
-        message: "Invalid email or password.",
+        message: "Invalid username or password.",
       });
     }
-
+    const SECRET_TOKEN = generateToken({
+      username: adminData.username,
+      role: adminData.role,
+    });
     // Login success
     return res.status(200).json({
       status: "success",
       message: "Login successful.",
-      adminId: adminDoc.id,
-      email: adminData.email,
+      // adminId: adminDoc.id,
+      // username: adminData.username,
+      SECRET_TOKEN,
     });
   } catch (error) {
     console.error("Login error:", error);
