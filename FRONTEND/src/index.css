@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Testimonials auto-scroll */
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  width: fit-content;
+  animation: scroll 25s linear infinite;
+}
+
+@layer components {
+  .NavLink {
+    @apply relative text-secondarylight px-2 py-1 font-medium transition-colors duration-1000 hover:text-gray-100 before:content-[''] before:absolute before:left-1/2 before:translate-x-[-50%] before:bottom-0 before:h-0.5  before:bg-secondary before:transition-all hover:before:w-full;
+  }
+}
