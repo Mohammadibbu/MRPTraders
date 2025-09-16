@@ -30,17 +30,16 @@ const Banner: React.FC<BannerProps> = ({ text, buttonText, onButtonClick }) => {
   };
 
   return (
-    <>
+    <div className="hidden md:block lg:block">
       {isBannerVisible && (
         <div
-          className={`fixed w-full bottom-0 left-0 z-[200] flex items-center justify-between bg-secondary text-primary p-4 shadow-md transition-all duration-1000 ease-in-out transform ${
+          className={`fixed w-full bottom-0 left-0 z-[200] flex  items-center justify-between bg-secondary text-primary p-4 shadow-md transition-all duration-1000 ease-in-out transform ${
             isExiting
               ? "opacity-0 translate-y-[100px]"
               : "opacity-100 translate-y-0"
           }`}
         >
-          <div className="flex"></div>
-          <div className="flex items-center justify-start">
+          <div className="flex mx-auto items-center justify-start">
             <p className="text-sm sm:text-base md:text-lg">
               <strong>GeneriCon 2023</strong> - {text}
             </p>
@@ -63,7 +62,7 @@ const Banner: React.FC<BannerProps> = ({ text, buttonText, onButtonClick }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* body {
+  font-family: "Epunda Slab", serif;
+} */
 /* Testimonials auto-scroll */
 @keyframes scroll {
   0% {
