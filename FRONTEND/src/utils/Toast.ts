@@ -39,6 +39,7 @@ const toastOptions = (description: string, duration: number) => ({
     fontSize: "14px",
     border: "none",
     boxShadow: "rgb(95, 26, 53) 2px 2px 5px 0px",
+    userSelect: "none" as "none",
   },
 });
 

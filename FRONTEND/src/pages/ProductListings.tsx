@@ -6,11 +6,12 @@ import ProductFilter from "../components/Products/ProductFilter";
 import SkeletonLoader from "../components/UI/SkeletonLoader";
 import { motion } from "framer-motion";
 import { Product } from "../types";
+import { showtoast } from "../utils/Toast";
 
 const ProductListings: React.FC = () => {
   const { category } = useParams<{ category: "imports" | "exports" }>();
   const { products, searchTerm } = useApp();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [filters, setFilters] = useState({
     category: category || "all",
@@ -52,7 +53,7 @@ const ProductListings: React.FC = () => {
 
   const handleAddToCart = (product: Product) => {
     // In a real app, this would add to cart/inquiry
-    alert(`Added ${product.name} to inquiry list!`);
+    showtoast(`Added ${product.name} to inquiry list!`);
   };
 
   const categoryTitle =
@@ -71,30 +72,30 @@ const ProductListings: React.FC = () => {
           className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full"
           animate={{
             y: [0, -20, 0],
-            opacity: [0.3, 0.6, 0.3]
+            opacity: [0.3, 0.6, 0.3],
           }}
           transition={{
             duration: 4,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
         <motion.div
           className="absolute bottom-10 right-10 w-16 h-16 bg-white/10 rounded-full"
           animate={{
             y: [0, 20, 0],
-            opacity: [0.2, 0.5, 0.2]
+            opacity: [0.2, 0.5, 0.2],
           }}
           transition={{
             duration: 5,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 1
+            delay: 1,
           }}
         />
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -102,7 +103,7 @@ const ProductListings: React.FC = () => {
           >
             {categoryTitle}
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-xl md:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -110,7 +111,7 @@ const ProductListings: React.FC = () => {
           >
             {categoryDescription}
           </motion.p>
-          <motion.div 
+          <motion.div
             className="text-white"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -132,20 +133,22 @@ const ProductListings: React.FC = () => {
             <SkeletonLoader type="product" count={8} />
           </div>
         ) : filteredProducts.length === 0 ? (
-          <motion.div 
+          <motion.div
             className="text-center py-20"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             <div className="text-6xl mb-6">🔍</div>
-            <div className="text-gray-500 text-2xl font-semibold mb-4">No products found</div>
+            <div className="text-gray-500 text-2xl font-semibold mb-4">
+              No products found
+            </div>
             <p className="text-gray-400 text-lg max-w-md mx-auto">
               Try adjusting your filters or search terms
             </p>
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

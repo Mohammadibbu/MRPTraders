@@ -4,6 +4,7 @@ import { showtoast, showToastPromise } from "../utils/Toast";
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import Animation from "../utils/Animation"; // Import the Animation component
+import GradientButton from "../components/UI/GradientButton";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -291,15 +292,18 @@ const Contact: React.FC = () => {
                           placeholder="Tell us about your requirements, preferred products, quantities, etc."
                         />
                       </div>
-
-                      <button
+                      <GradientButton
                         type="submit"
-                        className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+                        variant="primary"
+                        size="md"
+                        icon={Send}
+                        iconPosition="right"
+                        loading={loading}
+                        className="shadow-md w-full"
                         disabled={loading}
                       >
-                        <Send className="h-5 w-5" />
-                        <span>{loading ? "Sending..." : "Send Message"}</span>
-                      </button>
+                        {loading ? " Sending Message..." : " Send Message"}
+                      </GradientButton>
                     </form>
                   </div>
                 </div>

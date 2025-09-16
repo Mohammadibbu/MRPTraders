@@ -86,11 +86,15 @@ const UserTable: React.FC = () => {
         transition={{ duration: 0.6 }}
         className="mb-8"
       >
-        <h1 className="text-3xl font-bold gradient-text mb-2">Admin Management</h1>
-        <p className="text-gray-600">Manage system administrators and their permissions</p>
+        <h1 className="text-3xl font-bold gradient-text mb-2">
+          Admin Management
+        </h1>
+        <p className="text-gray-600">
+          Manage system administrators and their permissions
+        </p>
       </motion.div>
-      
-      <motion.div 
+
+      <motion.div
         className="overflow-x-auto bg-white/95 backdrop-blur-sm shadow-xl rounded-2xl border border-gray-100"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -114,8 +118,8 @@ const UserTable: React.FC = () => {
               </tr>
             ) : users.length > 0 ? (
               users.map((user, index) => (
-                <motion.tr 
-                  key={user.id} 
+                <motion.tr
+                  key={user.id}
                   className="hover:bg-gray-50 transition-colors duration-200"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -127,7 +131,9 @@ const UserTable: React.FC = () => {
                         {user.username.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="font-medium text-gray-900">{user.username}</div>
+                        <div className="font-medium text-gray-900">
+                          {user.username}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -150,7 +156,7 @@ const UserTable: React.FC = () => {
                       >
                         View
                       </GradientButton>
-                    {/* <button className="bg-secondary text-white px-4 py-2 rounded mr-2">
+                      {/* <button className="bg-secondary text-white px-4 py-2 rounded mr-2">
                       Edit
                     </button> */}
                       <GradientButton
@@ -181,7 +187,6 @@ const UserTable: React.FC = () => {
                       No administrators found
                     </span>
                   </motion.div>
-                  </span>
                 </td>
               </tr>
             )}

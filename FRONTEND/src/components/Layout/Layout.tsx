@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import FloatingWhatsApp from "../UI/FloatingWhatsApp";
-
+import ScrollToTop from "../UI/ScrollToTop";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -13,6 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <ScrollToTop />
       <FloatingWhatsApp />
     </div>
   );
