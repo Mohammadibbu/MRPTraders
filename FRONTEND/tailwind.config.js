@@ -9,6 +9,28 @@ export default {
         secondarylight: "#F7F4F1",
         primary: "#5F1A35",
       },
+      animation: {
+        shimmer: 'shimmer 2s infinite',
+        float: 'float 3s ease-in-out infinite',
+        glow: 'glow 2s ease-in-out infinite alternate',
+        'spin-slow': 'spin 3s linear infinite',
+        'bounce-slow': 'bounce 2s infinite',
+        'pulse-slow': 'pulse 3s infinite',
+      },
+      keyframes: {
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        glow: {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(95, 26, 53, 0.5)' },
+          '50%': { boxShadow: '0 0 20px rgba(95, 26, 53, 0.8), 0 0 30px rgba(204, 187, 174, 0.6)' },
+        },
+      },
       gradients: {
         primaryGradient: "linear-gradient(135deg, #5F1A35, #CCBBAE)",
         lightFadeGradient: "linear-gradient(135deg, #CCBBAE, #5F1A35)",
@@ -22,13 +44,34 @@ export default {
       },
       boxShadow: {
         "button-primary": "0 4px 12px rgba(95, 26, 53, 0.4)",
+        "button-hover": "0 8px 25px rgba(95, 26, 53, 0.5)",
         card: "0 2px 8px rgba(0, 0, 0, 0.05)",
+        "card-hover": "0 10px 40px rgba(95, 26, 53, 0.15)",
+        glow: "0 0 20px rgba(95, 26, 53, 0.5)",
+        "glow-lg": "0 0 40px rgba(95, 26, 53, 0.6)",
+      },
+      backdropBlur: {
+        xs: '2px',
       },
       spacing: {
         "hero-padding": "40px",
+        18: "4.5rem",
+        88: "22rem",
       },
       borderRadius: {
         button: "8px",
+        "4xl": "2rem",
+      },
+      screens: {
+        xs: "475px",
+        "3xl": "1600px",
+      },
+      zIndex: {
+        60: "60",
+        70: "70",
+        80: "80",
+        90: "90",
+        100: "100",
       },
     },
   },

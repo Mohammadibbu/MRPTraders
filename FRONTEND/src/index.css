@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(95, 26, 53, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(95, 26, 53, 0.8), 0 0 30px rgba(204, 187, 174, 0.6);
+  }
+}
+
 /* body {
   font-family: "Epunda Slab", serif;
 } */
@@ -21,8 +49,117 @@
   animation: scroll 25s linear infinite;
 }
 
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(95, 26, 53, 0.1);
+  border: 1px solid rgba(204, 187, 174, 0.2);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #5F1A35, #CCBBAE);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #4a1529, #b8a394);
+}
+
 @layer components {
   .NavLink {
-    @apply relative text-secondarylight px-2 py-1 font-medium transition-colors duration-1000 hover:text-gray-100 before:content-[''] before:absolute before:left-1/2 before:translate-x-[-50%] before:bottom-0 before:h-0.5  before:bg-secondary before:transition-all hover:before:w-full;
+    @apply relative text-secondarylight px-2 py-1 font-medium transition-all duration-300 hover:text-gray-100 before:content-[''] before:absolute before:left-1/2 before:translate-x-[-50%] before:bottom-0 before:h-0.5 before:w-0 before:bg-gradient-to-r before:from-secondary before:to-dustyTaupe before:transition-all before:duration-300 hover:before:w-full;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-dustyTaupe text-white font-semibold py-3 px-6 rounded-lg shadow-button-primary hover:shadow-xl hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-dustyTaupe to-secondary text-primary font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-dustyTaupe/50 focus:ring-offset-2;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary text-primary bg-transparent font-semibold py-3 px-6 rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-dustyTaupe hover:text-white hover:border-transparent transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-dustyTaupe bg-clip-text text-transparent;
+  }
+  
+  .section-padding {
+    @apply py-16 px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+  .hero-text {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  
+  .section-padding {
+    @apply py-12 px-4;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass, .glass-dark {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer,
+  .animate-float,
+  .animate-glow,
+  .animate-scroll {
+    animation: none;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }

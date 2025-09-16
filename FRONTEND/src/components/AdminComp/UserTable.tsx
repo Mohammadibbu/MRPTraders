@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { showtoast } from "../../utils/Toast"; // Make sure this imports your custom toast function
+import SkeletonLoader from "../UI/SkeletonLoader";
+import GradientButton from "../UI/GradientButton";
+import { motion } from "framer-motion";
+import { Trash2, Eye } from "lucide-react";
 
 type User = {
   id: string;
@@ -75,61 +79,115 @@ const UserTable: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
+    <div className="container mx-auto p-4 min-h-screen bg-gray-50">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="mb-8"
+      >
+        <h1 className="text-3xl font-bold gradient-text mb-2">Admin Management</h1>
+        <p className="text-gray-600">Manage system administrators and their permissions</p>
+      </motion.div>
+      
+      <motion.div 
+        className="overflow-x-auto bg-white/95 backdrop-blur-sm shadow-xl rounded-2xl border border-gray-100"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
         <table className="min-w-full table-auto">
-          <thead className="bg-primary text-white">
+          <thead className="bg-gradient-to-r from-primary to-dustyTaupe text-white">
             <tr>
-              <th className="px-4 py-2">Username</th>
-              <th className="px-4 py-2">Role</th>
-              <th className="px-4 py-2">Created At</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className="px-6 py-4 text-left font-semibold">Username</th>
+              <th className="px-6 py-4 text-left font-semibold">Role</th>
+              <th className="px-6 py-4 text-left font-semibold">Created At</th>
+              <th className="px-6 py-4 text-center font-semibold">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
             {loading ? (
               <tr>
-                <td colSpan={4} className="px-4 py-4 text-center">
-                  {/* You can optionally show a loading text or a static message here */}
-                  Loading...
+                <td colSpan={4} className="px-6 py-8">
+                  <SkeletonLoader type="list" count={1} />
                 </td>
               </tr>
             ) : users.length > 0 ? (
-              users.map((user) => (
-                <tr key={user.id} className="text-center">
-                  <td className="px-4 py-2">{user.username}</td>
-                  <td className="px-4 py-2">{user.role}</td>
-                  <td className="px-4 py-2">
+              users.map((user, index) => (
+                <motion.tr 
+                  key={user.id} 
+                  className="hover:bg-gray-50 transition-colors duration-200"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-gradient-to-r from-primary to-dustyTaupe rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                        {user.username.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900">{user.username}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-primary/10 to-dustyTaupe/10 text-primary border border-primary/20">
+                      {user.role}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-gray-600">
                     {new Date(user.createdAt).toLocaleString()}
                   </td>
-                  <td className="px-4 py-2">
-                    <button className="bg-primary text-white px-4 py-2 rounded mr-2">
-                      View
-                    </button>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-center space-x-2">
+                      <GradientButton
+                        variant="secondary"
+                        size="sm"
+                        icon={Eye}
+                        iconPosition="left"
+                        className="min-w-0"
+                      >
+                        View
+                      </GradientButton>
                     {/* <button className="bg-secondary text-white px-4 py-2 rounded mr-2">
                       Edit
                     </button> */}
-                    <button
-                      className="bg-red-600 text-white px-4 py-2 rounded"
-                      onClick={() => DeletehandleClick(user.id)}
-                    >
-                      Delete
-                    </button>
+                      <GradientButton
+                        variant="outline"
+                        size="sm"
+                        icon={Trash2}
+                        iconPosition="left"
+                        onClick={() => DeletehandleClick(user.id)}
+                        className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white min-w-0"
+                      >
+                        Delete
+                      </GradientButton>
+                    </div>
                   </td>
-                </tr>
+                </motion.tr>
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="px-4 py-4 text-center">
-                  <span className="bg-red-200 px-5 py-2 rounded-lg text-red-500">
-                    Details Not Found
+                <td colSpan={4} className="px-6 py-12 text-center">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col items-center"
+                  >
+                    <div className="text-6xl mb-4">👥</div>
+                    <span className="bg-red-100 px-6 py-3 rounded-xl text-red-600 font-medium">
+                      No administrators found
+                    </span>
+                  </motion.div>
                   </span>
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-      </div>
+      </motion.div>
     </div>
   );
 };
