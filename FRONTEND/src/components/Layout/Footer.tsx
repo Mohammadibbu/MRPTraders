@@ -8,154 +8,223 @@ import {
   Mail,
   Phone,
   MapPin,
+  ArrowUp,
+  Globe,
 } from "lucide-react";
 import logo from "../../assets/images/logo.png";
+
 const Footer: React.FC = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <footer className="bg-primary text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="relative bg-primary text-secondarylight overflow-hidden">
+      {/* Animated gradient border */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-secondarylight to-transparent animate-shimmer"></div>
+
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 bg-gradient-to-br from-dustyTaupe/10 to-transparent"></div>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center ">
-              {/* <Globe className="h-8 w-8 text-[#CCBBAE]" /> */}
-              <img src={logo} alt="logo" className="h-52 w-52" />
+          <div className="space-y-6 group">
+            <div className="flex items-center space-x-3 animate-float">
+              <div className="relative">
+                <img
+                  src={logo}
+                  alt="MRPGlobal Logo"
+                  className="h-24 w-24  group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-secondarylight via-dustyTaupe to-secondarylight bg-clip-text text-transparent animate-shimmer">
+                  MRPGlobal
+                </h2>
+                <div className="flex items-center space-x-1 mt-1">
+                  <Globe className="h-3 w-3 text-dustyTaupe animate-pulse-slow" />
+                  <span className="text-xs text-dustyTaupe font-medium">
+                    Traders
+                  </span>
+                </div>
+              </div>
             </div>
-            <p className="text-gray-300 text-sm">
+
+            <p className="text-secondary text-sm leading-relaxed">
               Connecting farmers and suppliers with international buyers through
-              premium quality fruits and food products.
+              premium quality fruits and food products. Building bridges across
+              continents.
             </p>
+
+            {/* Social Media Links */}
             <div className="flex space-x-4">
-              <a
-                href="#"
-                className="text-gray-300 hover:text-[#CCBBAE] transition-colors"
-              >
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="text-gray-300 hover:text-[#CCBBAE] transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="text-gray-300 hover:text-[#CCBBAE] transition-colors"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="text-gray-300 hover:text-[#CCBBAE] transition-colors"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
+              {[
+                { icon: Facebook, href: "#", label: "Facebook" },
+                { icon: Twitter, href: "#", label: "Twitter" },
+                { icon: Instagram, href: "#", label: "Instagram" },
+                { icon: Linkedin, href: "#", label: "LinkedIn" },
+              ].map(({ icon: Icon, href, label }, index) => (
+                <a
+                  key={label}
+                  href={href}
+                  className="group relative p-2 text-secondary hover:text-dustyTaupe transition-all duration-300 hover:scale-110 transform"
+                  aria-label={label}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                  <Icon className="h-5 w-5 relative z-10 group-hover:animate-bounce-slow" />
+                </a>
+              ))}
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#CCBBAE]">
-              Quick Links
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-dustyTaupe p-2 relative group">
+              <span className="relative z-10">Quick Links</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg  "></div>
             </h3>
-            <div className="space-y-2">
-              <Link
-                to="/"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                to="/about"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                About Us
-              </Link>
-              <Link
-                to="/products/imports"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                Imports
-              </Link>
-              <Link
-                to="/products/exports"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                Exports
-              </Link>
-              <Link
-                to="/gallery"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                Gallery
-              </Link>
+            <div className="space-y-3">
+              {[
+                { to: "/", label: "Home" },
+                { to: "/about", label: "About Us" },
+                { to: "/products/imports", label: "Imports" },
+                { to: "/products/exports", label: "Exports" },
+                { to: "/gallery", label: "Gallery" },
+              ].map(({ to, label }, index) => (
+                <Link
+                  key={label}
+                  to={to}
+                  className="group flex items-center space-x-2 text-secondary hover:text-dustyTaupe transition-all duration-300 animate-shimmer"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="w-2 h-1 bg-dustyTaupe rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    {label}
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
 
           {/* Legal */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#CCBBAE]">Legal</h3>
-            <div className="space-y-2">
-              <Link
-                to="/privacy-policy"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="/terms"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                Terms & Conditions
-              </Link>
-              <Link
-                to="/faq"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                FAQ
-              </Link>
-              <Link
-                to="/contact"
-                className="block text-gray-300 hover:text-white transition-colors"
-              >
-                Contact Us
-              </Link>
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold text-dustyTaupe p-2 relative group">
+              <span className="relative z-10">Legal & Support</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg  transition-transform duration-300"></div>
+            </h3>
+            <div className="space-y-3">
+              {[
+                { to: "/privacy-policy", label: "Privacy Policy" },
+                { to: "/terms", label: "Terms & Conditions" },
+                { to: "/faq", label: "FAQ" },
+                { to: "/contact", label: "Contact Us" },
+              ].map(({ to, label }, index) => (
+                <Link
+                  key={label}
+                  to={to}
+                  className="group flex items-center space-x-2 text-secondary hover:text-dustyTaupe transition-all duration-300 animate-shimmer"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="w-2 h-1 bg-dustyTaupe rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    {label}
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#CCBBAE]">
-              Contact Info
+          <div className="space-y-6">
+            <h3 className="text-xl font-bold p-2 text-dustyTaupe relative group">
+              <span className="relative z-10">Get In Touch</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg  transition-transform duration-300"></div>
             </h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-[#CCBBAE]" />
-                <span className="text-gray-300 text-sm">
-                  info@mrpglobal.com
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-[#CCBBAE]" />
-                <span className="text-gray-300 text-sm">+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-[#CCBBAE]" />
-                <span className="text-gray-300 text-sm">
-                  MRP Global Traders , Chennai, India
-                </span>
-              </div>
+            <div className="space-y-4">
+              {[
+                {
+                  icon: Mail,
+                  text: "info@mrpglobal.com",
+                  href: "mailto:info@mrpglobal.com",
+                },
+                {
+                  icon: Phone,
+                  text: "+1 (555) 123-4567",
+                  href: "tel:+15551234567",
+                },
+                {
+                  icon: MapPin,
+                  text: "MRP Global Traders, Chennai, India",
+                  href: "#",
+                },
+              ].map(({ icon: Icon, text, href }, index) => (
+                <a
+                  key={text}
+                  href={href}
+                  className="group flex items-start space-x-3 text-secondary hover:text-dustyTaupe transition-all duration-300 "
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <div className="relative mt-0.5">
+                    <Icon className="h-5 w-5 text-dustyTaupe " />
+                    <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-secondary/20 rounded-full scale-0 group-hover:scale-150 transition-transform duration-300"></div>
+                  </div>
+                  <span className="text-sm leading-relaxed group-hover:translate-x-1 transition-transform duration-300">
+                    {text}
+                  </span>
+                </a>
+              ))}
             </div>
+
+            {/* Back to Top Button */}
+            <button
+              onClick={scrollToTop}
+              className="group mt-6 flex items-center space-x-2 text-dustyTaupe hover:text-secondarylight transition-all duration-300 hover:scale-105 transform"
+            >
+              <div className="relative p-2 bg-dustyTaupe/10 rounded-full group-hover:bg-dustyTaupe/20 transition-colors duration-300">
+                <ArrowUp className="h-4 w-4 group-hover:animate-bounce-slow" />
+              </div>
+              <span className="text-sm font-medium">Back to Top</span>
+            </button>
           </div>
         </div>
 
-        <div className="border-t border-gray-600 mt-8 pt-8 text-center">
-          <p className="text-gray-300 text-sm">
-            &copy; 2025 MRPGlobal Traders. All rights reserved. Connecting the
-            world through quality food products.
-          </p>
+        {/* Bottom Section */}
+        <div className="relative mt-16 pt-8">
+          {/* Animated divider */}
+          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-dustyTaupe/50 to-transparent animate-shimmer"></div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="text-center md:text-left">
+              <p className="text-secondary text-sm">
+                &copy; 2025{" "}
+                <span className="font-semibold text-dustyTaupe">
+                  MRPGlobal Traders
+                </span>
+                . All rights reserved.
+              </p>
+              <p className="text-secondary/80 text-xs mt-1">
+                Connecting the world through quality food products.
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-4 text-xs text-secondary/80">
+              <span className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse-slow"></div>
+                <span>Global Network, Trusted Service</span>
+              </span>
+              <span>|</span>
+              <span>Committed to Quality & Freshness</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Bottom glow effect */}
+      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-dustyTaupe/30 to-transparent animate-pulse-slow"></div>
     </footer>
   );
 };

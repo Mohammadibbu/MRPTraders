@@ -83,9 +83,9 @@ const Hero: React.FC = () => {
               className="absolute right-64 bottom-0 hidden md:block lg:block   p-4 bg-white/20 rounded-lg  hover:bg-white/30 transition-all"
             >
               {isPlaying ? (
-                <Pause className="w-7 h-7 text-gray-800" />
+                <Pause className="w-6 h-6 text-gray-800" />
               ) : (
-                <Play className="w-7 h-7 text-gray-800" />
+                <Play className="w-6 h-6 text-gray-800" />
               )}
             </button>
           </div>

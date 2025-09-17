@@ -45,15 +45,11 @@ const FloatingWhatsApp: React.FC = () => {
                   ],
                 }
           }
-          transition={
-            isOpen
-              ? {}
-              : {
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatDelay: 1,
-                }
-          }
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatDelay: 1,
+          }}
         >
           <AnimatePresence mode="wait">
             {isOpen ? (

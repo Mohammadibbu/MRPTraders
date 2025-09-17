@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { ArrowUp } from "lucide-react";
 interface ScrollToTopProps {
   bgColor?: string; // Background color
   textColor?: string; // Text color
@@ -35,26 +35,14 @@ const ScrollToTop: React.FC<ScrollToTopProps> = ({
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-28 right-6 p-4 rounded-full shadow-xl transition-opacity duration-500 ease-in-out ${bgColor} ${textColor} ${hoverColor} ${
+      className={`fixed right-6 bottom-24  animate-float mt-6 flex items-center space-x-2 ${textColor} ${hoverColor}  rounded-full transition-all duration-300 hover:scale-105 transform ${
         showButton ? "opacity-100" : "opacity-0"
       } ${showButton ? "pointer-events-auto" : "pointer-events-none"}`}
-      style={{ transition: "opacity 0.5s ease-in-out" }}
-      aria-label="Scroll to Top"
+      style={{ transition: "opacity 0.8s ease-in-out" }}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 21 21"
-        stroke="currentColor"
-        className="w-5 h-5"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="3"
-          d="M19 9l-7-7-7 7"
-        />
-      </svg>
+      <div className={` p-2 ${bgColor} rounded-full hover:bg-secondarylight `}>
+        <ArrowUp className={`h-9 w-9 `} />
+      </div>
     </button>
   );
 };
