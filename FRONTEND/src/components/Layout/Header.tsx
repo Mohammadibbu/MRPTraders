@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Search, Menu, X, Globe } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import { useApp } from "../../context/AppContext";
-
+import logo from "../../assets/images/logo.png";
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -32,9 +32,9 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <Globe className="h-10 w-10 text-secondary" />
-            <div className="text-2xl font-bold bg-gradient-to-r from-secondary via-secondarylight to-secondary bg-clip-text text-transparent">
+          <Link to="/" className="flex items-center space-x-4 justify-center ">
+            <img className="h-20 w-23" src={logo} alt="Logo" />
+            <div className=" text-xl font-bold bg-gradient-to-r from-secondary via-secondarylight to-secondary bg-clip-text text-transparent">
               MRPGlobal
             </div>
           </Link>

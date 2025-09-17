@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Globe,
   Facebook,
   Twitter,
   Instagram,
@@ -10,7 +9,7 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-
+import logo from "../../assets/images/logo.png";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-primary text-white">
@@ -18,9 +17,9 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Globe className="h-8 w-8 text-[#CCBBAE]" />
-              <div className="text-xl font-bold">MRPGlobal</div>
+            <div className="flex items-center ">
+              {/* <Globe className="h-8 w-8 text-[#CCBBAE]" /> */}
+              <img src={logo} alt="logo" className="h-52 w-52" />
             </div>
             <p className="text-gray-300 text-sm">
               Connecting farmers and suppliers with international buyers through

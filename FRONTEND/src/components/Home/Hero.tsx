@@ -49,18 +49,6 @@ const Hero: React.FC = () => {
         ></video>
       </div>
 
-      {/* Play/Pause Button */}
-      <button
-        onClick={togglePlayPause}
-        className="z-10 hidden md:block lg:block absolute top-10 right-10 transform -translate-x-1/2 -translate-y-1/2 p-4 bg-white/20 rounded-full  hover:bg-white/30 transition-all"
-      >
-        {isPlaying ? (
-          <Pause className="w-7 h-7 text-gray-800" />
-        ) : (
-          <Play className="w-7 h-7 text-gray-800" />
-        )}
-      </button>
-
       {/* Gradient Overlay */}
       <div className="absolute top-0 inset-0 bg-gradient-to-b from-secondarylight/40 via-transparent to-primary">
         <div className="absolute inset-0 bg-black opacity-30"></div>
@@ -82,7 +70,7 @@ const Hero: React.FC = () => {
         </Animation>
 
         <Animation initialY={50}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="relative flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/products"
               className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2"
@@ -90,6 +78,16 @@ const Hero: React.FC = () => {
               <span>Browse Products</span>
               <ArrowRight className="h-5 w-5" />
             </Link>
+            <button
+              onClick={togglePlayPause}
+              className="absolute right-64 bottom-0 hidden md:block lg:block   p-4 bg-white/20 rounded-lg  hover:bg-white/30 transition-all"
+            >
+              {isPlaying ? (
+                <Pause className="w-7 h-7 text-gray-800" />
+              ) : (
+                <Play className="w-7 h-7 text-gray-800" />
+              )}
+            </button>
           </div>
         </Animation>
       </div>
