@@ -10,7 +10,7 @@ import {
   BarChart3,
 } from "lucide-react";
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboardTest: React.FC = () => {
   const pendingApprovals = [
     { id: 1, name: "ABC Fruits Ltd", type: "Seller", date: "2025-01-15" },
     { id: 2, name: "Global Import Co", type: "Client", date: "2025-01-14" },
@@ -203,4 +203,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminDashboardTest;

@@ -200,7 +200,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-secondary text-sm">
-                &copy; 2025{" "}
+                &copy; {new Date().getFullYear()}{" "}
                 <span className="font-semibold text-dustyTaupe">
                   MRPGlobal Traders
                 </span>

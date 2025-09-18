@@ -5,8 +5,8 @@ type ToastType = "info" | "success" | "error" | "warning" | "default";
 export const showtoast = (
   message: string,
   description = "",
-  duration = 3000,
-  type: ToastType = "default"
+  type: ToastType = "default",
+  duration = 3000
 ) => {
   switch (type) {
     case "info":

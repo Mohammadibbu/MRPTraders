@@ -1,5 +1,5 @@
 import { Dialog, DialogTitle, DialogPanel } from "@headlessui/react";
-import { AlertTriangle, X } from "lucide-react"; // Added X icon for close functionality
+import { AlertTriangle, X, Loader } from "lucide-react"; // Added X icon for close functionality
 import { ReactNode } from "react";
 
 interface DialogProps {
@@ -13,6 +13,8 @@ interface DialogProps {
   iconColor?: string; // Optional icon color (defaults to primary color)
   okButtonColor?: string; // Optional ok button color
   cancelButtonColor?: string; // Optional cancel button color
+  okButtonAction?: () => void;
+  loading?: boolean;
 }
 
 const DialogComponent: React.FC<DialogProps> = ({
@@ -26,6 +28,8 @@ const DialogComponent: React.FC<DialogProps> = ({
   // iconColor = "text-red-400", // Default icon color
   okButtonColor = "bg-primary", // Default OK button color (primary)
   cancelButtonColor = "bg-secondarylight", // Default cancel button color (secondarylight)
+  okButtonAction,
+  loading = false,
 }) => {
   return (
     <Dialog
@@ -63,10 +67,19 @@ const DialogComponent: React.FC<DialogProps> = ({
               {/* OK Button */}
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                // onClick={() => setOpen(false)}
+                onClick={() => {
+                  okButtonAction?.();
+                }}
+                disabled={loading}
                 className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto ${okButtonColor} shadow-button-primary hover:shadow-button-hover`}
               >
                 {okText}
+                {loading ? (
+                  <Loader className="animate-spin ms-2 h-5 w-5" />
+                ) : (
+                  ""
+                )}
               </button>
               {/* Cancel Button */}
               <button

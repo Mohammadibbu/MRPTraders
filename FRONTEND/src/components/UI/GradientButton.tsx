@@ -44,14 +44,14 @@ const GradientButton: React.FC<GradientButtonProps> = ({
       shadow-xl hover:shadow-2xl
     `,
     secondary: `
-      bg-gradient-to-r from-[#6A0D4F] to-[#9B1F65] text-primary
+      bg-gradient-to-r from-[#6A0D4F] to-[#9B1F65] text-secondary
       hover:from-[#6A0D4F]/90 hover:to-[#9B1F65]/90
       focus:ring-[#6A0D4F]/50
       shadow-lg hover:shadow-xl
     `,
     outline: `
       border-2 border-[#9B1F65] text-[#9B1F65] bg-transparent
-      hover:bg-gradient-to-r hover:from-[#9B1F65] hover:to-[#6A0D4F] hover:text-white
+       hover:text-primary
       focus:ring-[#9B1F65]/50
     `,
   };

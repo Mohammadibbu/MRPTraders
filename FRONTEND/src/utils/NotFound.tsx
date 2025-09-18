@@ -1,34 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+// src/pages/NotFoundPage.js
+
+import PageNotFoundImage from "../assets/SVG/PageNotFound.svg"; // Assuming your 404 SVG is stored here
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { showtoast } from "./Toast";
 
-const NotFound: React.FC = () => {
-  showtoast("404", "Page Not Found !");
+const NotFoundPage = () => {
+  const navigate = useNavigate(); // Hook to navigate programmatically
+
+  const handleHomeRedirect = () => {
+    navigate("/"); // Redirect to the homepage
+  };
+
   return (
-    <div className="relative h-screen flex flex-col items-center justify-center bg-gradient-to-b from-secondarylight to-primary text-white text-center px-6">
-      {/* Overlay for subtle effect */}
-      <div className="absolute inset-0 bg-black/30"></div>
+    <div className=" min-h-screen bg-gradient-to-b from-secondarylight to-primary text-white  ">
+      <main>
+        <div className="flex justify-center flex-col items-center bg-secondary/60 text-gray-800 rounded-lg shadow-lg   w-full p-8 md:p-12">
+          <h1 className="text-4xl md:text-5xl font-semibold text-gray-600 drop-shadow-lg">
+            404 Not Found
+          </h1>
 
-      <div className="relative z-10 max-w-xl">
-        <h1 className="text-7xl md:text-9xl font-extrabold mb-4">404</h1>
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6">
-          Oops! Page Not Found
-        </h2>
-        <p className="text-lg md:text-xl text-gray-200 mb-8">
-          The page you’re looking for doesn’t exist or has been moved.
-        </p>
+          <img
+            src={PageNotFoundImage}
+            alt="Page Not Found"
+            className="my-6 max-w-lg mx-auto"
+          />
 
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          Go Back Home
-        </Link>
-      </div>
+          <p className="mt-4 text-lg text-gray-700">
+            Oops! The page you're looking for doesn't exist or has been moved.
+          </p>
+
+          <p className="mt-4 text-md text-gray-500">
+            You can return to the homepage and try again.
+          </p>
+
+          <button
+            onClick={handleHomeRedirect}
+            className="mt-6 px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow-md hover:shadow-xl hover:bg-primary/80 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/50"
+          >
+            <ArrowLeft className="w-4 h-4" /> Go to Homepage
+          </button>
+        </div>
+      </main>
     </div>
   );
 };
 
-export default NotFound;
+export default NotFoundPage;

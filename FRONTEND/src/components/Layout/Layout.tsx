@@ -1,17 +1,18 @@
+// components/Layout/Layout.tsx
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import FloatingWhatsApp from "../UI/FloatingWhatsApp";
 import ScrollToTop from "../UI/ScrollToTop";
-interface LayoutProps {
-  children: React.ReactNode;
-}
+import { Outlet } from "react-router-dom";
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout = () => {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden mt-20">
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <Footer />
       <ScrollToTop />
       <FloatingWhatsApp />

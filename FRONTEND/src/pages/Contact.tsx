@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { MapPin, Phone, Mail, MessageCircle, Send } from "lucide-react";
 import { showtoast, showToastPromise } from "../utils/Toast";
-import axios from "axios";
+
 import { AnimatePresence } from "framer-motion";
 import Animation from "../utils/Animation"; // Import the Animation component
 import GradientButton from "../components/UI/GradientButton";
+import axios, { GoogleSheetApi } from "../utils/AxiosInstance";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -39,7 +40,7 @@ const Contact: React.FC = () => {
       showtoast(
         "Missing Fields",
         "Please fill all required fields.",
-        3000,
+
         "error"
       );
       return;
@@ -55,7 +56,7 @@ const Contact: React.FC = () => {
     };
 
     const SheetapiPromise = axios
-      .post(import.meta.env.VITE_GOOGLE_SHEET_API_URL, MessageData, {
+      .post(GoogleSheetApi, MessageData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

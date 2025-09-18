@@ -28,7 +28,7 @@ const Header: React.FC = () => {
     <header
       className={`fixed w-full top-0 z-50 transition-all duration-700 ease-in-out ${
         scrolled
-          ? "backdrop-blur-xl shadow-2xl border-b border-secondarylight/30"
+          ? "backdrop-blur-xl shadow-xl border-b border-secondarylight/30"
           : "backdrop-blur-sm"
       }`}
       style={{
