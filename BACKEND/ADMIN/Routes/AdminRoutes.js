@@ -7,6 +7,7 @@ import {
   AdminLogin,
 } from "../Controllers/Admin.js";
 import { AdminAuth } from "../Middlewares/AdminAuth.js";
+import { verifyVerificationToken } from "../Controllers/VerificationAdmin.js";
 const router = Router();
 // GET /alladmins - get all admins
 router.get(AdminRoutes.FetchAllAdminEndPoint, AdminAuth, GetAllAdmins);
@@ -18,5 +19,7 @@ router.post(AdminRoutes.CreateAdminEndPOint, AdminAuth, CreateAdmin);
 router.delete(AdminRoutes.DeleteAdmin, AdminAuth, DeleteAdmin);
 
 router.post(AdminRoutes.AdminLogin, AdminLogin);
+
+router.post(AdminRoutes.AdminVerification, AdminAuth, verifyVerificationToken);
 
 export default router;
