@@ -9,17 +9,17 @@ const ImportExportSection: React.FC = () => {
         {/* Title Animation */}
         <Animation initialY={-50}>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Import & Export Made Easy
+            Simplifying Global Trade, One Shipment at a Time
           </h2>
         </Animation>
 
         {/* Description Animation */}
         <Animation initialY={-50}>
           <p className="text-lg text-gray-700 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Our platform simplifies the process of importing and exporting fresh
-            fruits, pulses, rice, wheat, and more. Whether you are a farmer, a
-            supplier, or a global business, MRPGlobal Traders offers a seamless
-            experience.
+            At MRPGlobal Traders, we make importing and exporting effortless.
+            Whether you're sourcing fresh produce or distributing Indian staples
+            worldwide, our trusted logistics and quality-first approach ensure a
+            smooth experience from farm to market.
           </p>
         </Animation>
 
@@ -32,10 +32,11 @@ const ImportExportSection: React.FC = () => {
                 <ArrowDownCircle className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Import Products
+                Import Essentials
               </h3>
               <p className="text-gray-600">
-                Premium tropical fruits from Southeast Asia
+                Sourcing top-grade tropical fruits and specialty items from
+                trusted global partners.
               </p>
             </div>
           </Animation>
@@ -47,10 +48,11 @@ const ImportExportSection: React.FC = () => {
                 <ArrowUpCircle className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Export Products
+                Export with Confidence
               </h3>
               <p className="text-gray-600">
-                Quality grains and pulses from India
+                Delivering India’s finest rice, pulses, spices, and grains to
+                global destinations.
               </p>
             </div>
           </Animation>
@@ -62,10 +64,11 @@ const ImportExportSection: React.FC = () => {
                 <Package className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Quality Assured
+                Certified Quality
               </h3>
               <p className="text-gray-600">
-                Rigorous quality checks and certifications
+                Every batch undergoes strict inspections to meet international
+                quality and safety standards.
               </p>
             </div>
           </Animation>
@@ -79,7 +82,10 @@ const ImportExportSection: React.FC = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Global Reach
               </h3>
-              <p className="text-gray-600">Connecting markets worldwide</p>
+              <p className="text-gray-600">
+                Serving importers and distributors across Asia, the Middle East,
+                Europe, and beyond.
+              </p>
             </div>
           </Animation>
         </div>

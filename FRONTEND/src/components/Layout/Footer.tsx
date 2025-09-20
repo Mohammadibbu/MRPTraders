@@ -37,39 +37,57 @@ const Footer: React.FC = () => {
                 <img
                   src={logo}
                   alt="MRPGlobal Logo"
-                  className="h-24 w-24  group-hover:scale-110 transition-transform duration-300"
+                  className="h-24 w-24 group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               <div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-secondarylight via-dustyTaupe to-secondarylight bg-clip-text text-transparent animate-shimmer">
-                  MRPGlobal
+                  MRPGlobal Traders
                 </h2>
                 <div className="flex items-center space-x-1 mt-1">
                   <Globe className="h-3 w-3 text-dustyTaupe animate-pulse-slow" />
                   <span className="text-xs text-dustyTaupe font-medium">
-                    Traders
+                    Global Food & Fruit Exporters
                   </span>
                 </div>
               </div>
             </div>
 
             <p className="text-secondary text-sm leading-relaxed">
-              Connecting farmers and suppliers with international buyers through
-              premium quality fruits and food products. Building bridges across
-              continents.
+              Bridging farmers and suppliers with international markets,
+              delivering fresh, premium quality fruits and food products
+              worldwide.
             </p>
 
             {/* Social Media Links */}
             <div className="flex space-x-4">
               {[
-                { icon: Facebook, href: "#", label: "Facebook" },
-                { icon: Twitter, href: "#", label: "Twitter" },
-                { icon: Instagram, href: "#", label: "Instagram" },
-                { icon: Linkedin, href: "#", label: "LinkedIn" },
+                {
+                  icon: Facebook,
+                  href: "https://facebook.com/mrpglobal",
+                  label: "Facebook",
+                },
+                {
+                  icon: Twitter,
+                  href: "https://twitter.com/mrpglobal",
+                  label: "Twitter",
+                },
+                {
+                  icon: Instagram,
+                  href: "https://instagram.com/mrpglobal",
+                  label: "Instagram",
+                },
+                {
+                  icon: Linkedin,
+                  href: "https://linkedin.com/company/mrpglobal",
+                  label: "LinkedIn",
+                },
               ].map(({ icon: Icon, href, label }, index) => (
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group relative p-2 text-secondary hover:text-dustyTaupe transition-all duration-300 hover:scale-110 transform"
                   aria-label={label}
                   style={{ animationDelay: `${index * 0.1}s` }}
@@ -85,7 +103,7 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-dustyTaupe p-2 relative group">
               <span className="relative z-10">Quick Links</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg  "></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg"></div>
             </h3>
             <div className="space-y-3">
               {[
@@ -93,7 +111,7 @@ const Footer: React.FC = () => {
                 { to: "/about", label: "About Us" },
                 { to: "/products/imports", label: "Imports" },
                 { to: "/products/exports", label: "Exports" },
-                { to: "/gallery", label: "Gallery" },
+                { to: "/contact", label: "Contact Us" },
               ].map(({ to, label }, index) => (
                 <Link
                   key={label}
@@ -110,11 +128,11 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Legal */}
+          {/* Legal & Support */}
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-dustyTaupe p-2 relative group">
               <span className="relative z-10">Legal & Support</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg  transition-transform duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg transition-transform duration-300"></div>
             </h3>
             <div className="space-y-3">
               {[
@@ -142,40 +160,36 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <h3 className="text-xl font-bold p-2 text-dustyTaupe relative group">
               <span className="relative z-10">Get In Touch</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg  transition-transform duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg transition-transform duration-300"></div>
             </h3>
             <div className="space-y-4">
               {[
                 {
                   icon: Mail,
-                  text: "info@mrpglobal.com",
-                  href: "mailto:info@mrpglobal.com",
+                  text: "contact@mrpglobal.com",
                 },
                 {
                   icon: Phone,
-                  text: "+1 (555) 123-4567",
-                  href: "tel:+15551234567",
+                  text: "+91 98765 43210",
                 },
                 {
                   icon: MapPin,
-                  text: "MRP Global Traders, Chennai, India",
-                  href: "#",
+                  text: "Global Trade Center, Mumbai, Maharashtra, India",
                 },
-              ].map(({ icon: Icon, text, href }, index) => (
-                <a
+              ].map(({ icon: Icon, text }, index) => (
+                <span
                   key={text}
-                  href={href}
-                  className="group flex items-start space-x-3 text-secondary hover:text-dustyTaupe transition-all duration-300 "
+                  className="group flex items-start space-x-3 text-secondary hover:text-dustyTaupe transition-all duration-300"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <div className="relative mt-0.5">
-                    <Icon className="h-5 w-5 text-dustyTaupe " />
+                    <Icon className="h-5 w-5 text-dustyTaupe" />
                     <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-secondary/20 rounded-full scale-0 group-hover:scale-150 transition-transform duration-300"></div>
                   </div>
                   <span className="text-sm leading-relaxed group-hover:translate-x-1 transition-transform duration-300">
                     {text}
                   </span>
-                </a>
+                </span>
               ))}
             </div>
 
@@ -207,7 +221,7 @@ const Footer: React.FC = () => {
                 . All rights reserved.
               </p>
               <p className="text-secondary/80 text-xs mt-1">
-                Connecting the world through quality food products.
+                Connecting the world through fresh, quality food products.
               </p>
             </div>
 
@@ -224,7 +238,7 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Bottom glow effect */}
-      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-dustyTaupe/30 to-transparent animate-pulse-slow"></div>
+      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-dustyTaupe to-transparent animate-pulse-slow"></div>
     </footer>
   );
 };

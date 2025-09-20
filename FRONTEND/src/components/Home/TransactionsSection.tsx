@@ -10,17 +10,17 @@ const TransactionsSection: React.FC = () => {
         {/* Title Animation */}
         <Animation initialY={-50}>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Effortless Transactions
+            Seamless & Secure Transactions
           </h2>
         </Animation>
 
         {/* Description Animation */}
         <Animation initialY={-50}>
           <p className="text-lg text-gray-700 mb-12 max-w-4xl mx-auto leading-relaxed">
-            From browsing and placing orders to making payments and tracking
-            shipments, MRPGlobal Traders offers a smooth and secure
-            transactional experience. Multiple payment options and integration
-            with logistics services make global trade easy.
+            Whether browsing products, placing orders, or making payments,
+            MRPGlobal Traders ensures a hassle-free and secure experience. With
+            multiple payment methods and integrated logistics, we simplify
+            global trading for you.
           </p>
         </Animation>
 
@@ -36,7 +36,7 @@ const TransactionsSection: React.FC = () => {
                 Secure Payments
               </h3>
               <p className="text-gray-600">
-                Multiple payment gateways for your convenience
+                Multiple trusted payment gateways to suit your preferences.
               </p>
             </div>
           </Animation>
@@ -51,7 +51,7 @@ const TransactionsSection: React.FC = () => {
                 Global Shipping
               </h3>
               <p className="text-gray-600">
-                Integrated logistics for worldwide delivery
+                Reliable logistics partners delivering your orders worldwide.
               </p>
             </div>
           </Animation>
@@ -63,10 +63,10 @@ const TransactionsSection: React.FC = () => {
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Trade Protection
+                Buyer Protection
               </h3>
               <p className="text-gray-600">
-                Secure transactions with buyer protection
+                Secure transactions with comprehensive buyer safeguards.
               </p>
             </div>
           </Animation>
@@ -81,7 +81,7 @@ const TransactionsSection: React.FC = () => {
                 Real-time Tracking
               </h3>
               <p className="text-gray-600">
-                Track your orders from farm to destination
+                Monitor your shipments at every step from farm to doorstep.
               </p>
             </div>
           </Animation>

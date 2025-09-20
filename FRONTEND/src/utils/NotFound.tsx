@@ -29,15 +29,15 @@ const NotFoundPage = () => {
             Oops! The page you're looking for doesn't exist or has been moved.
           </p>
 
-          <p className="mt-4 text-md text-gray-500">
+          <p className="mt-4 text-md text-gray-900">
             You can return to the homepage and try again.
           </p>
 
           <button
             onClick={handleHomeRedirect}
-            className="mt-6 px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow-md hover:shadow-xl hover:bg-primary/80 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/50"
+            className="mt-6 px-6 py-3 bg-primary inline-flex items-center  text-white rounded-lg font-semibold shadow-md hover:shadow-xl hover:bg-primary/80 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/50"
           >
-            <ArrowLeft className="w-4 h-4" /> Go to Homepage
+            <ArrowLeft className="w-4 h-4 mr-2" /> Go to Homepage
           </button>
         </div>
       </main>

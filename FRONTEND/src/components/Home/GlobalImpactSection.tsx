@@ -1,25 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Users, TrendingUp, Globe, Heart } from "lucide-react";
 import Animation from "../../utils/Animation";
+import SkeletonLoader from "../UI/SkeletonLoader";
 
 const GlobalImpactSection: React.FC = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <section className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Title Animation */}
         <Animation initialY={-50}>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Global Reach, Local Impact
+            Bridging Borders, Empowering Communities
           </h2>
         </Animation>
 
         {/* Description Animation */}
         <Animation initialY={-50}>
           <p className="text-lg text-gray-700 mb-12 max-w-4xl mx-auto leading-relaxed">
-            We empower local farmers by providing them access to a global
-            marketplace. Our platform brings the world closer to local
-            agricultural communities, helping them grow and expand their
-            businesses.
+            At MRPGlobal Traders, we connect local farmers with international
+            markets, fostering sustainable growth and economic empowerment. Our
+            platform supports agricultural communities worldwide, enabling them
+            to thrive in the global economy.
           </p>
         </Animation>
 
@@ -58,19 +61,24 @@ const GlobalImpactSection: React.FC = () => {
           <Animation initialY={-50}>
             <div className="text-center">
               <div className="text-4xl font-bold text-[#5F1A35] mb-2">99%</div>
-              <div className="text-gray-600">Satisfaction Rate</div>
+              <div className="text-gray-600">Customer Satisfaction</div>
               <Heart className="h-8 w-8 text-[#CCBBAE] mx-auto mt-2" />
             </div>
           </Animation>
         </div>
 
-        {/* Image Fade-In Animation */}
+        {/* Image Fade-In Animation with Skeleton */}
         <Animation initialY={50}>
           <div className="max-w-3xl mx-auto">
+            {!imageLoaded && <SkeletonLoader type="image" />}
             <img
               src="https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg"
               alt="Global Local Impact"
-              className="w-full rounded-lg shadow-lg"
+              className={`w-full rounded-lg shadow-lg transition-opacity duration-700 ${
+                imageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageLoaded(false)}
             />
           </div>
         </Animation>

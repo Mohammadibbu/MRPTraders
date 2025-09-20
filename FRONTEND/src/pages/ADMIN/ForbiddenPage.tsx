@@ -26,9 +26,9 @@ const ForbiddenPage = () => {
         </p>
         <button
           onClick={handleLoginRedirect}
-          className="mt-6 px-6 py-2 bg-primary text-secondary rounded-lg hover:bg-primary/80 transition-all"
+          className="mt-6 px-6 py-2 inline-flex items-center bg-primary text-secondary rounded-lg hover:bg-primary/80 transition-all"
         >
-          <ArrowLeft className="w-4 h-4" /> Go to Login Page
+          <ArrowLeft className="w-4 h-4 mr-2" /> Go to Login Page
         </button>
       </div>
     </div>

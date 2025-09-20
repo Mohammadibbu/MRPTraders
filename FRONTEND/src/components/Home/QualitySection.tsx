@@ -10,16 +10,18 @@ const QualitySection: React.FC = () => {
         {/* Title Animation */}
         <Animation initialY={-50}>
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            High-Quality Products
+            Commitment to Excellence & Quality
           </h2>
         </Animation>
 
         {/* Description Animation */}
         <Animation initialY={-50}>
           <p className="text-lg mb-12 max-w-4xl mx-auto leading-relaxed opacity-90">
-            From exotic fruits like Rambutan, Mangosteen, and Durian to
-            essential grains such as rice and wheat, all our products go through
-            a rigorous quality check, ensuring only the finest for our buyers.
+            At MRPGlobal Traders, quality is our top priority. From exotic
+            tropical fruits like Rambutan, Mangosteen, and Durian to staple
+            grains such as rice and wheat, every product undergoes strict
+            quality assurance processes to guarantee freshness and safety for
+            our customers worldwide.
           </p>
         </Animation>
 
@@ -29,11 +31,12 @@ const QualitySection: React.FC = () => {
           <Animation initialX={-50}>
             <div className="text-center">
               <div className="bg-white bg-opacity-90 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Award className="h-8 w-8" />
+                <Award className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Premium Grade</h3>
+              <h3 className="text-xl font-semibold mb-2">Premium Quality</h3>
               <p className="opacity-90">
-                Only Grade A products make it to our platform
+                Only the finest Grade A produce and grains sourced from trusted
+                farmers.
               </p>
             </div>
           </Animation>
@@ -42,11 +45,12 @@ const QualitySection: React.FC = () => {
           <Animation initialY={50}>
             <div className="text-center">
               <div className="bg-white bg-opacity-90 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8" />
+                <Shield className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Certified Safe</h3>
+              <h3 className="text-xl font-semibold mb-2">Certified & Safe</h3>
               <p className="opacity-90">
-                ISO, FSSAI, and international certifications
+                Compliance with ISO, FSSAI, and global food safety standards for
+                peace of mind.
               </p>
             </div>
           </Animation>
@@ -55,11 +59,14 @@ const QualitySection: React.FC = () => {
           <Animation initialX={50}>
             <div className="text-center">
               <div className="bg-white bg-opacity-90 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Leaf className="h-8 w-8" />
+                <Leaf className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Organic Options</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Organic & Sustainable
+              </h3>
               <p className="opacity-90">
-                Sustainably grown organic produce available
+                Wide range of sustainably grown organic products to support
+                healthy living.
               </p>
             </div>
           </Animation>
@@ -71,7 +78,7 @@ const QualitySection: React.FC = () => {
             to="/products"
             className="inline-flex items-center space-x-2 bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
           >
-            <span>Explore Our Products</span>
+            <span>Discover Our Quality Range</span>
             <ArrowRight className="h-5 w-5" />
           </Link>
         </Animation>

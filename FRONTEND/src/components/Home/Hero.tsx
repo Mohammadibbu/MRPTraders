@@ -55,17 +55,18 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6  lg:px-8 text-center text-white">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
         <Animation initialY={50}>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Connecting Farmers to the World
+            Empowering Global Trade with Quality Goods
           </h1>
         </Animation>
 
         <Animation initialY={100}>
           <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed">
-            MRPGlobal Traders is your trusted platform for seamless import and
-            export of high-quality fruits and food products.
+            With a legacy of excellence, MRPGlobal Traders connects the world
+            with the finest agricultural products, ensuring reliability,
+            quality, and ethical sourcing.
           </p>
         </Animation>
 
@@ -75,12 +76,12 @@ const Hero: React.FC = () => {
               to="/products"
               className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2"
             >
-              <span>Browse Products</span>
+              <span>Explore Our Products</span>
               <ArrowRight className="h-5 w-5" />
             </Link>
             <button
               onClick={togglePlayPause}
-              className="absolute right-64 bottom-0 hidden md:block lg:block   p-4 bg-white/20 rounded-lg  hover:bg-white/30 transition-all"
+              className="absolute right-64 bottom-0 hidden md:block lg:block p-4 bg-white/20 rounded-lg hover:bg-white/30 transition-all"
             >
               {isPlaying ? (
                 <Pause className="w-6 h-6 text-gray-800" />

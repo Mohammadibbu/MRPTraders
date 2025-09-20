@@ -39,14 +39,13 @@ const Contact: React.FC = () => {
       setLoading(false);
       showtoast(
         "Missing Fields",
-        "Please fill all required fields.",
-
+        "Please complete all required fields before submitting.",
         "error"
       );
       return;
     }
 
-    // Message Data ready to send
+    // Prepare message data for submission
     const MessageData = {
       Name: name,
       Email: email,
@@ -64,14 +63,14 @@ const Contact: React.FC = () => {
       .then(() => {
         setFormData({ name: "", email: "", phone: "", message: "" });
         return {
-          message: "Your message has been sent",
+          message: "Your message was successfully sent",
         };
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         return Promise.reject({
           message:
-            "Something Went wrong! Please try again after a few seconds.",
+            "An error occurred while sending your message. Please try again shortly.",
           error: error,
         });
       })
@@ -82,11 +81,11 @@ const Contact: React.FC = () => {
     showToastPromise(
       SheetapiPromise,
       {
-        loading: "Message Sending... please wait!",
+        loading: "Sending your message, please wait...",
         success: (d: { message: string }) =>
-          `${d.message} to our team. Thanks for reaching out! We’ll get back to you shortly.`,
+          `${d.message}! Thank you for contacting us. We will respond as soon as possible.`,
         error: (err: { message: string; error: any }) =>
-          ` ${err?.message || "Something went wrong!"}`,
+          `${err?.message || "Something went wrong!"}`,
       },
       4000
     );
@@ -105,7 +104,6 @@ const Contact: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <AnimatePresence>
         {/* Hero Section */}
-
         <section className="py-20 relative">
           <div className="absolute top-0 inset-0 bg-gradient-to-b from-primary/30 via-transparent to-primary/25 z-10">
             <div className="absolute inset-0 bg-black opacity-30"></div>
@@ -113,25 +111,24 @@ const Contact: React.FC = () => {
           <img
             src="https://img.etimg.com/thumb/width-420,height-315,imgsize-166651,resizemode-75,msid-57750623/news/economy/agriculture/fruit-importer-ig-international-forayes-into-export-markets-with-bananas-grapes-and-onions.jpg"
             className="absolute top-0 z-4 object-cover w-full h-full blur-sm"
+            alt="Contact Background"
           />
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-[11]">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Contact Us
             </h1>
             <p className="text-xl text-gray-200">
-              Get in touch with our trade specialists for personalized
-              assistance
+              Reach out to our trade experts for customized support and guidance
             </p>
           </div>
         </section>
 
         {/* Contact Information Section */}
-
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Animation initialY={-100}>
               <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
-                Get In Touch
+                We're Here to Help
               </h2>
             </Animation>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -143,7 +140,7 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        Address
+                        Office Address
                       </h3>
                       <p className="text-gray-600">
                         Global Trade Center, Mumbai, Maharashtra 400001, India
@@ -158,7 +155,7 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        Phone
+                        Phone Numbers
                       </h3>
                       <p className="text-gray-600">
                         +91 98765 43210
@@ -175,7 +172,7 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        Email
+                        Email Addresses
                       </h3>
                       <p className="text-gray-600">
                         info@mrpglobaltraders.com
@@ -192,10 +189,10 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        WhatsApp
+                        WhatsApp Support
                       </h3>
                       <p className="text-gray-600">
-                        For instant support and quick orders
+                        Instant support and quick order placement via WhatsApp
                       </p>
                       <a
                         href="https://wa.me/919876543210"
@@ -210,11 +207,12 @@ const Contact: React.FC = () => {
                   </div>
                 </Animation>
               </div>
+
               <Animation initialX={100}>
                 <div>
                   <div className="bg-secondarylight rounded-lg shadow-xl p-8">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      Send us a message
+                      Send Us a Message
                     </h2>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -234,7 +232,7 @@ const Contact: React.FC = () => {
                           value={formData.name}
                           onChange={handleChange}
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:shadow-xl focus:border-primary outline-none"
-                          placeholder="Your full name"
+                          placeholder="Enter your full name"
                         />
                       </div>
                       <div>
@@ -261,7 +259,7 @@ const Contact: React.FC = () => {
                           htmlFor="phone"
                           className="block text-sm font-medium text-gray-700 mb-2"
                         >
-                          Phone Number{" "}
+                          Phone Number
                           <span className="text-primary font-extrabold">*</span>
                         </label>
                         <input
@@ -279,7 +277,7 @@ const Contact: React.FC = () => {
                           htmlFor="message"
                           className="block text-sm font-medium text-gray-700 mb-2"
                         >
-                          Message{" "}
+                          Message
                           <span className="text-primary font-extrabold">*</span>
                         </label>
                         <textarea
@@ -290,7 +288,7 @@ const Contact: React.FC = () => {
                           value={formData.message}
                           onChange={handleChange}
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:shadow-xl focus:border-primary outline-none resize-none"
-                          placeholder="Tell us about your requirements, preferred products, quantities, etc."
+                          placeholder="Share your requirements, preferred products, quantities, or questions."
                         />
                       </div>
                       <GradientButton
@@ -324,9 +322,7 @@ const Contact: React.FC = () => {
                 <div className="w-full h-96 bg-gray-200 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">
-                      Interactive map would be embedded here
-                    </p>
+                    <p className="text-gray-500">Interactive map coming soon</p>
                     <p className="text-sm text-gray-400 mt-2">
                       Global Trade Center, Mumbai, Maharashtra, India
                     </p>

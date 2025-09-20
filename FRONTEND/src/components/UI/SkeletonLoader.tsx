@@ -2,7 +2,7 @@ import React from "react";
 import ShimmerEffect from "./ShimmerEffect";
 
 interface SkeletonLoaderProps {
-  type: "card" | "text" | "avatar" | "product" | "list";
+  type: "card" | "text" | "avatar" | "product" | "list" | "image";
   count?: number;
   className?: string;
 }
@@ -94,7 +94,14 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             ))}
           </div>
         );
-
+      case "image":
+        return (
+          <div
+            className={`w-full h-72 bg-gray-300 rounded-lg overflow-hidden ${className}`}
+          >
+            <ShimmerEffect height="h-full" />
+          </div>
+        );
       default:
         return <ShimmerEffect className={className} />;
     }

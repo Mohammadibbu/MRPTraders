@@ -4,7 +4,7 @@ import GradientButton from "../../components/UI/GradientButton";
 import axios, { AdminLoginApi } from "../../utils/AxiosInstance";
 import { showtoast } from "../../utils/Toast";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -13,7 +13,9 @@ const LoginPage = () => {
     username: "",
     password: "",
   });
+  const [view, setView] = useState(false);
 
+  const toggleView = () => setView(!view);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -42,10 +44,20 @@ const LoginPage = () => {
       }
     } catch (error: any) {
       const errordata = error?.response?.data;
+      if (errordata) {
+        showtoast(
+          errordata?.errorCode || "Login Failed",
+          errordata?.message || "Invalid credentials",
+          "error"
+        );
+      }
+      console.log(error);
+
       showtoast(
-        errordata?.errorCode || "Login Failed",
-        errordata?.message || "Invalid credentials",
-        "error"
+        "Oops!",
+        "We're experiencing some issues. Please try again shortly.",
+        "warning",
+        5000
       );
     } finally {
       setLoading(false);
@@ -82,12 +94,13 @@ const LoginPage = () => {
                   placeholder="Username"
                 />
               </div>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-primary">
+              <div className="relative">
+                <label className=" block mb-2 text-sm font-medium text-primary">
                   Password
                 </label>
                 <input
-                  type="password"
+                  type={view ? "text" : "password"}
+                  value={LoginData.password}
                   name="password"
                   required
                   autoComplete="current-password"
@@ -95,6 +108,13 @@ const LoginPage = () => {
                   className="bg-secondarylight border border-gray-300 text-primary rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
                   placeholder="••••••••"
                 />
+                <button
+                  onClick={toggleView}
+                  className="absolute top-10 right-3"
+                  type="button"
+                >
+                  {view ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
               <div className="flex items-center justify-between">
                 <a

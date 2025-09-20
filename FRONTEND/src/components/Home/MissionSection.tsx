@@ -1,45 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import Animation from "../../utils/Animation";
+import SkeletonLoader from "../UI/SkeletonLoader";
 
 const MissionSection: React.FC = () => {
+  const [imageError, setImageError] = useState(false);
+
+  const imageUrl =
+    "https://images.unsplash.com/photo-1603297631955-d84bd07b5a4a?auto=format&fit=crop&w=1200&q=80";
+
   return (
     <section className="bg-[#F7F4F1] py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Title */}
-        <Animation initialY={-100}>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Our Mission
-          </h2>
-        </Animation>
-
-        {/* Description */}
-        <Animation initialY={-50}>
-          <p className="text-lg text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
-            We bridge the gap between local farmers and international buyers,
-            ensuring the global trade of fresh produce, grains, and high-quality
-            food products. MRPGlobal Traders aims to support local agriculture
-            while providing businesses worldwide with premium, fresh supplies.
-          </p>
-        </Animation>
-
-        {/* Flexbox layout for image and content */}
-        <div className="flex flex-col lg:flex-row items-center justify-between mb-10 pr-5">
-          <Animation initialX={100}>
-            <img
-              src="https://imgsrv2.voi.id/OuBRtklGGiwi5FTEKc9UWdpRiNdCrWPOeoMdb6J2aqk/auto/1280/853/sm/1/bG9jYWw6Ly8vcHVibGlzaGVycy8zMDE0NjUvMjAyMzA4MTQxMzE2LW1haW4ucG5n.jpg"
-              alt="Our Mission"
-              className="lg:w-2/2 w-full max-w-2xl mx-auto rounded-lg shadow-lg mb-9"
-            />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <Animation initialY={-100}>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Our Mission
+            </h2>
           </Animation>
-          {/* Content on the left */}
-          <div className="lg:w-2/2 ">
+          <Animation initialY={-50}>
+            <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
+              At MRPGlobal Traders, we aim to build a bridge between farmers and
+              global markets — delivering farm-fresh produce, grains, and food
+              products with consistency and care.
+            </p>
+          </Animation>
+        </div>
+
+        {/* Content Section */}
+
+        <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-10">
+          {/* Image Section */}
+          <div className="w-full lg:w-1/2">
+            <Animation initialX={100}>
+              <>
+                {!imageError && (
+                  <img
+                    src={imageUrl}
+                    alt="Fresh global trade"
+                    onError={() => setImageError(true)}
+                    className={`rounded-lg shadow-lg object-cover w-full h-full max-h-[420px] transition-opacity duration-700`}
+                  />
+                )}
+
+                {imageError && <SkeletonLoader type="image" />}
+              </>
+            </Animation>
+          </div>
+          {/* Text Block */}
+          <div className="w-full lg:w-1/2">
             <Animation initialX={-100}>
-              <p className="text-lg text-gray-700 mb-8">
-                Our mission is to empower farmers and suppliers by providing
-                them access to a global marketplace. We ensure that every
-                product reaches its destination with care and quality.
+              <p className="text-lg text-gray-700 mb-8 text-left lg:text-justify leading-relaxed">
+                We empower local producers by providing them access to global
+                opportunities. Every product we deliver reflects our commitment
+                to freshness, traceability, and ethical trade. From sourcing to
+                shipment, our process is built on transparency, quality, and
+                mutual growth.
               </p>
             </Animation>
             <Animation initialY={100}>
@@ -52,7 +70,6 @@ const MissionSection: React.FC = () => {
               </Link>
             </Animation>
           </div>
-          {/* Image on the right */}
         </div>
       </div>
     </section>

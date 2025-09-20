@@ -23,6 +23,9 @@ import AddProduct from "./pages/ADMIN/AddProduct";
 // Auth
 import ProtectedRoute from "./Routes/ProtectedRoute";
 import ForbiddenPage from "./pages/ADMIN/ForbiddenPage";
+import PrivacyPolicy from "./pages/LegalAndSupport/PrivacyPolicy";
+import FAQPage from "./pages/LegalAndSupport/FaqPage";
+import TermsAndConditions from "./pages/LegalAndSupport/TermsAndCondition";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -32,7 +35,8 @@ const AppRoutes = () => {
   }, [location]);
 
   const isAdminLogin = location.pathname === "/admin/login";
-  const isAdminRoute = location.pathname.startsWith("/admin") && !isAdminLogin;
+  const isAdminRoute =
+    /^\/admin(\/|$)/.test(location.pathname) && !isAdminLogin;
 
   return (
     <Routes>
@@ -43,6 +47,10 @@ const AppRoutes = () => {
           <Route path="/about" element={<About />} />
           <Route path="/products/:category" element={<ProductListings />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/faq" element={<FAQPage />} />
+
           <Route path="*" element={<NotFound />} />
         </Route>
       )}

@@ -70,7 +70,7 @@ const UserTable: React.FC = () => {
 
       setUsers((prev) => prev.filter((u) => u.id !== selectedUserId));
 
-      showtoast("Success", "User deleted successfully", "success");
+      showtoast("Success", "Admin deleted successfully", "success");
     } catch (error) {
       console.error("Delete error:", error);
 
