@@ -1,146 +1,135 @@
-# 🌍 MRPTRADERS - Import & Export Platform
+# 🌍 MRPTRADERS - Trusted Import & Export Platform
 
-**MRPTRADERS** is a full-fledged digital platform designed to connect **local farmers and suppliers** with **international buyers**. Focused on high-quality **fruits** (like rambutan, mangosteen, durian) and **food products** (such as pulses, rice, wheat), it streamlines the global trade of fresh produce and grains.
+![Under Construction](https://user-images.githubusercontent.com/74038190/212750672-2f3f2b50-c84f-4ed8-a60a-849ae69ff9df.gif)
+
+🚧 **This platform is currently under active development. Pages and features are being updated. Stay tuned!** 🚧
 
 ---
 
-## 📝 Description
+## 📝 About Us (Updated)
 
-> “Connecting Farmers to the World”  
-MRPTRADERS simplifies import/export operations with features for clients, sellers, and administrators, offering seamless product showcasing, ordering, payments, and logistics — all in one place.
+**MRP GLOBAL Traders** is a forward-thinking export company dedicated to delivering high-quality, natural agricultural products to global markets.
+
+We partner directly with local farmers, cooperatives, and certified producers across Asia to ensure **product integrity**, **ethical sourcing**, and **full traceability** from origin to destination.
+
+Our goal is simple — to create a **seamless, trustworthy supply chain** that benefits both producers and global buyers while promoting **sustainability** and **transparency** at every step.
+
+---
+
+## 📦 What This Platform Does
+
+MRPTRADERS is a **showcase website** that highlights our trusted **import and export offerings**. Visitors can explore detailed product listings and reach out to us directly through:
+
+- ✅ **WhatsApp Messaging**
+- ✅ **Direct Phone Calls**
+
+There is **no client or seller dashboard**. All business communication is done directly and transparently with our team.
 
 ---
 
 ## 🚀 Features
 
 ### 🌐 Public Website
-- **Home Page** with hero banner, quick links (Imports, Exports, WhatsApp, Contact).
-- **About Us**: Mission, company story, certifications (ISO, FSSAI, Organic).
-- **Product Listings**: 
-  - **Imports**: Rambutan, Mangosteen, Durian, Dragonfruit
-  - **Exports**: Pulses, Rice, Wheat, Grains
-  - Filtering by category, origin, and season.
-- **Product Details**: Price, availability, quality grade, certifications, photos.
-- **Contact Page**: Form (Name, Email, Phone, Message), WhatsApp, Google Maps integration.
-- **Gallery**: High-res media of farms, logistics, packaging.
 
-### 👤 Client Dashboard
-- **Registration/Login**: Email, Phone, Google OAuth
-- **Features**:
-  - Browse products
-  - Place orders
-  - Track shipments
-  - Payment gateways (Stripe, Razorpay, PayPal)
-  - Inquiry and order history
-- **Notifications** via Email, SMS, WhatsApp
+- **Home Page**: Hero banner, featured categories, quick access to imports/exports, contact links
+- **About Page**: Company mission, certifications, sourcing model
+- **Imports & Exports**:
+  - Product listing pages for fruits, grains, pulses, and more
+  - Details include photos, grade, availability, certifications, and origin
+- **Contact Page**:
+  - Contact form
+  - Integrated WhatsApp and phone support
+  - Google Maps integration for location
+- **Gallery Page**: Photos of farms, packaging, logistics, and facilities
+- **FAQ Page**: Accordion-based Q&A for common buyer inquiries
+- **Privacy Policy & Terms Pages**
+- **404 & 403 Pages**:
+  - Custom UI for Not Found
+  - 403 Forbidden page for restricted admin access
 
-### 🚚 Seller Dashboard
-- Add/manage products (name, price, availability, photos, certifications)
-- Accept/reject orders, update shipping
-- Upload invoices and export documents
-- View sales reports and buyer insights
+---
 
-### 🛠️ Admin Dashboard
-- Manage users (approve/reject sellers, ban clients)
-- Moderate product listings
-- Order management
-- Analytics (sales, destinations, top products)
-- Global settings (languages, currencies, SEO)
+## 🛠️ Admin Dashboard (Secure Access Only)
+
+The admin dashboard allows **authorized administrators** to manage all aspects of the website’s content.
+
+### 🔐 Admin Features:
+
+- **Login / Logout**
+- **Manage Admins**:
+  - Add new admins
+  - Delete existing admins
+  - Edit roles and permissions
+- **Manage Products**:
+  - Add new import/export products
+  - Edit product info
+  - Upload photos and certifications
+  - Enable/disable products from public view
+- **Site Settings**:
+  - Update contact info
+  - Manage homepage banners
+  - Upload gallery images
+- **Security**:
+  - Access control (403 for unauthorized users)
+  - JWT or session-based auth
 
 ---
 
 ## 🧱 Tech Stack
 
 ### 🔹 Frontend
+
 - **Framework**: React.js
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 
 ### 🔹 Backend
+
 - **Framework**: Node.js + Express
-- **Auth**: JWT + Google OAuth
+- **Authentication**: JWT-based admin login
 - **File Storage**: AWS S3 or Firebase Storage
 
 ### 🔹 Database
-- **Primary**: Firebase 
-- **Secondary**: Firebase (Auth & Notifications)
+
+- **Primary**: Firebase or MongoDB Atlas (for products, admins)
 
 ### 🔹 Integrations
-- **Payments**: Stripe, Razorpay, PayPal
-- **Messaging**: WhatsApp API
-- **Maps**: Google Maps API
+
+- **WhatsApp API**
+- **Google Maps API**
 
 ### 🔹 Deployment
+
 - **Frontend**: Vercel or Netlify
-- **Backend**: AWS or DigitalOcean
-- **Database**: FireBase Cloud
+- **Backend**: AWS, Render, or DigitalOcean
+- **Database**: Firebase Firestore or MongoDB Atlas
 
 ---
 
 ## 🎨 UI/UX Overview
 
-### 🌈 Theme
-- **Style**: Modern, clean, trustworthy
+- **Theme**: Clean, trustworthy, and responsive
 - **Colors**: Green (#2E7D32), Orange (#FFA726), Light Gray (#F5F5F5)
-- **Fonts**: 
-  - Headings: Poppins (bold)
-  - Body: Inter or Roboto
-
-### 🧭 Layouts
-
-- **Home Page**: Hero image, CTA buttons, product carousel, global reach map, floating WhatsApp
-- **About Us**: Timeline, team profiles, certification grid
-- **Products**: 3-column responsive cards with filters
-- **Contact**: Split layout with form + Google Maps, QR code for WhatsApp
-- **Dashboards**:
-  - Client: Sidebar with cards (orders, payments, notifications)
-  - Seller: Analytics charts, order table, uploads
-  - Admin: Reports, user management, moderation tools
-
-### ✨ Microinteractions
-- Smooth hover effects and transitions (Framer Motion)
-- Custom fruit-themed loading indicators
-
-### ♿ Accessibility
-- WCAG-compliant contrast
-- Mobile-first responsive design
-- Multi-language support
+- **Fonts**: Poppins (headings), Inter/Roboto (body)
+- **Accessibility**: WCAG-compliant, mobile-first
 
 ---
 
 ## 🔐 Reliability & Security
 
-- SSL/HTTPS
-- Two-Factor Authentication (admin)
-- Daily MongoDB Atlas backups
-- Backend supports microservices architecture
+- HTTPS with SSL
+- JWT-authenticated admin access
+- 403 Forbidden page for unauthorized access
+- Admin role management
+- Daily backups (if MongoDB used)
 
 ---
 
 ## 📅 Roadmap
 
 ### ✅ Phase 1
+
 - Static website
-- About, Products, Contact, WhatsApp, Inquiry form
-
-### 🔜 Phase 2
-- Client & seller dashboards
-- Order management
-- Payments
-
-### 🚀 Phase 3
-- AI demand forecasting
-- Multi-language & currency
-- Global scaling
-
----
-
-
-
-## 🛡 License
-
-This project is licensed under the **MIT License** — feel free to use, modify, and contribute.
-
----.
-
-> © MRPTRADERS — Empowering global trade, one shipment at a time.
+- Product showcase (imports/exports)
+- WhatsApp + Phone contact
+- Admin login an
