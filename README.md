@@ -6,7 +6,7 @@
 
 ---
 
-## 📝 About Us (Updated)
+## 📝 About 
 
 **MRP GLOBAL Traders** is a forward-thinking export company dedicated to delivering high-quality, natural agricultural products to global markets.
 
