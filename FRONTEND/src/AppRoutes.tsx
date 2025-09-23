@@ -26,6 +26,7 @@ import ForbiddenPage from "./pages/ADMIN/ForbiddenPage";
 import PrivacyPolicy from "./pages/LegalAndSupport/PrivacyPolicy";
 import FAQPage from "./pages/LegalAndSupport/FaqPage";
 import TermsAndConditions from "./pages/LegalAndSupport/TermsAndCondition";
+import ProductDetails from "./components/Products/ProductsDetails";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -45,7 +46,8 @@ const AppRoutes = () => {
         <Route element={<Layout />}>
           <Route index path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/products/:category" element={<ProductListings />} />
+          <Route path="/products/:productid" element={<ProductDetails />} />
+          <Route path="/products" element={<ProductListings />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsAndConditions />} />

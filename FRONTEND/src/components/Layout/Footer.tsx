@@ -109,8 +109,8 @@ const Footer: React.FC = () => {
               {[
                 { to: "/", label: "Home" },
                 { to: "/about", label: "About Us" },
-                { to: "/products/imports", label: "Imports" },
-                { to: "/products/exports", label: "Exports" },
+                { to: "/products", label: "Our Products" },
+
                 { to: "/contact", label: "Contact Us" },
               ].map(({ to, label }, index) => (
                 <Link

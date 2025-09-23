@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Search, Menu, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search, Menu, X, ArrowRight } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import logo from "../../assets/images/logo.png";
+import { showtoast } from "../../utils/Toast";
+import SearchBar from "../UI/Searchbar";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { searchTerm, setSearchTerm } = useApp();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -64,48 +68,13 @@ const Header: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
             </Link>
 
-            <div className="relative group">
-              <button className="relative px-4 py-2 text-secondarylight hover:text-secondarylight font-medium transition-all duration-300 group">
-                <span className="relative z-10">Products</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
-              </button>
-
-              <div
-                className="absolute top-full left-0 mt-2 w-48 backdrop-blur-xl rounded-lg shadow-lg border border-secondarylight/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transform translate-y-2 group-hover:translate-y-0 transition-all duration-300"
-                style={{ backgroundColor: "#e8e0da" }}
-              >
-                <div className="p-2">
-                  <Link
-                    to="/products/imports"
-                    className="flex items-center px-4 py-3 font-bold text-primary hover:text-secondarylight rounded-xl transition-all duration-200 group/item"
-                    style={{ backgroundColor: "transparent" }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.backgroundColor = "#5F1A35")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.backgroundColor = "transparent")
-                    }
-                  >
-                    <div className="w-2 h-2 bg-gradient-to-r from-primary to-secondarylight rounded-full mr-3 "></div>
-                    <span>Imports</span>
-                  </Link>
-                  <Link
-                    to="/products/exports"
-                    className="flex items-center px-4 py-3 font-bold text-primary hover:text-secondarylight rounded-xl transition-all duration-200 group/item"
-                    style={{ backgroundColor: "transparent" }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.backgroundColor = "#5F1A35")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.backgroundColor = "transparent")
-                    }
-                  >
-                    <div className="w-2 h-2 bg-gradient-to-r from-secondarylight to-primary rounded-full mr-3 "></div>
-                    <span>Exports</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <Link
+              to="/products"
+              className="relative px-4 py-2 text-secondarylight hover:text-secondarylight font-medium transition-all duration-300 group"
+            >
+              <span className="relative z-10">Our Products</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+            </Link>
 
             {["About Us", "Contact"].map((item, index) => (
               <Link
@@ -121,22 +90,7 @@ const Header: React.FC = () => {
           </nav>
 
           {/*  Search Bar */}
-          <div className="hidden md:flex items-center flex-2 max-w-md mx-8">
-            <div className="relative w-full group">
-              <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary h-5 w-5 transition-colors duration-300 group-hover:text-secondarylight " />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border outline-none border-secondarylight/50 rounded-lg focus:ring-2 focus:ring-secondarylight focus:border-transparent transition-all duration-300 shadow-lg hover:shadow-xl"
-                  style={{ backgroundColor: "#F7F4F1", color: "#5F1A35" }}
-                />
-              </div>
-            </div>
-          </div>
+          <SearchBar />
 
           {/*  Mobile Menu Button */}
           <button
@@ -180,8 +134,8 @@ const Header: React.FC = () => {
             {/* Mobile Navigation Links */}
             {[
               { name: "Home", to: "/" },
-              { name: "Imports", to: "/products/imports" },
-              { name: "Exports", to: "/products/exports" },
+              { name: "Products", to: "/products" },
+
               { name: "About Us", to: "/about" },
               { name: "Contact", to: "/contact" },
             ].map((link, index) => (

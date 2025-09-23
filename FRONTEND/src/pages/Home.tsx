@@ -28,8 +28,6 @@ const Home: React.FC = () => {
       />
 
       <AnimatePresence>
-        {/* Reusable animation sections */}
-
         <Hero />
 
         <MissionSection />

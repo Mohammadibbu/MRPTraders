@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Product } from "../../types";
-import { Badge, MapPin, Calendar, Award } from "lucide-react";
+import { Badge, MapPin, Calendar, Award, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import GlassmorphismCard from "../UI/GlassmorphismCard";
 import GradientButton from "../UI/GradientButton";
+
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
   product: Product;
@@ -11,6 +13,11 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  const [imageError, setImageError] = useState(false);
+  const navigate = useNavigate();
+  const handleMoreinfo = (productid: number) => {
+    navigate(`/products/${productid}`);
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -22,12 +29,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       <GlassmorphismCard className="bg-white/95 backdrop-blur-sm border border-gray-100 overflow-hidden group h-full flex flex-col">
         <div className="relative h-48 overflow-hidden">
           <motion.img
-            src={product.photos[0]}
+            src={imageError ? "/Images/fallback.png" : product.photos[0]}
             alt={product.name}
             className="w-full h-full object-cover"
+            onError={() => setImageError(true)}
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
+            // loading="lazy"
           />
+
           <div className="absolute top-4 left-4">
             <motion.span
               initial={{ opacity: 0, x: -20 }}
@@ -54,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
               {product.quality}
             </motion.span>
           </div>
-          
+
           {/* Gradient overlay on hover */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0"
@@ -64,31 +74,48 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         </div>
 
         <div className="p-6 flex-1 flex flex-col">
-          <motion.h3 
+          <motion.h3
             className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300"
             whileHover={{ scale: 1.02 }}
           >
             {product.name}
           </motion.h3>
-          <div className="text-2xl font-bold bg-gradient-to-r from-primary to-dustyTaupe bg-clip-text text-transparent mb-4">
+          {/* <div className="text-2xl font-bold bg-gradient-to-r from-primary to-dustyTaupe bg-clip-text text-transparent mb-4">
             {product.price}
-          </div>
+          </div> */}
 
           <div className="space-y-2 mb-4 flex-1">
-            <motion.div 
+            <motion.div
               className="flex items-center text-gray-600 text-sm hover:text-primary transition-colors duration-200"
               whileHover={{ x: 5 }}
             >
               <MapPin className="h-4 w-4 mr-2 text-dustyTaupe" />
-              <span>Origin: {product.origin}</span>
+              <span>
+                <span className="text-sm mr-2 font-medium text-gray-700">
+                  Origin :
+                </span>
+                {product.origin.length > 5
+                  ? product.origin.slice(0, 5).map((value, index) => (
+                      <span key={index}>
+                        {value}
+                        {index < 4 ? ", " : " ..."}
+                      </span>
+                    ))
+                  : product.origin.map((value, index) => (
+                      <span key={index}>
+                        {value}
+                        {index < product.origin.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+              </span>
             </motion.div>
-            <motion.div 
+            {/* <motion.div
               className="flex items-center text-gray-600 text-sm hover:text-primary transition-colors duration-200"
               whileHover={{ x: 5 }}
             >
               <Calendar className="h-4 w-4 mr-2 text-dustyTaupe" />
               <span>Season: {product.season}</span>
-            </motion.div>
+            </motion.div> */}
           </div>
 
           <div className="mb-6">
@@ -114,14 +141,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             </div>
           </div>
 
-          <GradientButton
-            onClick={() => onAddToCart?.(product)}
-            variant="primary"
-            size="md"
-            className="w-full mt-auto"
-          >
-            Add to Inquiry
-          </GradientButton>
+          {/* Show More Button */}
+          <div className="flex justify-between flex-col items-center">
+            <GradientButton
+              onClick={() => onAddToCart?.(product)}
+              variant="primary"
+              size="md"
+              className="w-full mt-auto"
+            >
+              Add to Inquiry
+            </GradientButton>
+            <GradientButton
+              variant="outline"
+              size="md"
+              className="w-full mt-5"
+              onClick={() => handleMoreinfo(product.id)}
+            >
+              More Information
+            </GradientButton>
+          </div>
         </div>
       </GlassmorphismCard>
     </motion.div>

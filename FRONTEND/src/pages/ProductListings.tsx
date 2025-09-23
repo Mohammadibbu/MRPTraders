@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useMemo, useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import ProductCard from "../components/Products/ProductCard";
 import ProductFilter from "../components/Products/ProductFilter";
@@ -9,63 +8,67 @@ import { Product } from "../types";
 import { showtoast } from "../utils/Toast";
 
 const ProductListings: React.FC = () => {
-  const { category } = useParams<{ category: "imports" | "exports" }>();
-  const { products, searchTerm } = useApp();
+  const { products, searchTerm, setSearchTerm } = useApp();
   const [loading, setLoading] = useState(true);
-
+  setSearchTerm(searchTerm);
   const [filters, setFilters] = useState({
-    category: category || "all",
+    category: "All",
     origin: "All",
-    season: "All",
-    certification: "All",
-    quality: "All",
+    searchTerm,
+    availability: "All",
   });
 
+  // Memoized filtered products based on the selected filters
   const filteredProducts = useMemo(() => {
     return products.filter((product: Product) => {
-      // Category filter
-      if (category && product.category !== category) return false;
-
       // Search filter
       if (
-        searchTerm &&
-        !product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        filters.searchTerm &&
+        !product.name.toLowerCase().includes(filters.searchTerm.toLowerCase())
       ) {
         return false;
       }
 
-      // Other filters
-      if (filters.origin !== "All" && product.origin !== filters.origin)
+      // Category filter
+      if (filters.category !== "All" && product.category !== filters.category) {
         return false;
-      if (filters.season !== "All" && product.season !== filters.season)
-        return false;
+      }
+
+      // Origin filter
       if (
-        filters.certification !== "All" &&
-        !product.certifications.includes(filters.certification)
-      )
+        filters.origin !== "All" &&
+        !product.origin.includes(filters.origin)
+      ) {
         return false;
-      if (filters.quality !== "All" && product.quality !== filters.quality)
+      }
+
+      // Availability filter
+      if (
+        filters.availability !== "All" &&
+        product.availability !== filters.availability
+      ) {
         return false;
+      }
 
       return true;
     });
-  }, [products, category, searchTerm, filters]);
+  }, [products, filters]);
 
   const handleAddToCart = (product: Product) => {
-    // In a real app, this would add to cart/inquiry
     showtoast(`Added ${product.name} to inquiry list!`);
   };
 
-  const categoryTitle =
-    category === "imports" ? "Import Products" : "Export Products";
-  const categoryDescription =
-    category === "imports"
-      ? "Premium tropical fruits and exotic produce from Southeast Asia"
-      : "High-quality grains, pulses, and agricultural products from India";
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header Section */}
       <section className="relative bg-gradient-to-r from-primary via-dustyTaupe to-secondary py-20 overflow-hidden">
         {/* Animated background elements */}
         <motion.div
@@ -101,7 +104,7 @@ const ProductListings: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {categoryTitle}
+            Product Listings
           </motion.h1>
           <motion.p
             className="text-xl md:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto"
@@ -109,25 +112,20 @@ const ProductListings: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {categoryDescription}
+            Explore our range of high-quality natural products.
           </motion.p>
-          <motion.div
-            className="text-white"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <span className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30 font-semibold">
-              {filteredProducts.length} products found
-            </span>
-          </motion.div>
         </div>
       </section>
 
-      {/* Content */}
+      {/* Product Filters and Listings */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <ProductFilter filters={filters} onFilterChange={setFilters} />
+        <ProductFilter
+          filters={filters}
+          products={products}
+          onFilterChange={setFilters}
+        />
 
+        {/* Show Skeleton Loader when loading, or show filtered products */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <SkeletonLoader type="product" count={8} />
@@ -144,7 +142,7 @@ const ProductListings: React.FC = () => {
               No products found
             </div>
             <p className="text-gray-400 text-lg max-w-md mx-auto">
-              Try adjusting your filters or search terms
+              Try adjusting your filters or search terms.
             </p>
           </motion.div>
         ) : (
@@ -154,6 +152,7 @@ const ProductListings: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
+            {/* Displaying filtered product cards */}
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
