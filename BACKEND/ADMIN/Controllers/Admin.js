@@ -31,6 +31,20 @@ const CreateAdmin = async (req, res) => {
         message: "username and password are required.",
       });
     }
+    if (username.length <= 2) {
+      return res.status(400).json({
+        status: "error",
+        message: "Username must be at least 3 characters long.",
+      });
+    }
+
+    if (password.length <= 4) {
+      return res.status(400).json({
+        status: "error",
+        message: "Password must be at least 5 characters long.",
+      });
+    }
+
     // Check if admin with same username already exists
     const existingAdminSnapshot = await db
       .collection("admin")

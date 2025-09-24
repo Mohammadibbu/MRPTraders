@@ -6,12 +6,23 @@ const DeleteAdmin = `${Base_EndPoint}/admin/deleteAdmin/:id`;
 const AdminLogin = `${Base_EndPoint}/admin/login`;
 const AdminVerification = `${Base_EndPoint}/admin/verifyadmin`;
 
+//products
+const AdminAddProduct = `${Base_EndPoint}/admin/addproduct`;
+const AdminAddBulkProduct = `${Base_EndPoint}/admin/addproduct/bulkupload`;
+const AdminGetProduct = `${Base_EndPoint}/admin/allproducts/`;
+const AdminDeleteProduct = `${Base_EndPoint}/admin/delProduct/:productid`;
+
 const AdminRoutes = {
   CreateAdminEndPOint,
   FetchAllAdminEndPoint,
   DeleteAdmin,
   AdminLogin,
   AdminVerification,
+  // product
+  AdminAddProduct,
+  AdminAddBulkProduct,
+  AdminGetProduct,
+  AdminDeleteProduct,
 };
 
 export { AdminRoutes };
