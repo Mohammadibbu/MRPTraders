@@ -4,7 +4,7 @@ import CustomSelect from "./CustomSelect";
 
 interface ProductFilterProps {
   filters: FilterOptions;
-  products: Product[];
+  products: Product[] | null | undefined;
 
   onFilterChange: (filters: FilterOptions) => void;
 }
@@ -36,11 +36,11 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
     setIsVisible(true);
 
     const uniqueCategories = Array.from(
-      new Set(products.map((product) => product.category))
+      new Set(products?.map((product) => product.category))
     );
 
     const uniqueOrigins = Array.from(
-      new Set(products.flatMap((product) => product.origin))
+      new Set(products?.flatMap((product) => product.origin))
     );
 
     setCategories(["All", ...uniqueCategories]);

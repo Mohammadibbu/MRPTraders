@@ -23,10 +23,11 @@ const AdminHeader: React.FC = () => {
       <h1 className="text-xl font-semibold text-primary">Admin Dashboard</h1>
       <div className="flex items-center space-x-4">
         <button
-          className="bg-primary text-white px-4 py-1.5 rounded hover:bg-primary-light transition"
+          className="bg-primary inline-flex font-bold text-white px-4 py-1.5 rounded hover:bg-primary-light transition"
           onClick={() => setLogoutDialog(true)}
         >
           Logout
+          <LogOut className="ml-4" />
         </button>
 
         {/* Logout Confirmation Dialog */}

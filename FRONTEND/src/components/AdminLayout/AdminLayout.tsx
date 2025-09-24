@@ -1,7 +1,15 @@
 // components/AdminLayout/AdminLayout.tsx
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Users, Package, PlusCircle, Menu, ChevronLeft } from "lucide-react";
+import {
+  Users,
+  Package,
+  PlusCircle,
+  Menu,
+  ChevronLeft,
+  Upload,
+  User2,
+} from "lucide-react";
 import AdminHeader from "./AdminHeader";
 
 const AdminLayout = () => {
@@ -10,6 +18,11 @@ const AdminLayout = () => {
   const location = useLocation();
 
   const navItems = [
+    {
+      name: "Dashboard",
+      path: "/admin",
+      icon: <User2 size={20} />,
+    },
     {
       name: "Manage Admins",
       path: "/admin/Alladmins",
@@ -24,6 +37,11 @@ const AdminLayout = () => {
       name: "Add Product",
       path: "/admin/products/add",
       icon: <PlusCircle size={20} />,
+    },
+    {
+      name: "Bulk upload",
+      path: "/admin/products/bulkupload",
+      icon: <Upload size={20} />,
     },
   ];
 

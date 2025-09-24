@@ -28,6 +28,8 @@ import FAQPage from "./pages/LegalAndSupport/FaqPage";
 import TermsAndConditions from "./pages/LegalAndSupport/TermsAndCondition";
 import ProductDetails from "./components/Products/ProductsDetails";
 
+import BulkUploadPage from "./pages/ADMIN/BulkUpload";
+
 const AppRoutes = () => {
   const location = useLocation();
 
@@ -65,9 +67,11 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
+
           <Route path="Alladmins" element={<UserTable />} />
           <Route path="products" element={<ManageProducts />} />
           <Route path="products/add" element={<AddProduct />} />
+          <Route path="products/bulkupload" element={<BulkUploadPage />} />
           <Route path="*" element={<NotFoundInAdminPage />} />
         </Route>
       </Route>

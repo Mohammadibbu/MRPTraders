@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import Animation from "../utils/Animation"; // Import the Animation component
 import GradientButton from "../components/UI/GradientButton";
 import axios, { GoogleSheetApi } from "../utils/AxiosInstance";
+import Accordion from "../components/UI/Accordian";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,14 @@ const Contact: React.FC = () => {
     phone: "",
     message: "",
   });
+  const whatsappNumber = "919356380766";
+  const defaultMessage =
+    "Hi there! I'm interested in sourcing high-quality agricultural products. I'd like to learn more about your export services.";
+
+  // Encode message for URL
+  const encodedMessage = encodeURIComponent(defaultMessage);
+
+  const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
   const formatDate = (date: Date): string => {
     const day = String(date.getDate()).padStart(2, "0");
@@ -109,7 +118,7 @@ const Contact: React.FC = () => {
             <div className="absolute inset-0 bg-black opacity-30"></div>
           </div>
           <img
-            src="https://img.etimg.com/thumb/width-420,height-315,imgsize-166651,resizemode-75,msid-57750623/news/economy/agriculture/fruit-importer-ig-international-forayes-into-export-markets-with-bananas-grapes-and-onions.jpg"
+            src="/Images/ContactPage/Hero.png"
             className="absolute top-0 z-4 object-cover w-full h-full blur-sm"
             alt="Contact Background"
           />
@@ -140,10 +149,10 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        Office Address
+                        Serving customers from
                       </h3>
                       <p className="text-gray-600">
-                        Global Trade Center, Mumbai, Maharashtra 400001, India
+                        MRP Global Trade Center, Chennai
                       </p>
                     </div>
                   </div>
@@ -155,13 +164,9 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        Phone Numbers
+                        Phone Number
                       </h3>
-                      <p className="text-gray-600">
-                        +91 98765 43210
-                        <br />
-                        +1 (555) 123-4567
-                      </p>
+                      <p className="text-gray-600">+91 935 638 0766</p>
                     </div>
                   </div>
                 </Animation>
@@ -195,7 +200,7 @@ const Contact: React.FC = () => {
                         Instant support and quick order placement via WhatsApp
                       </p>
                       <a
-                        href="https://wa.me/919876543210"
+                        href={whatsappURL}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center space-x-2 text-green-600 hover:text-green-700 font-medium mt-2"
@@ -310,6 +315,9 @@ const Contact: React.FC = () => {
             </div>
           </div>
         </section>
+        {/* Faq */}
+
+        <Accordion count={5} className="bg-secondarylight" />
 
         {/* Map Section */}
         <Animation initialX={100}>
@@ -324,7 +332,7 @@ const Contact: React.FC = () => {
                     <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-500">Interactive map coming soon</p>
                     <p className="text-sm text-gray-400 mt-2">
-                      Global Trade Center, Mumbai, Maharashtra, India
+                      MRP Global Traders , chennai, India
                     </p>
                   </div>
                 </div>

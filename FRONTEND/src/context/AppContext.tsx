@@ -1,15 +1,11 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Product } from "../types";
-// import { mockProducts, mockUsers } from '../data/mockData';
-import mockProducts from "../data/mock";
+
+// import mockProducts from "../data/mock"; // Mock data for initial state
 
 interface AppContextType {
-  // user: User | null;
-  // setUser: (user: User | null) => void;
-  products: Product[];
+  products: Product[] | null | undefined;
   setProducts: (products: Product[]) => void;
-  // orders: Order[];
-  // setOrders: (orders: Order[]) => void;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
 }
@@ -19,23 +15,13 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // const [user, setUser] = useState<User | null>(null);
-  const [products, setProducts] = useState<Product[]>(mockProducts);
-  // const [orders, setOrders] = useState<Order[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  // Initialize state with mock data or empty array if mock data is unavailable
+  const [products, setProducts] = useState<Product[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
     <AppContext.Provider
-      value={{
-        // user,
-        // setUser,
-        products,
-        setProducts,
-        // orders,
-        // setOrders,
-        searchTerm,
-        setSearchTerm,
-      }}
+      value={{ products, setProducts, searchTerm, setSearchTerm }}
     >
       {children}
     </AppContext.Provider>

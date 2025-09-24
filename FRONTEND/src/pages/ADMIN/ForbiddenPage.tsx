@@ -10,23 +10,28 @@ const ForbiddenPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b min-h-screen from-secondarylight to-primary text-white ">
-      <div className="text-center p-8 md:p-12 bg-secondary/60 rounded-lg shadow-lg ">
-        <h1 className="text-4xl font-semibold text-gray-600">403 Forbidden</h1>
+    <div className="min-h-screen  flex items-center  bg-secondary/60 justify-center px-4 py-10">
+      <div className="w-full max-w-3xl  rounded-xl  p-6 sm:p-10 text-center">
+        <h1 className="text-3xl sm:text-4xl font-semibold text-gray-700">
+          403 Forbidden
+        </h1>
+
         <img
           src={Forbidden}
           alt="403 Forbidden"
-          className=" max-w-2xl mx-auto"
+          className="w-full max-w-lg mx-auto my-6"
         />
-        <p className="mt-4 text-lg text-gray-700">
+
+        <p className="text-base sm:text-lg text-gray-700">
           You do not have permission to access this page.
         </p>
-        <p className="mt-4 text-md text-gray-700">
+        <p className="text-sm sm:text-md text-gray-700 mt-2">
           Please log in with the appropriate credentials to gain access.
         </p>
+
         <button
           onClick={handleLoginRedirect}
-          className="mt-6 px-6 py-2 inline-flex items-center bg-primary text-secondary rounded-lg hover:bg-primary/80 transition-all"
+          className="mt-6 px-5 py-2 text-sm sm:text-base inline-flex items-center bg-primary text-white rounded-lg hover:bg-primary/80 transition-all"
         >
           <ArrowLeft className="w-4 h-4 mr-2" /> Go to Login Page
         </button>

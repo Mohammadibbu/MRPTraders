@@ -5,7 +5,7 @@ import { MessageCircle, X, Phone } from "lucide-react";
 const FloatingWhatsApp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const whatsappNumber = "+919876543210";
+  const whatsappNumber = "+919356380766";
   const defaultMessage =
     "Hi! I'm interested in your products. Can you help me?";
 
@@ -108,7 +108,7 @@ const FloatingWhatsApp: React.FC = () => {
 
                 <motion.button
                   onClick={handleCallClick}
-                  className="w-full flex items-center space-x-3 p-3 bg-gradient-to-r from-primary to-dustyTaupe text-white rounded-xl hover:from-primary/90 hover:to-dustyTaupe/90 transition-all duration-200"
+                  className="w-full flex items-center space-x-3 p-3 bg-gradient-to-r from-primary to-primary text-white rounded-xl hover:from-primary/90 hover:to-dustyTaupe/90 transition-all duration-200"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >

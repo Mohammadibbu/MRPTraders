@@ -2,6 +2,7 @@ import React from "react";
 import { Award, Users, Globe, Shield, Heart } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import Animation from "../utils/Animation";
+import JoinUsSection from "../components/Home/JoinUsSection";
 
 const certifications = [
   {
@@ -58,7 +59,7 @@ const About: React.FC = () => {
             <div className="absolute inset-0 bg-black opacity-30" />
           </div>
           <img
-            src="https://www.shutterstock.com/shutterstock/videos/1086445067/thumb/8.jpg?ip=x480"
+            src="/Images/AboutPage/Hero.png"
             alt="Background"
             className="absolute top-0 z-4 object-cover w-full h-full blur-sm"
           />
@@ -101,9 +102,9 @@ const About: React.FC = () => {
               <Animation initialX={100}>
                 <div className="relative">
                   <img
-                    src="https://images.pexels.com/photos/4397923/pexels-photo-4397923.jpeg"
+                    src="/Images/AboutPage/about1.png"
                     alt="Our Mission"
-                    className="rounded-lg shadow-xl"
+                    className="w-3/4"
                   />
                 </div>
               </Animation>
@@ -112,13 +113,13 @@ const About: React.FC = () => {
         </section>
 
         {/* Certifications */}
-        <section className="py-14 px-5 bg-white">
+        <section className="py-14 px-5 bg-secondarylight">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2  gap-12 items-center">
               <Animation initialX={-100}>
                 <div className="relative">
                   <img
-                    src="https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg"
+                    src="/Images/AboutPage/about2.png"
                     alt="Certifications"
                     className="rounded-lg shadow-xl"
                   />
@@ -192,6 +193,7 @@ const About: React.FC = () => {
           </div>
         </section>
       </AnimatePresence>
+      <JoinUsSection />
     </div>
   );
 };

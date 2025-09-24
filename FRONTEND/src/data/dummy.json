@@ -1,0 +1,846 @@
+[
+  {
+    "name": "Toor Dal",
+    "alias": "Pigeon Pea / Thuvaram Paruppu",
+    "origin": ["Madurai", "Dindigul", "Virudhunagar", "Tirunelveli"],
+    "health_benefits": [
+      "Rich in protein and dietary fiber",
+      "Helps in digestion",
+      "Provides essential vitamins (B-complex) and minerals like potassium & magnesium"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/toor_dal_1.jpg",
+      "https://example.com/images/toor_dal_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic", "FDA Approved"],
+    "description": "Toor Dal is a staple pulse in Indian kitchens, rich in protein and fiber, aiding digestion and nutrition.",
+    "applications": [
+      "Used in South Indian sambar and dals.",
+      "Cooked with spices for protein-rich meals."
+    ],
+    "why_choose_us": [
+      "Sourced from prime regions in Tamil Nadu.",
+      "Nutrient-rich and sustainably cultivated."
+    ],
+    "contact_info": "Bulk orders available on request.",
+    "id": 1
+  },
+  {
+    "name": "Urad Dal",
+    "alias": "Black Gram / Ulundhu Paruppu",
+    "origin": ["Thanjavur", "Cuddalore", "Villupuram", "Tiruvannamalai"],
+    "health_benefits": [
+      "High in protein and iron (good for energy & strength)",
+      "Improves bone health",
+      "Aids digestion and boosts heart health"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/urad_dal_1.jpg",
+      "https://example.com/images/urad_dal_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic", "FDA Approved"],
+    "description": "Urad Dal is commonly used in South Indian cuisine for idli, dosa, and vada. It's rich in iron and protein.",
+    "applications": [
+      "Used in making idli/dosa batter and dals.",
+      "Essential for South Indian tiffin recipes."
+    ],
+    "why_choose_us": [
+      "Carefully cleaned and sorted.",
+      "Traditionally grown in Tamil Nadu."
+    ],
+    "contact_info": "Contact us for wholesale pricing.",
+    "id": 2
+  },
+  {
+    "name": "Moong Dal",
+    "alias": "Green Gram / Paasi Paruppu",
+    "origin": ["Virudhunagar", "Tirunelveli", "Vellore"],
+    "health_benefits": [
+      "Easily digestible (ideal for all ages)",
+      "Rich in antioxidants, potassium, magnesium",
+      "Helps control cholesterol and weight"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/moong_dal_1.jpg",
+      "https://example.com/images/moong_dal_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic", "FDA Approved"],
+    "description": "Moong Dal is light, easily digestible, and ideal for detox diets and daily nutrition.",
+    "applications": [
+      "Used in khichdi, soups, and curries.",
+      "Great for infants and elderly diets."
+    ],
+    "why_choose_us": [
+      "Naturally processed and chemical-free.",
+      "Excellent source of plant-based protein."
+    ],
+    "contact_info": "Connect with us for export options.",
+    "id": 3
+  },
+  {
+    "name": "Bengal Gram",
+    "alias": "Chana Dal / Kadalai Paruppu",
+    "origin": ["Salem", "Namakkal", "Krishnagiri", "Dharmapuri"],
+    "health_benefits": [
+      "Excellent protein source for vegetarians",
+      "Maintains blood sugar levels",
+      "Boosts immunity and digestion"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/bengal_gram_1.jpg",
+      "https://example.com/images/bengal_gram_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic", "FDA Approved"],
+    "description": "Bengal Gram is a rich source of protein, perfect for vegetarians and vegans. It helps control blood sugar and promotes immunity.",
+    "applications": [
+      "Used in making hummus, curries, and soups.",
+      "Can be roasted and eaten as a snack."
+    ],
+    "why_choose_us": [
+      "Rich in protein and fiber.",
+      "Helps regulate blood sugar and improve immunity."
+    ],
+    "contact_info": "Contact us for more details on customized packaging.",
+    "id": 4
+  },
+  {
+    "name": "Masoor Dal",
+    "alias": "Red Lentil",
+    "origin": ["Erode", "Salem", "Tiruvannamalai"],
+    "health_benefits": [
+      "Rich in protein, fiber, and folate",
+      "Good for heart health",
+      "Improves skin health and energy"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/masoor_dal_1.jpg",
+      "https://example.com/images/masoor_dal_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic", "FDA Approved"],
+    "description": "Masoor Dal, or Red Lentil, is a quick-cooking lentil that is rich in nutrients, especially folate and fiber. It supports heart health and energy levels.",
+    "applications": [
+      "Used in making soups, curries, and dals.",
+      "A great addition to vegetarian and vegan dishes."
+    ],
+    "why_choose_us": [
+      "Rich in folate and fiber.",
+      "Supports heart health and boosts energy."
+    ],
+    "contact_info": "Reach out to our team for bulk pricing and inquiries.",
+    "id": 5
+  },
+  {
+    "name": "Horse Gram",
+    "alias": "Kollu",
+    "origin": ["Dindigul", "Karur", "Madurai", "Tirunelveli"],
+    "health_benefits": [
+      "Aids weight loss",
+      "Detoxifies the body",
+      "Good for treating kidney stones and diabetes"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/horse_gram_1.jpg",
+      "https://example.com/images/horse_gram_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Horse Gram is a traditional legume known for its fat-burning and detoxifying properties, widely used in Siddha medicine.",
+    "applications": [
+      "Used in soups and kollu rasam.",
+      "Consumed in powdered form for health benefits."
+    ],
+    "why_choose_us": [
+      "Organically sourced and unpolished.",
+      "High nutritional and medicinal value."
+    ],
+    "contact_info": "For retail and bulk orders, contact our sales team.",
+    "id": 6
+  },
+  {
+    "name": "Cowpea",
+    "alias": "Lobia / Karamani",
+    "origin": ["Coimbatore", "Thanjavur", "Villupuram", "Trichy"],
+    "health_benefits": [
+      "Rich in protein, vitamins, and minerals",
+      "Improves digestion",
+      "Boosts energy and immunity"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/cowpea_1.jpg",
+      "https://example.com/images/cowpea_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Cowpea, also known as Karamani, is rich in protein and fiber. It is a popular pulse in both North and South Indian cuisines.",
+    "applications": [
+      "Used in sundal and curries.",
+      "Soaked and sprouted for salads."
+    ],
+    "why_choose_us": [
+      "Locally grown with care.",
+      "Nutrient-dense and versatile ingredient."
+    ],
+    "contact_info": "Email or call us to get pricing and supply details.",
+    "id": 7
+  },
+  {
+    "name": "Rajma",
+    "alias": "Kidney Beans",
+    "origin": ["Nilgiris", "Western Ghats"],
+    "health_benefits": [
+      "High in protein & fiber",
+      "Supports heart health",
+      "Good source of iron & magnesium"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/rajma_1.jpg",
+      "https://example.com/images/rajma_2.jpg"
+    ],
+    "availability": "Limited Stock",
+    "quality": "Grade A",
+    "season": "Seasonal",
+    "certifications": ["FDA Approved"],
+    "description": "Rajma is a high-protein legume with excellent fiber and mineral content, perfect for curries and stews.",
+    "applications": [
+      "Used in North Indian rajma curry.",
+      "A great addition to rice and salads."
+    ],
+    "why_choose_us": [
+      "Rarely cultivated in Tamil Nadu's high ranges.",
+      "High-altitude grown for dense nutrition."
+    ],
+    "contact_info": "Available in seasonal batches – pre-order recommended.",
+    "id": 8
+  },
+  {
+    "name": "Soybean",
+    "alias": null,
+    "origin": ["Erode", "Salem", "Coimbatore"],
+    "health_benefits": [
+      "Excellent plant-based protein",
+      "Supports bone health",
+      "Balances cholesterol levels"
+    ],
+    "category": "Pulses",
+    "photos": [
+      "https://example.com/images/soybean_1.jpg",
+      "https://example.com/images/soybean_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Available Year-round",
+    "certifications": ["Certified Organic", "FDA Approved"],
+    "description": "Soybean is a powerhouse of protein and essential amino acids, widely used in plant-based diets and processed foods.",
+    "applications": [
+      "Used in tofu, soy milk, and flour.",
+      "Great for vegans and protein supplements."
+    ],
+    "why_choose_us": [
+      "High-yield, non-GMO crops.",
+      "Lab-tested for purity and nutrition."
+    ],
+    "contact_info": "Speak to our team for industrial supply needs.",
+    "id": 9
+  },
+
+  {
+    "name": "Rambutan",
+    "alias": null,
+    "origin": [
+      "Kanyakumari",
+      "Tirunelveli",
+      "Nilgiris",
+      "Western Ghats",
+      "Indonesia (Sumatra & Java)",
+      "China (Hainan, Guangdong, Guangxi)"
+    ],
+    "health_benefits": [
+      "Rich in Vitamin C → boosts immunity",
+      "Contains iron & copper → improves blood health",
+      "High in antioxidants → protects cells, slows aging",
+      "Fiber-rich → aids digestion",
+      "Naturally hydrating & refreshing"
+    ],
+    "category": "Exotic Fruits",
+    "photos": [
+      "https://example.com/images/rambutan_1.jpg",
+      "https://example.com/images/rambutan_2.jpg"
+    ],
+    "availability": "Seasonal",
+    "quality": "Premium Grade",
+    "season": "Summer and Monsoon",
+    "certifications": ["Certified Organic", "GlobalGAP"],
+    "description": "Rambutan is a tropical fruit known for its juicy, sweet flavor and rich nutritional profile, including vitamin C and antioxidants.",
+    "applications": [
+      "Consumed fresh as a refreshing fruit.",
+      "Used in fruit salads, desserts, and beverages."
+    ],
+    "why_choose_us": [
+      "Handpicked from prime Tamil Nadu and Southeast Asian regions.",
+      "Carefully transported to preserve freshness."
+    ],
+    "contact_info": "Contact us for fresh seasonal stock and export inquiries.",
+    "id": 101
+  },
+  {
+    "name": "Mangosteen",
+    "alias": "Queen of Fruits",
+    "origin": [
+      "Nilgiris",
+      "Kanyakumari",
+      "Tirunelveli",
+      "Courtallam",
+      "Indonesia (Sumatra, Kalimantan)",
+      "China (Hainan, Yunnan, Guangxi)"
+    ],
+    "health_benefits": [
+      "Contains xanthones (powerful antioxidants) → strengthens immunity",
+      "Anti-inflammatory → good for joint & heart health",
+      "Promotes skin glow & anti-aging",
+      "Improves digestion & gut health",
+      "Supports weight management"
+    ],
+    "category": "Exotic Fruits",
+    "photos": [
+      "https://example.com/images/mangosteen_1.jpg",
+      "https://example.com/images/mangosteen_2.jpg"
+    ],
+    "availability": "Seasonal",
+    "quality": "Premium Grade",
+    "season": "Summer",
+    "certifications": ["Certified Organic", "GlobalGAP"],
+    "description": "Mangosteen, known as the Queen of Fruits, is prized for its delicious sweet-sour taste and potent antioxidant properties.",
+    "applications": [
+      "Eaten fresh or in fruit salads.",
+      "Used in juices, jams, and desserts."
+    ],
+    "why_choose_us": [
+      "Sourced from the best orchards in Tamil Nadu and Southeast Asia.",
+      "Strict quality control to ensure superior taste and freshness."
+    ],
+    "contact_info": "Reach out for seasonal availability and bulk orders.",
+    "id": 102
+  },
+  {
+    "name": "Onion",
+    "alias": "Big Onion & Small Onion/Shallots",
+    "origin": ["Perambalur", "Namakkal", "Erode", "Trichy"],
+    "health_benefits": [
+      "Rich in antioxidants (quercetin) → boosts immunity",
+      "Supports heart health & controls cholesterol",
+      "Anti-inflammatory, good for skin & hair health"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/onion_1.jpg",
+      "https://example.com/images/onion_2.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Onions are rich in antioxidants and quercetin, supporting immunity, heart health, and skin & hair wellness.",
+    "applications": [
+      "Used widely in cooking, salads, and pickles.",
+      "Essential ingredient in many Tamil Nadu dishes."
+    ],
+    "why_choose_us": [
+      "Grown in prime Tamil Nadu regions ensuring freshness.",
+      "Harvested with care to maintain quality and nutrition."
+    ],
+    "contact_info": "Contact us for bulk orders and delivery options.",
+    "id": 201
+  },
+  {
+    "name": "Tomato",
+    "alias": null,
+    "origin": ["Krishnagiri", "Dharmapuri", "Salem", "Dindigul"],
+    "health_benefits": [
+      "Rich in Vitamin C, Vitamin A & Lycopene → good for skin & eyes",
+      "Supports heart health",
+      "Boosts immunity and reduces oxidative stress"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/tomato_1.jpg",
+      "https://example.com/images/tomato_2.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Tomatoes are nutrient-rich fruits that support skin, eye, and heart health with antioxidants like lycopene.",
+    "applications": ["Used in curries, salads, sauces, and chutneys."],
+    "why_choose_us": [
+      "Sourced fresh from top cultivation zones in Tamil Nadu.",
+      "Ensured high nutrient retention through careful handling."
+    ],
+    "contact_info": "Contact for fresh supplies and wholesale pricing.",
+    "id": 202
+  },
+  {
+    "name": "Brinjal",
+    "alias": "Eggplant / Aubergine",
+    "origin": ["Dharmapuri", "Vellore", "Coimbatore", "Trichy"],
+    "health_benefits": [
+      "High in fiber → supports digestion",
+      "Contains antioxidants → reduces inflammation",
+      "Helps in blood sugar management"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/brinjal_1.jpg",
+      "https://example.com/images/brinjal_2.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Brinjal is a fiber-rich vegetable that supports digestion, reduces inflammation, and aids blood sugar control.",
+    "applications": [
+      "Used in curries, stir-fries, and stuffed vegetable recipes."
+    ],
+    "why_choose_us": [
+      "Locally grown ensuring authentic taste and freshness.",
+      "Processed and packed under strict quality control."
+    ],
+    "contact_info": "Get in touch for seasonal availability.",
+    "id": 203
+  },
+  {
+    "name": "Okra",
+    "alias": "Ladies Finger / Bhindi",
+    "origin": ["Salem", "Namakkal", "Dharmapuri", "Trichy"],
+    "health_benefits": [
+      "Rich in Vitamin C & Folate → boosts immunity",
+      "Good for pregnant women (folic acid content)",
+      "Supports blood sugar control"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/okra_1.jpg",
+      "https://example.com/images/okra_2.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Okra is a nutritious vegetable rich in vitamins and folate, beneficial for immunity and blood sugar regulation.",
+    "applications": ["Commonly used in curries, stir-fries, and soups."],
+    "why_choose_us": [
+      "Farmed sustainably in prime Tamil Nadu regions.",
+      "Ensures high folate content and freshness."
+    ],
+    "contact_info": "Contact us for supply and bulk orders.",
+    "id": 204
+  },
+  {
+    "name": "Drumstick",
+    "alias": "Moringa",
+    "origin": ["Dindigul", "Theni", "Tirunelveli", "Madurai"],
+    "health_benefits": [
+      "Known as a superfood → packed with vitamins, minerals & antioxidants",
+      "Strengthens bones & boosts energy",
+      "Controls blood pressure & sugar levels"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/drumstick_1.jpg",
+      "https://example.com/images/drumstick_2.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Drumstick (Moringa) is a superfood vegetable rich in essential nutrients that promote overall health and vitality.",
+    "applications": ["Used in soups, curries, and as a vegetable side dish."],
+    "why_choose_us": [
+      "Sourced from the world’s largest producer - Tamil Nadu.",
+      "Packed with maximum nutrient retention."
+    ],
+    "contact_info": "Contact for fresh supply and bulk orders.",
+    "id": 205
+  },
+  {
+    "name": "Cabbage & Cauliflower",
+    "alias": null,
+    "origin": ["Nilgiris", "Krishnagiri", "Dindigul"],
+    "health_benefits": [
+      "Rich in Vitamin K, Vitamin C → bone & immune health",
+      "Contains sulforaphane → anti-cancer properties",
+      "Good for weight management"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/cabbage_1.jpg",
+      "https://example.com/images/cauliflower_1.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Cabbage and cauliflower are nutrient-dense vegetables known for their vitamins and anti-cancer compounds.",
+    "applications": ["Used in salads, stir-fries, and as cooked vegetables."],
+    "why_choose_us": [
+      "Harvested from prime growing regions with organic practices.",
+      "Maintains high nutritional value and freshness."
+    ],
+    "contact_info": "Inquire for bulk purchase and seasonal availability.",
+    "id": 206
+  },
+  {
+    "name": "Green Chillies",
+    "alias": null,
+    "origin": ["Ramanathapuram", "Thoothukudi", "Trichy"],
+    "health_benefits": [
+      "High in Vitamin C & Capsaicin → boosts metabolism",
+      "Improves digestion",
+      "Natural antioxidant"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/green_chillies_1.jpg",
+      "https://example.com/images/green_chillies_2.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Green chillies are a spicy vegetable rich in vitamin C and capsaicin that support metabolism and digestion.",
+    "applications": ["Widely used in cooking for flavor and heat."],
+    "why_choose_us": [
+      "Carefully harvested to retain heat and nutrients.",
+      "Sourced from the best Tamil Nadu farming regions."
+    ],
+    "contact_info": "Contact for fresh stock and wholesale options.",
+    "id": 207
+  },
+  {
+    "name": "Curry Leaves",
+    "alias": null,
+    "origin": ["Madurai", "Dindigul", "Tirunelveli"],
+    "health_benefits": [
+      "Improves hair & skin health",
+      "Rich in iron, calcium & vitamins",
+      "Supports digestion & controls cholesterol"
+    ],
+    "category": "Vegetables",
+    "photos": [
+      "https://example.com/images/curry_leaves_1.jpg",
+      "https://example.com/images/curry_leaves_2.jpg"
+    ],
+    "availability": "In Season",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Curry leaves are aromatic leaves rich in essential minerals and vitamins beneficial for hair, skin, and digestion.",
+    "applications": ["Used as a seasoning in South Indian cooking."],
+    "why_choose_us": [
+      "Harvested fresh from Tamil Nadu's prime regions.",
+      "Ensured highest quality and flavor."
+    ],
+    "contact_info": "Reach out for supply and bulk orders.",
+    "id": 208
+  },
+  {
+    "name": "Turmeric",
+    "alias": "Haldi / Manjal",
+    "origin": ["Salem", "Erode", "Dharmapuri"],
+    "health_benefits": [
+      "Contains curcumin, a natural anti-inflammatory",
+      "Boosts immunity",
+      "Supports skin health & digestion"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/turmeric_1.jpg",
+      "https://example.com/images/turmeric_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic", "FDA Approved"],
+    "description": "Salem turmeric is world-famous for its high curcumin content, known for its anti-inflammatory and immune-boosting properties.",
+    "applications": [
+      "Used in cooking, traditional medicine, and as a natural colorant."
+    ],
+    "why_choose_us": [
+      "Sourced from the prime turmeric-growing region of Salem.",
+      "Highest quality with rich curcumin levels."
+    ],
+    "contact_info": "Contact us for bulk orders and custom packaging.",
+    "id": 301
+  },
+  {
+    "name": "Black Pepper",
+    "alias": "Milagu",
+    "origin": ["Coimbatore", "Nilgiris", "Dindigul", "Kanyakumari"],
+    "health_benefits": [
+      "Known as the “King of Spices”",
+      "Improves digestion & metabolism",
+      "Rich in antioxidants, supports respiratory health"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/black_pepper_1.jpg",
+      "https://example.com/images/black_pepper_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Black pepper from the Western Ghats is prized for its flavor and medicinal properties, aiding digestion and respiratory health.",
+    "applications": ["Widely used as a spice and digestive aid."],
+    "why_choose_us": [
+      "Grown in prime Western Ghats regions.",
+      "Ensures premium quality and potency."
+    ],
+    "contact_info": "Get in touch for supply details and pricing.",
+    "id": 302
+  },
+  {
+    "name": "Cardamom",
+    "alias": "Elakkai / Green Cardamom",
+    "origin": ["Kanyakumari", "Theni", "Dindigul"],
+    "health_benefits": [
+      "Natural mouth freshener",
+      "Good for digestion & detoxification",
+      "Supports heart health & blood circulation"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/cardamom_1.jpg",
+      "https://example.com/images/cardamom_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Cardamom from Tamil Nadu's Western Ghats is a flavorful spice known for digestive and cardiovascular benefits.",
+    "applications": ["Used in cooking, teas, and traditional remedies."],
+    "why_choose_us": [
+      "Freshly harvested from optimal growing zones.",
+      "Maintains high aroma and medicinal properties."
+    ],
+    "contact_info": "Contact for bulk supply and packaging options.",
+    "id": 303
+  },
+  {
+    "name": "Cloves",
+    "alias": "Krambu",
+    "origin": ["Nilgiris", "Kanyakumari", "Western Ghats"],
+    "health_benefits": [
+      "Contains eugenol → natural pain reliever",
+      "Improves oral health",
+      "Boosts immunity & reduces inflammation"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/cloves_1.jpg",
+      "https://example.com/images/cloves_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Cloves are rich in eugenol, making them a natural analgesic and immune booster, sourced from the Western Ghats.",
+    "applications": [
+      "Used in spice blends, oral hygiene products, and traditional medicine."
+    ],
+    "why_choose_us": [
+      "Sourced from premium cultivation zones.",
+      "Ensures high eugenol content and freshness."
+    ],
+    "contact_info": "Reach out for details on supply and packaging.",
+    "id": 304
+  },
+  {
+    "name": "Cinnamon",
+    "alias": "Pattai",
+    "origin": ["Kanyakumari", "Western Ghats"],
+    "health_benefits": [
+      "Controls blood sugar & cholesterol",
+      "Rich in antioxidants",
+      "Supports brain & heart health"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/cinnamon_1.jpg",
+      "https://example.com/images/cinnamon_2.jpg"
+    ],
+    "availability": "Limited Cultivation",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Cinnamon from Tamil Nadu is valued for its antioxidant properties and benefits to blood sugar, brain, and heart health.",
+    "applications": ["Used in cooking, baking, and herbal remedies."],
+    "why_choose_us": [
+      "Limited cultivation ensuring exclusivity.",
+      "High-quality cinnamon with potent health benefits."
+    ],
+    "contact_info": "Contact us for orders and inquiries.",
+    "id": 305
+  },
+  {
+    "name": "Dry Red Chillies",
+    "alias": null,
+    "origin": ["Ramanathapuram", "Virudhunagar", "Thoothukudi", "Sivagangai"],
+    "health_benefits": [
+      "High in Vitamin C & Capsaicin → boosts metabolism",
+      "Improves digestion",
+      "Supports immunity"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/dry_red_chillies_1.jpg",
+      "https://example.com/images/dry_red_chillies_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Dry red chillies are rich in vitamin C and capsaicin, aiding metabolism, digestion, and immune function.",
+    "applications": ["Used in spice blends, pickles, and cooking."],
+    "why_choose_us": [
+      "Sourced from top chilli growing regions.",
+      "Ensures strong heat and quality."
+    ],
+    "contact_info": "Contact for bulk purchase options.",
+    "id": 306
+  },
+  {
+    "name": "Coriander Seeds",
+    "alias": "Dhania / Kothamalli Vidhai",
+    "origin": ["Theni", "Dindigul", "Tirunelveli"],
+    "health_benefits": [
+      "Aids digestion",
+      "Detoxifies the body",
+      "Good for controlling blood sugar"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/coriander_seeds_1.jpg",
+      "https://example.com/images/coriander_seeds_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Coriander seeds from Tamil Nadu help with digestion, detoxification, and blood sugar management.",
+    "applications": ["Used in spice mixes, cooking, and herbal teas."],
+    "why_choose_us": [
+      "Harvested fresh from prime regions.",
+      "Maintains high potency and aroma."
+    ],
+    "contact_info": "Contact for supply and packaging inquiries.",
+    "id": 307
+  },
+  {
+    "name": "Cumin Seeds",
+    "alias": "Jeera / Seeragam",
+    "origin": ["Coimbatore", "Erode", "Dindigul"],
+    "health_benefits": [
+      "Improves digestion & appetite",
+      "Rich in iron (good for blood health)",
+      "Boosts immunity"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/cumin_seeds_1.jpg",
+      "https://example.com/images/cumin_seeds_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Cumin seeds are known for aiding digestion, improving appetite, and boosting immunity with their rich iron content.",
+    "applications": ["Used widely in cooking and traditional medicines."],
+    "why_choose_us": [
+      "Sourced from high-quality farms in Tamil Nadu.",
+      "Ensured nutrient-rich and fresh seeds."
+    ],
+    "contact_info": "Get in touch for bulk supply options.",
+    "id": 308
+  },
+  {
+    "name": "Fennel Seeds",
+    "alias": "Saunf / Sombu",
+    "origin": ["Salem", "Erode", "Thanjavur"],
+    "health_benefits": [
+      "Natural mouth freshener",
+      "Aids digestion & reduces acidity",
+      "Supports bone & eye health"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/fennel_seeds_1.jpg",
+      "https://example.com/images/fennel_seeds_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Fennel seeds are aromatic and aid digestion while supporting bone and eye health, sourced from Tamil Nadu.",
+    "applications": ["Used in cooking, teas, and breath fresheners."],
+    "why_choose_us": [
+      "Grown in optimal conditions ensuring quality.",
+      "Retains aroma and medicinal benefits."
+    ],
+    "contact_info": "Contact us for supply and bulk orders.",
+    "id": 309
+  },
+  {
+    "name": "Tamarind",
+    "alias": "Puli",
+    "origin": ["Villupuram", "Cuddalore", "Ariyalur", "Trichy"],
+    "health_benefits": [
+      "Rich in Vitamin C & antioxidants",
+      "Improves digestion",
+      "Good for skin & liver health"
+    ],
+    "category": "Spices",
+    "photos": [
+      "https://example.com/images/tamarind_1.jpg",
+      "https://example.com/images/tamarind_2.jpg"
+    ],
+    "availability": "In Stock",
+    "quality": "Grade A",
+    "season": "Year-round",
+    "certifications": ["Certified Organic"],
+    "description": "Tamarind is a tangy spice rich in vitamin C and antioxidants, beneficial for digestion and skin health.",
+    "applications": ["Used in cooking, chutneys, and traditional remedies."],
+    "why_choose_us": [
+      "Sourced from Tamil Nadu’s best tamarind producing regions.",
+      "Ensures freshness and high nutrient content."
+    ],
+    "contact_info": "Reach out for bulk supply and pricing.",
+    "id": 310
+  }
+]

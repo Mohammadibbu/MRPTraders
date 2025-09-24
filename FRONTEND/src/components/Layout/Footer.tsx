@@ -170,11 +170,11 @@ const Footer: React.FC = () => {
                 },
                 {
                   icon: Phone,
-                  text: "+91 98765 43210",
+                  text: "+91 935 638 0766",
                 },
                 {
                   icon: MapPin,
-                  text: "Global Trade Center, Mumbai, Maharashtra, India",
+                  text: "MRP Global Traders , chennai , India",
                 },
               ].map(({ icon: Icon, text }, index) => (
                 <span

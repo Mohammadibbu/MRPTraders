@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios, {
   adminTableApi,
   adminDeleteApi,
+  addadminapi,
 } from "../../utils/AxiosInstance";
 import { showtoast } from "../../utils/Toast";
 import SkeletonLoader from "../UI/SkeletonLoader";
 import GradientButton from "../UI/GradientButton";
 import { motion } from "framer-motion";
-import { Trash2, Eye, Users, RotateCcw, PlusCircle } from "lucide-react";
+import { Trash2, Users, RotateCcw, PlusCircle, Edit } from "lucide-react";
 import DialogComponent from "../UI/DialogModel";
 import { useNavigate } from "react-router-dom";
 
@@ -21,35 +22,43 @@ type User = {
 const UserTable: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isDeleting, setDeleting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [newAdmin, setNewAdmin] = useState({ username: "", password: "" });
+  const [adding, setAdding] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
+  // Fetch Users
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const res = await axios.get(adminTableApi);
       setUsers(res.data.data);
     } catch (error: any) {
-      if (error?.response?.data?.Token === false) {
-        navigate("/admin/login");
-        showtoast(
-          "Session Expired",
-          "Your login session has expired due to inactivity or unauthorized access. Please log in again.",
-          "error",
-          5000
-        );
-      } else {
-        showtoast(
-          "Failed to Retrieve Data",
-          "We were unable to fetch the admin details. Please try again later or contact support.",
-          "error"
-        );
-      }
+      handleError(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handle Errors
+  const handleError = (error: any) => {
+    if (error?.response?.data?.Token === false) {
+      showtoast(
+        "Session Expired",
+        "Your session has expired. Please log in again.",
+        "error"
+      );
+      navigate("/admin/login");
+    } else {
+      showtoast(
+        "Error",
+        error?.response?.data?.message || "An unexpected error occurred.",
+        "error"
+      );
     }
   };
 
@@ -57,33 +66,59 @@ const UserTable: React.FC = () => {
     fetchUsers();
   }, []);
 
+  // Add Admin
+  const handleAddAdmin = async () => {
+    const { username, password } = newAdmin;
+    if (!username || !password) {
+      showtoast(
+        "Missing Fields",
+        "Both username and password are required.",
+        "warning"
+      );
+      return;
+    }
+
+    setAdding(true);
+    try {
+      const response = await axios.post(addadminapi, { username, password });
+      if (response?.data?.status === "error") {
+        showtoast(
+          "Failed",
+          response?.data?.message || "Could not add admin. Try again.",
+          "error"
+        );
+        return;
+      }
+      showtoast("Success", "Admin added successfully.", "success");
+      fetchUsers();
+      setAddDialogOpen(false);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setAdding(false);
+    }
+  };
+
+  // Delete Admin
   const handleDelete = async () => {
-    setDeleting(true);
     if (!selectedUserId) return;
 
-    const adminDelete = `${adminDeleteApi}/${selectedUserId}`;
-
+    setIsDeleting(true);
     try {
-      const del = await axios.delete(adminDelete);
-
-      console.log(del);
-
+      await axios.delete(`${adminDeleteApi}/${selectedUserId}`);
       setUsers((prev) => prev.filter((u) => u.id !== selectedUserId));
-
-      showtoast("Success", "Admin deleted successfully", "success");
+      showtoast("Success", "Admin deleted successfully.", "success");
     } catch (error) {
-      console.error("Delete error:", error);
-
-      showtoast("Error", "Could not delete user", "error");
+      handleError(error);
     } finally {
-      setDeleting(false);
+      setIsDeleting(false);
       setOpenDialog(false);
       setSelectedUserId(null);
     }
   };
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-xl min-h-screen select-none ">
+    <div className="p-6 bg-white shadow-md rounded-xl min-h-screen">
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -100,19 +135,15 @@ const UserTable: React.FC = () => {
         </div>
         <div className="flex space-x-3 mt-5 sm:mt-0">
           <button
-            onClick={() =>
-              showtoast(
-                "Not allowed",
-                "This Method is under development. Please check back later.",
-                "info"
-              )
-            }
+            onClick={() => {
+              setAddDialogOpen(true);
+              setNewAdmin({ username: "", password: "" });
+            }}
             className="flex items-center gap-1 text-sm font-medium text-primary border border-primary px-3 py-1.5 rounded-md hover:bg-primary hover:text-white transition"
           >
             <PlusCircle className="w-4 h-4" />
             Add Admin
           </button>
-          {/* Refresh Button */}
           <button
             onClick={fetchUsers}
             className="flex items-center gap-1 text-sm font-medium text-primary border border-primary px-3 py-1.5 rounded-md hover:bg-primary hover:text-white transition"
@@ -178,10 +209,18 @@ const UserTable: React.FC = () => {
                       <GradientButton
                         variant="secondary"
                         size="sm"
-                        icon={Eye}
+                        icon={Edit}
+                        onClick={() => {
+                          showtoast(
+                            "Not Allowed",
+                            "This feature is under development",
+                            "info"
+                          );
+                        }}
                         className="min-w-0"
+                        disabled={user.role === "superadmin"}
                       >
-                        View
+                        Edit
                       </GradientButton>
                       <GradientButton
                         variant="outline"
@@ -192,6 +231,7 @@ const UserTable: React.FC = () => {
                           setOpenDialog(true);
                         }}
                         className="min-w-0 text-red-500 border-red-500 hover:bg-red-500 hover:text-white"
+                        disabled={user.role === "superadmin"}
                       >
                         Delete
                       </GradientButton>
@@ -219,7 +259,53 @@ const UserTable: React.FC = () => {
         </table>
       </motion.div>
 
-      {/* Global Dialog Component */}
+      {/* Add Admin Dialog */}
+      <DialogComponent
+        open={addDialogOpen}
+        setOpen={setAddDialogOpen}
+        heading="Add New Admin"
+        messageDescription={
+          <div className="my-7 sm:flex">
+            <div className="mb-3 sm:mr-5">
+              <label className="block text-sm font-medium text-gray-700">
+                Username
+              </label>
+              <input
+                type="text"
+                value={newAdmin.username}
+                onChange={(e) =>
+                  setNewAdmin({ ...newAdmin, username: e.target.value })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm"
+                placeholder="Enter admin username"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
+                value={newAdmin.password}
+                onChange={(e) =>
+                  setNewAdmin({ ...newAdmin, password: e.target.value })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm"
+                placeholder="Enter password"
+              />
+            </div>
+          </div>
+        }
+        okText={adding ? "Adding..." : "Add Admin"}
+        cancelText="Cancel"
+        loading={adding}
+        icon={<Users className="h-6 w-6 text-primary" />}
+        okButtonAction={handleAddAdmin}
+        okButtonColor="bg-primary hover:bg-primary/90"
+        cancelButtonColor="bg-gray-100 text-primary hover:bg-gray-200"
+      />
+
+      {/* Delete Confirmation Dialog */}
       <DialogComponent
         open={openDialog}
         setOpen={setOpenDialog}

@@ -76,10 +76,10 @@ const QualitySection: React.FC = () => {
         <Animation initialY={50}>
           <Link
             to="/products"
-            className="inline-flex items-center space-x-2 bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
+            className="group inline-flex items-center space-x-2 bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
           >
             <span>Discover Our Quality Range</span>
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 duration-300" />
           </Link>
         </Animation>
       </div>

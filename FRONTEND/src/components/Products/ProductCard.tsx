@@ -66,11 +66,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           </div>
 
           {/* Gradient overlay on hover */}
-          <motion.div
+          {/* <motion.div
             className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0"
             whileHover={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-          />
+          /> */}
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent " />
         </div>
 
         <div className="p-6 flex-1 flex flex-col">
@@ -94,19 +95,32 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                 <span className="text-sm mr-2 font-medium text-gray-700">
                   Origin :
                 </span>
-                {product.origin.length > 5
-                  ? product.origin.slice(0, 5).map((value, index) => (
-                      <span key={index}>
+                {product.origin.length > 2 ? (
+                  <>
+                    {product.origin.slice(0, 2).map((value, index) => (
+                      <span key={`${value}-${index}`}>
                         {value}
-                        {index < 4 ? ", " : " ..."}
-                      </span>
-                    ))
-                  : product.origin.map((value, index) => (
-                      <span key={index}>
-                        {value}
-                        {index < product.origin.length - 1 ? ", " : ""}
+                        {index === 0 ? ", " : ""}
                       </span>
                     ))}
+                    <span className="text-gray-500 italic">
+                      {` and ${product.origin.length - 2}  more origin
+                     ${
+                       product.origin.length - 2 === 1
+                         ? " country"
+                         : " countries"
+                     }
+                       ...`}
+                    </span>
+                  </>
+                ) : (
+                  product.origin.map((value, index) => (
+                    <span key={`${value}-${index}`}>
+                      {value}
+                      {index < product.origin.length - 1 ? ", " : ""}
+                    </span>
+                  ))
+                )}
               </span>
             </motion.div>
             {/* <motion.div
@@ -143,18 +157,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
           {/* Show More Button */}
           <div className="flex justify-between flex-col items-center">
-            <GradientButton
+            {/* <GradientButton
               onClick={() => onAddToCart?.(product)}
               variant="primary"
               size="md"
               className="w-full mt-auto"
             >
               Add to Inquiry
-            </GradientButton>
+            </GradientButton> */}
             <GradientButton
-              variant="outline"
+              variant="primary"
               size="md"
               className="w-full mt-5"
+              icon={ArrowRight}
               onClick={() => handleMoreinfo(product.id)}
             >
               More Information

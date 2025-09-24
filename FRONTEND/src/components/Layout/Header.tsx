@@ -1,36 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Search, Menu, X, ArrowRight } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { Search, Menu, X } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import logo from "../../assets/images/logo.png";
-import { showtoast } from "../../utils/Toast";
 import SearchBar from "../UI/Searchbar";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
+
   const { searchTerm, setSearchTerm } = useApp();
 
-  const navigate = useNavigate();
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
 
-  const handleScroll = () => {
-    if (window.scrollY > window.innerHeight / 1.2) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
-  };
+      // Toggle scrolled style
+      setScrolled(currentScrollY > window.innerHeight / 1.2);
+
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        // Scrolling down
+        setVisible(false);
+      } else {
+        // Scrolling up
+        setVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header
-      className={`fixed w-full top-0 z-50 transition-all duration-700 ease-in-out ${
+      className={`fixed w-full top-0 z-50 transition-all duration-500 ease-in-out transform ${
+        visible ? "translate-y-0" : "-translate-y-full"
+      } ${
         scrolled
           ? "backdrop-blur-xl shadow-xl border-b border-secondarylight/30"
           : "backdrop-blur-sm"
@@ -43,16 +54,14 @@ const Header: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <Link
-            to="/"
-            className="flex items-center space-x-4 justify-center group  "
-          >
-            <img className="h-20 w-23 " src={logo} alt="Logo" />
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-4 group">
+            <img className="h-20 w-23" src={logo} alt="Logo" />
             <div className="relative">
-              <div className="text-xl font-bold bg-gradient-to-r from-secondary via-secondarylight to-secondary bg-clip-text text-transparent ">
+              <div className="text-xl font-bold bg-gradient-to-r from-secondary via-secondarylight to-secondary bg-clip-text text-transparent">
                 MRPGlobal
               </div>
-              <div className="absolute inset-0 text-xl font-bold bg-gradient-to-r from-secondarylight to-secondarylight bg-clip-text text-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
+              <div className="absolute inset-0 text-xl font-bold bg-gradient-to-r from-secondarylight to-secondarylight bg-clip-text text-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 MRPGlobal
               </div>
             </div>
@@ -89,10 +98,10 @@ const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/*  Search Bar */}
+          {/* SearchBar */}
           <SearchBar />
 
-          {/*  Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden relative p-3 text-secondarylight hover:text-secondarylight transition-all duration-300 group"
@@ -100,19 +109,19 @@ const Header: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-300"></div>
             <div className="relative z-10">
               {isMenuOpen ? (
-                <X className="h-6 w-6 " />
+                <X className="h-6 w-6" />
               ) : (
-                <Menu className="h-6 w-6 " />
+                <Menu className="h-6 w-6" />
               )}
             </div>
           </button>
         </div>
       </div>
 
-      {/* Enhanced Mobile Menu */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div
-          className="lg:hidden backdrop-blur-xl border-t border-secondarylight/30 shadow-2xl "
+          className="lg:hidden backdrop-blur-xl border-t border-secondarylight/30 shadow-2xl"
           style={{ backgroundColor: "#e8e0da" }}
         >
           <div className="px-4 py-4 space-y-7">
@@ -131,18 +140,17 @@ const Header: React.FC = () => {
               </div>
             </div>
 
-            {/* Mobile Navigation Links */}
+            {/* Mobile Navigation */}
             {[
               { name: "Home", to: "/" },
               { name: "Products", to: "/products" },
-
               { name: "About Us", to: "/about" },
               { name: "Contact", to: "/contact" },
             ].map((link, index) => (
               <Link
                 key={link.name}
                 to={link.to}
-                className="block text-primary hover:text-secondarylight py-2 font-medium transition-all duration-300 group "
+                className="block text-primary hover:text-secondarylight py-2 font-medium transition-all duration-300 group"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 onClick={() => setIsMenuOpen(false)}
               >

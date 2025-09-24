@@ -8,7 +8,7 @@ const GlobalImpactSection: React.FC = () => {
 
   return (
     <section className="bg-gray-50 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center ">
         {/* Title Animation */}
         <Animation initialY={-50}>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
@@ -27,42 +27,40 @@ const GlobalImpactSection: React.FC = () => {
         </Animation>
 
         {/* Stats Cards Animation */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-2  lg:grid-cols-4 gap-8 mb-12">
           {/* Partner Farmers */}
           <Animation initialX={-50}>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#5F1A35] mb-2">500+</div>
+            <div className="text-center rounded-lg p-3 bg-primary/5 ">
+              <div className="text-4xl font-bold text-primary mb-2 ">500+</div>
               <div className="text-gray-600">Partner Farmers</div>
-              <Users className="h-8 w-8 text-[#CCBBAE] mx-auto mt-2" />
+              <Users className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />
             </div>
           </Animation>
 
           {/* Countries Served */}
           <Animation initialY={50}>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#5F1A35] mb-2">50+</div>
+            <div className="text-center rounded-lg p-3 bg-primary/5">
+              <div className="text-4xl font-bold text-primary mb-2 ">50+</div>
               <div className="text-gray-600">Countries Served</div>
-              <Globe className="h-8 w-8 text-[#CCBBAE] mx-auto mt-2" />
+              <Globe className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />
             </div>
           </Animation>
 
           {/* Successful Trades */}
           <Animation initialX={50}>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#5F1A35] mb-2">
-                1000+
-              </div>
+            <div className="text-center rounded-lg p-3 bg-primary/5">
+              <div className="text-4xl font-bold text-primary mb-2 ">1000+</div>
               <div className="text-gray-600">Successful Trades</div>
-              <TrendingUp className="h-8 w-8 text-[#CCBBAE] mx-auto mt-2" />
+              <TrendingUp className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />
             </div>
           </Animation>
 
           {/* Satisfaction Rate */}
           <Animation initialY={-50}>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#5F1A35] mb-2">99%</div>
+            <div className="text-center rounded-lg p-3 bg-primary/5">
+              <div className="text-4xl font-bold text-primary mb-2 ">99%</div>
               <div className="text-gray-600">Customer Satisfaction</div>
-              <Heart className="h-8 w-8 text-[#CCBBAE] mx-auto mt-2" />
+              <Heart className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />
             </div>
           </Animation>
         </div>
@@ -72,7 +70,7 @@ const GlobalImpactSection: React.FC = () => {
           <div className="max-w-3xl mx-auto">
             {!imageLoaded && <SkeletonLoader type="image" />}
             <img
-              src="https://images.pexels.com/photos/1595104/pexels-photo-1595104.jpeg"
+              src="/Images/HomePageImages/Globalimpact.png"
               alt="Global Local Impact"
               className={`w-full rounded-lg shadow-lg transition-opacity duration-700 ${
                 imageLoaded ? "opacity-100" : "opacity-0"

@@ -1,5 +1,3 @@
-// components/FAQ.tsx
-
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -69,19 +67,21 @@ const AccordionItem = ({
   onClick: () => void;
 }) => {
   return (
-    <div className="border border-gray-200 rounded-md">
+    <div className="border border-primary/30 rounded-lg overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-md bg-white">
       <button
         onClick={onClick}
-        className="w-full px-4 py-4 flex justify-between items-center text-left group focus:outline-none"
+        className="w-full px-6 py-4 flex justify-between items-center text-left group focus:outline-none"
         aria-expanded={isOpen}
         aria-controls={`faq-${question.replace(/\s+/g, "-").toLowerCase()}`}
         id={`faq-header-${question.replace(/\s+/g, "-").toLowerCase()}`}
       >
-        <span className="text-lg font-medium text-gray-800">{question}</span>
+        <span className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors duration-300">
+          {question}
+        </span>
         <ChevronDown
           className={`w-5 h-5 transform transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          } text-gray-600 group-hover:text-primary`}
+            isOpen ? "rotate-180 text-primary" : "text-gray-500"
+          }`}
           aria-hidden="true"
         />
       </button>
@@ -89,20 +89,16 @@ const AccordionItem = ({
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="px-6 pb-5 text-gray-600 text-base leading-relaxed"
             id={`faq-${question.replace(/\s+/g, "-").toLowerCase()}`}
             role="region"
             aria-labelledby={`faq-header-${question
               .replace(/\s+/g, "-")
               .toLowerCase()}`}
-            initial="collapsed"
-            animate="open"
-            exit="collapsed"
-            variants={{
-              open: { opacity: 1, height: "auto" },
-              collapsed: { opacity: 0, height: 0 },
-            }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="px-4 pb-4 text-gray-600 text-base"
           >
             {answer}
           </motion.div>
@@ -112,28 +108,39 @@ const AccordionItem = ({
   );
 };
 
-const Accordion: React.FC = () => {
+type AccordionProps = {
+  count?: number;
+  className?: string;
+};
+
+const Accordion: React.FC<AccordionProps> = ({
+  count,
+  className = "bg-gray-50",
+}) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const toggleIndex = (index: number) => {
     setActiveIndex((prev) => (prev === index ? null : index));
   };
 
+  const safeCount = count ? Math.min(count, faqData.length) : faqData.length;
+  const visibleFaqs = faqData.slice(0, safeCount);
+
   return (
-    <section className="bg-white py-20" id="faq">
+    <section className={`${className} py-20`} id="faq">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Got questions? We’ve got answers to help you get started with MRP
             GLOBAL Traders.
           </p>
         </div>
 
         <div className="space-y-4">
-          {faqData.map((item, index) => (
+          {visibleFaqs.map((item, index) => (
             <AccordionItem
               key={index}
               question={item.question}

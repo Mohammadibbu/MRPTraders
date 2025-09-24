@@ -6,7 +6,7 @@ interface DialogProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   heading: string;
-  messageDescription: string;
+  messageDescription: string | ReactNode;
   okText: string;
   cancelText: string;
   icon?: ReactNode; // Optional icon

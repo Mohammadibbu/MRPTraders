@@ -7,11 +7,10 @@ import SkeletonLoader from "../UI/SkeletonLoader";
 const MissionSection: React.FC = () => {
   const [imageError, setImageError] = useState(false);
 
-  const imageUrl =
-    "https://images.unsplash.com/photo-1603297631955-d84bd07b5a4a?auto=format&fit=crop&w=1200&q=80";
+  const imageUrl = "/Images/HomePageImages/mission.png";
 
   return (
-    <section className="bg-[#F7F4F1] py-16">
+    <section className="bg-secondarylight py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -63,10 +62,10 @@ const MissionSection: React.FC = () => {
             <Animation initialY={100}>
               <Link
                 to="/about"
-                className="inline-flex items-center space-x-2 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
+                className="group inline-flex items-center space-x-2 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
               >
                 <span>Learn More About Us</span>
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 duration-300" />
               </Link>
             </Animation>
           </div>

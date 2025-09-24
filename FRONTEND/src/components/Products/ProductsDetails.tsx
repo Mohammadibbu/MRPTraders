@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Leaf,
   Award,
@@ -7,6 +7,8 @@ import {
   Phone,
   Globe,
   Zap,
+  ChevronLeft,
+  ChevronRight,
   Shield,
 } from "lucide-react";
 import MissionSection from "../Home/MissionSection";
@@ -14,6 +16,7 @@ import JoinUsSection from "../Home/JoinUsSection";
 import ImportExportSection from "../Home/ImportExportSection";
 import { useApp } from "../../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
+import Accordion from "../UI/Accordian";
 
 const ProductDetails: React.FC = () => {
   const { products } = useApp();
@@ -31,10 +34,38 @@ const ProductDetails: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState("overview");
   const [imageError, setImageError] = useState(false);
+  const tabNavRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      const el = tabNavRef.current;
+      if (!el) return;
+
+      setCanScrollLeft(el.scrollLeft > 0);
+      setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth);
+    };
+
+    const el = tabNavRef.current;
+    if (!el) return;
+
+    checkScroll();
+    el.addEventListener("scroll", checkScroll);
+    window.addEventListener("resize", checkScroll);
+
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, []);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+  const scrollTabs = (amount: number) => {
+    tabNavRef.current?.scrollBy({ left: amount, behavior: "smooth" });
+  };
 
   const handleContactUs = () => {
     const message = `Hello, I am interested in purchasing ${product?.name}. Could you please provide more details?`;
@@ -57,7 +88,7 @@ const ProductDetails: React.FC = () => {
       <section className="relative py-20">
         <div className="absolute inset-0">
           <img
-            src="https://images.pexels.com/photos/1353938/pexels-photo-1353938.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            src="/Images/ProductPage.png"
             alt="Background"
             className="w-full h-full object-cover"
           />
@@ -85,7 +116,7 @@ const ProductDetails: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           {/* Left Section: Product Image Gallery */}
           <div
             className={`space-y-8 transform transition-all duration-1000 ${
@@ -145,9 +176,33 @@ const ProductDetails: React.FC = () => {
             }`}
           >
             {/* Navigation Tabs */}
-            <div className="select-none">
-              <div className="px-8 rounded-lg">
-                <nav className="flex  gap-4 py-4 overflow-x-auto">
+            <div className="select-none relative">
+              {/* Left Arrow */}
+              {canScrollLeft && (
+                <button
+                  onClick={() => scrollTabs(-150)}
+                  className="absolute -left-3 -bottom-2 z-10 bg-white/80 hover:bg-white rounded-full shadow p-1 transition"
+                >
+                  <ChevronLeft className="w-5 h-5 text-primary" />
+                </button>
+              )}
+
+              {/* Right Arrow */}
+              {canScrollRight && (
+                <button
+                  onClick={() => scrollTabs(150)}
+                  className="absolute -right-3 -bottom-2 z-10 bg-white/80 hover:bg-white rounded-full shadow p-1 transition"
+                >
+                  <ChevronRight className="w-5 h-5 text-primary" />
+                </button>
+              )}
+
+              <div>
+                <nav
+                  ref={tabNavRef}
+                  className="flex gap-4 py-4 overflow-x-auto px-10 bg-gradient-to-r from-dustyTaupe/20 to-primary/20 text-primary rounded-lg border border-dustyTaupe/30 hover:from-dustyTaupe/30 hover:to-primary/30 transition-all duration-200 whitespace-nowrap scroll-smooth"
+                  style={{ WebkitOverflowScrolling: "touch" }}
+                >
                   {sections.map((section) => {
                     const Icon = section.icon;
                     return (
@@ -228,7 +283,7 @@ const ProductDetails: React.FC = () => {
               {product?.origin?.map((val, i) => (
                 <span
                   key={i}
-                  className="text-lg text-gray-700 bg-secondarylight px-3 rounded-lg mr-3 "
+                  className="px-3 mx-0.5 py-1 bg-gradient-to-r from-dustyTaupe/20 to-primary/20 text-primary text-xs font-medium rounded-full border border-dustyTaupe/30 hover:from-dustyTaupe/30 hover:to-primary/30 transition-all duration-200"
                 >
                   {val}
                 </span>
@@ -266,8 +321,10 @@ const ProductDetails: React.FC = () => {
       </div>
 
       {/* Mission, Import Export and Join Us sections */}
+
       <MissionSection />
       <ImportExportSection />
+      <Accordion count={3} className="bg-secondarylight" />
       <JoinUsSection />
     </div>
   );

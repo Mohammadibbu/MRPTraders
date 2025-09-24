@@ -14,7 +14,7 @@ const AdminDashboard: React.FC = () => {
 
   // Simulate loading
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 15000); // simulate API
+    const timer = setTimeout(() => setLoading(false), 1000); // simulate API
     return () => clearTimeout(timer);
   }, []);
 

@@ -100,11 +100,11 @@ const TransactionsSection: React.FC = () => {
 
         {/* Button Animation */}
         <Link
-          to="/client/dashboard"
-          className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#5F1A35] to-[#CCBBAE] text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
+          to="/contact"
+          className="group  inline-flex items-center space-x-2 bg-gradient-to-r from-primary  to-primary text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
         >
           <span>Start Trading Now</span>
-          <ArrowRight className="h-5 w-5" />
+          <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 duration-300" />
         </Link>
       </div>
     </section>
