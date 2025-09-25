@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Product } from "../../types";
-import { Badge, MapPin, Calendar, Award, ArrowRight } from "lucide-react";
+import { MapPin, Award, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import GlassmorphismCard from "../UI/GlassmorphismCard";
 import GradientButton from "../UI/GradientButton";
@@ -29,7 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       <GlassmorphismCard className="bg-white/95 backdrop-blur-sm border border-gray-100 overflow-hidden group h-full flex flex-col">
         <div className="relative h-48 overflow-hidden">
           <motion.img
-            src={imageError ? "/Images/fallback.png" : product.photos[0]}
+            src={imageError ? "/Images/fallback.png" : product.photos[0].base64}
             alt={product.name}
             className="w-full h-full object-cover"
             onError={() => setImageError(true)}

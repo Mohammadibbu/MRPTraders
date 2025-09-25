@@ -188,7 +188,7 @@ const ManageProducts: React.FC = () => {
                 <tr key={index} className="border-b hover:bg-gray-50">
                   <td className="py-3 px-4">
                     <img
-                      src={p.photos[0] || "/Images/fallback.png"}
+                      src={p.photos[0].base64 || "/Images/fallback.png"}
                       alt={p.name}
                       onError={(e) =>
                         ((e.target as HTMLImageElement).src =

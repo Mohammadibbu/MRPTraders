@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 app.use(express.urlencoded({ extended: true }));
 
-app.use(json());
+app.use(json({ limit: "5mb" }));
 app.use(cors());
 app.use(router);
 

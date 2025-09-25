@@ -16,7 +16,7 @@ import NotFoundInAdminPage from "./pages/ADMIN/NotFoundInAdminPage";
 // Admin Pages
 import AdminDashboard from "./pages/ADMIN/AdminDashboard";
 import LoginPage from "./pages/ADMIN/LoginPage";
-import UserTable from "./components/AdminComp/UserTable";
+import UserTable from "./pages/ADMIN/UserTable";
 import ManageProducts from "./pages/ADMIN/ManageProducts";
 import AddProduct from "./pages/ADMIN/AddProduct";
 

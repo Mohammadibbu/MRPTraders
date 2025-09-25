@@ -170,7 +170,7 @@ const ProductDetails: React.FC = () => {
                   src={
                     imageError
                       ? "/Images/fallback.png"
-                      : product?.photos[selectedImageIndex]
+                      : product?.photos[selectedImageIndex].base64
                   }
                   alt={`${product?.name} - Image ${selectedImageIndex + 1}`}
                   onError={() => setImageError(true)}
@@ -196,7 +196,7 @@ const ProductDetails: React.FC = () => {
                   }`}
                 >
                   <img
-                    src={imageError ? "/Images/fallback.png" : photo}
+                    src={imageError ? "/Images/fallback.png" : photo.base64}
                     onError={() => setImageError(true)}
                     alt={`${product?.name} thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"

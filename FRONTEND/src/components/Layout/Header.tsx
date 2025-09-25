@@ -81,7 +81,7 @@ const Header: React.FC = () => {
               to="/products"
               className="relative px-4 py-2 text-secondarylight hover:text-secondarylight font-medium transition-all duration-300 group"
             >
-              <span className="relative z-10">Our Products</span>
+              <span className="relative z-10"> Products</span>
               <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
             </Link>
 

@@ -5,11 +5,11 @@ import axios, {
   addadminapi,
 } from "../../utils/AxiosInstance";
 import { showtoast } from "../../utils/Toast";
-import SkeletonLoader from "../UI/SkeletonLoader";
-import GradientButton from "../UI/GradientButton";
+import SkeletonLoader from "../../components/UI/SkeletonLoader";
+import GradientButton from "../../components/UI/GradientButton";
 import { motion } from "framer-motion";
 import { Trash2, Users, RotateCcw, PlusCircle, Edit } from "lucide-react";
-import DialogComponent from "../UI/DialogModel";
+import DialogComponent from "../../components/UI/DialogModel";
 import { useNavigate } from "react-router-dom";
 
 type User = {

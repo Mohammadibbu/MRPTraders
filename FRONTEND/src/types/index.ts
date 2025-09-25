@@ -4,7 +4,8 @@ export interface Product {
   origin: string[];
   health_benefits: string[];
   category: string;
-  photos: string[];
+  photos: { base64: string; size: number }[];
+
   // price: number;
   availability: string; // New field
   quality: string; // New field
