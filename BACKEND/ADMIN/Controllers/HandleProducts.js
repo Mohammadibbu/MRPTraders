@@ -120,7 +120,6 @@ const addbulkproduct = async (req, res) => {
 // Function to delete a product by ID
 const DeleteProduct = async (req, res) => {
   const { productid } = req.params;
-  console.log(productid);
 
   if (!productid) {
     return res
@@ -144,7 +143,7 @@ const DeleteProduct = async (req, res) => {
       .status(200)
       .json({ message: "Product deleted successfully.", success: true });
   } catch (error) {
-    console.error("Error deleting product:", error);
+    // console.error("Error deleting product:", error);
     res.status(500).json({
       message: "Error deleting product.",
       error: error.message,

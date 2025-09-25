@@ -74,7 +74,7 @@ const CreateAdmin = async (req, res) => {
       id: docRef.id,
     });
   } catch (error) {
-    console.error("Error creating admin:", error);
+    // console.error("Error creating admin:", error);
     res.status(500).json({
       status: "error",
       message: "Internal server error : Failed to create admin",
@@ -108,7 +108,7 @@ const DeleteAdmin = async (req, res) => {
       .status(200)
       .json({ status: "success", message: "Admin deleted successfully" });
   } catch (error) {
-    console.error("Error deleting admin:", error);
+    // console.error("Error deleting admin:", error);
     res.status(500).json({
       status: "error",
       message: "INTERNAL SERVER ERROR :Failed to delete admin",
@@ -173,7 +173,7 @@ const AdminLogin = async (req, res) => {
       SECRET_TOKEN,
     });
   } catch (error) {
-    console.error("Login error:", error);
+    // console.error("Login error:", error);
     return res.status(500).json({
       status: "error",
       errorCode: "SERVER_ERROR",
