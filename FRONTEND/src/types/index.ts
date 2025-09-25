@@ -14,7 +14,7 @@ export interface Product {
   applications?: string[]; // New field (Optional)
   why_choose_us?: string[]; // New field (Optional)
   contact_info?: string; // New field (Optional)
-  id: number; // Unique product ID for navigation or referencing
+  id: any; // Unique product ID for navigation or referencing
 }
 
 // export interface User {

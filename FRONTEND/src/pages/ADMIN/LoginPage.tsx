@@ -44,20 +44,19 @@ const LoginPage = () => {
       }
     } catch (error: any) {
       const errordata = error?.response?.data;
-      if (errordata) {
+      if (!errordata) {
         showtoast(
-          errordata?.errorCode || "Login Failed",
-          errordata?.message || "Invalid credentials",
-          "error"
+          "Oops!",
+          "We're experiencing some issues. Please try again shortly.",
+          "warning",
+          5000
         );
       }
-      console.log(error);
 
       showtoast(
-        "Oops!",
-        "We're experiencing some issues. Please try again shortly.",
-        "warning",
-        5000
+        errordata?.errorCode || "Login Failed",
+        errordata?.message || "Invalid credentials",
+        "error"
       );
     } finally {
       setLoading(false);

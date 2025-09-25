@@ -29,7 +29,7 @@ const Hero: React.FC = () => {
           <>
             <div className="fixed -z-[100] top-0 left-0 w-full h-full bg-secondarylight"></div>
             <img
-              src="https://importexportfederation.com/wp-content/uploads/2023/11/exotic-fruits-berries-spanish-market-1.jpg"
+              src="/Images/HomePageImages/Hero.png"
               alt="Fallback Image"
               className="absolute top-0 z-1 object-cover w-full h-full"
             />

@@ -104,13 +104,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
                       </span>
                     ))}
                     <span className="text-gray-500 italic">
-                      {` and ${product.origin.length - 2}  more origin
-                     ${
-                       product.origin.length - 2 === 1
-                         ? " country"
-                         : " countries"
-                     }
-                       ...`}
+                      {` and ${product.origin.length - 2} more ${
+                        product.origin.length - 2 === 1 ? "region" : "regions"
+                      }...`}
                     </span>
                   </>
                 ) : (

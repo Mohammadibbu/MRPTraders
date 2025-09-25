@@ -35,7 +35,7 @@ const ManageProducts: React.FC = () => {
         "success"
       );
     } catch (err: any) {
-      console.error("Error fetching products:", err);
+      // console.error("Error fetching products:", err);
       showtoast(
         "Data Fetching Failed",
         "There was an issue while fetching the data from the server. Please try again later.",
@@ -76,7 +76,7 @@ const ManageProducts: React.FC = () => {
 
       setProducts((prev) => prev.filter((p) => p.id !== deleteId));
     } catch (err: any) {
-      console.error("Error deleting product:", err);
+      // console.error("Error deleting product:", err);
       showtoast(
         "Deletion Failed",
         "The product could not be deleted. Please try again.",

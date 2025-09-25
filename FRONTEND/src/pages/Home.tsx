@@ -22,8 +22,9 @@ const Home: React.FC = () => {
   return (
     <>
       <Banner
-        text="Join us in Denver from June 7 – 9 to see what’s coming next."
-        buttonText="Contact now"
+        mainText="Sourcing You Can Trust"
+        text="Premium agricultural exports, ethically sourced across Asia with full traceability."
+        buttonText="Contact Us"
         onButtonClick={handleButtonClick}
       />
 

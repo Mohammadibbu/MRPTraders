@@ -23,12 +23,51 @@ const ProductDetails: React.FC = () => {
   const { productid } = useParams();
   const navigate = useNavigate();
 
-  if (!products || !productid) {
-    navigate("/products");
-    return null;
+  // Ensure valid productid and product list
+  if (!products || products.length === 0 || !productid) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
+        <h2 className="text-4xl font-bolder text-primary mb-2">
+          Oops! Something went wrong.
+        </h2>
+        <p className="text-gray-600 mb-4">
+          We're sorry, but we couldn't retrieve detailed information for this
+          product at the moment. Please try again later or return to the product
+          list.
+        </p>
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
+        >
+          Go Back to Products
+        </button>
+      </div>
+    );
   }
 
-  const product = products.find((val) => val.id === Number(productid));
+  const product = products.find((val) => val.id === productid);
+
+  if (!product) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
+        <h2 className="text-4xl font-bold text-primary mb-2">
+          Product Information Unavailable
+        </h2>
+        <p className="text-gray-600 mb-4">
+          We're sorry, but we couldn't retrieve detailed information for this
+          product at the moment. Please try again later or return to the product
+          list.
+        </p>
+
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
+        >
+          Go Back to Products
+        </button>
+      </div>
+    );
+  }
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);

@@ -75,6 +75,9 @@ const ProductListings: React.FC = () => {
 
   // Paginated products
   const totalPages = Math.ceil(filteredProducts!.length / PRODUCTS_PER_PAGE);
+  useEffect(() => {
+    window.scrollTo({ top: 300, behavior: "smooth" });
+  }, [currentPage]);
 
   const currentProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -184,7 +187,7 @@ const ProductListings: React.FC = () => {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50"
+                className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Prev
               </button>
@@ -210,7 +213,7 @@ const ProductListings: React.FC = () => {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50"
+                className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50  disabled:cursor-not-allowed"
               >
                 Next
               </button>

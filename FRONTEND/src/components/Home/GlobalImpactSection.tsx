@@ -30,7 +30,7 @@ const GlobalImpactSection: React.FC = () => {
         <div className="grid grid-cols-2  lg:grid-cols-4 gap-8 mb-12">
           {/* Partner Farmers */}
           <Animation initialX={-50}>
-            <div className="text-center rounded-lg p-3 bg-primary/5 ">
+            <div className="text-center  ">
               <div className="text-4xl font-bold text-primary mb-2 ">500+</div>
               <div className="text-gray-600">Partner Farmers</div>
               <Users className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />
@@ -39,7 +39,7 @@ const GlobalImpactSection: React.FC = () => {
 
           {/* Countries Served */}
           <Animation initialY={50}>
-            <div className="text-center rounded-lg p-3 bg-primary/5">
+            <div className="text-center  ">
               <div className="text-4xl font-bold text-primary mb-2 ">50+</div>
               <div className="text-gray-600">Countries Served</div>
               <Globe className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />
@@ -48,7 +48,7 @@ const GlobalImpactSection: React.FC = () => {
 
           {/* Successful Trades */}
           <Animation initialX={50}>
-            <div className="text-center rounded-lg p-3 bg-primary/5">
+            <div className="text-center  ">
               <div className="text-4xl font-bold text-primary mb-2 ">1000+</div>
               <div className="text-gray-600">Successful Trades</div>
               <TrendingUp className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />
@@ -57,7 +57,7 @@ const GlobalImpactSection: React.FC = () => {
 
           {/* Satisfaction Rate */}
           <Animation initialY={-50}>
-            <div className="text-center rounded-lg p-3 bg-primary/5">
+            <div className="text-center  ">
               <div className="text-4xl font-bold text-primary mb-2 ">99%</div>
               <div className="text-gray-600">Customer Satisfaction</div>
               <Heart className="h-8 w-8 text-dustyTaupe mx-auto mt-2" />

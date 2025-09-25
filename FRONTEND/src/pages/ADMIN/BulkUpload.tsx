@@ -75,7 +75,7 @@ const BulkUploadPage: React.FC = () => {
 
         setParsedProducts(parsed);
       } catch (err: any) {
-        console.error(err);
+        // console.error(err);
         showtoast(
           "Upload Failed",
           err.message || "Invalid file format",

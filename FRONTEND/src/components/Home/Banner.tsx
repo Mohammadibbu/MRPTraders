@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import { X, MailCheck } from "lucide-react";
 
 type BannerProps = {
-  text: string; // Text content to display inside the banner
-  buttonText: string; // Text for the button
-  onButtonClick: () => void; // The function that will be triggered on button click
+  mainText: String;
+  text: string;
+  buttonText: string;
+  onButtonClick: () => void;
 };
 
-const Banner: React.FC<BannerProps> = ({ text, buttonText, onButtonClick }) => {
+const Banner: React.FC<BannerProps> = ({
+  text,
+  mainText,
+  buttonText,
+  onButtonClick,
+}) => {
   const [isBannerVisible, setIsBannerVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -59,7 +65,7 @@ const Banner: React.FC<BannerProps> = ({ text, buttonText, onButtonClick }) => {
                     <div className="text-center sm:text-left">
                       <p className="text-xs sm:text-sm md:text-base lg:text-lg text-primary font-medium leading-tight">
                         <span className="font-bold bg-gradient-to-r from-primary via-dustyTaupe to-primary bg-clip-text text-transparent animate-shimmer">
-                          GeneriCon 2025
+                          {mainText}
                         </span>
                         <span className="hidden sm:inline"> - </span>
                         <span className="block sm:inline mt-1 sm:mt-0">
