@@ -95,20 +95,25 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
               </p>
             </div>
           </div>
-          <div className="p-4 bg-gray-50 rounded-md shadow-sm max-w-sm mx-auto">
+          <div className="px-4 py-2 bg-gray-50 rounded-md shadow-sm max-w-sm mx-auto">
             <div className="flex items-center mb-2">
               <span className="font-bold text-primary mr-2">Category :</span>
               <span className="font-semibold text-gray-900">
                 {filters.category}
               </span>
             </div>
-            <p className="text-sm text-gray-600">
-              Click{" "}
-              <span className="font-medium text-indigo-600 underline cursor-pointer">
-                Show Filters
-              </span>{" "}
-              to adjust categories and more.
-            </p>
+            {!isExpanded && (
+              <p className="text-sm text-gray-600">
+                Click
+                <button
+                  className="font-medium text-indigo-600 underline cursor-pointer mx-2"
+                  onClick={() => setIsExpanded(true)}
+                >
+                  Show Filters
+                </button>
+                to adjust categories and more.
+              </p>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
