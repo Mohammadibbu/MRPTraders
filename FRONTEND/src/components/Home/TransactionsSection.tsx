@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CreditCard, Truck, Shield, Clock } from "lucide-react";
 import Animation from "../../utils/Animation";
+import ImageWithLoader from "../../utils/imageLoader";
 
 const TransactionsSection: React.FC = () => {
   return (
@@ -89,13 +90,11 @@ const TransactionsSection: React.FC = () => {
 
         {/* Image Fade-In Animation */}
         <Animation initialY={50} delay={1}>
-          <div className="mb-8">
-            <img
-              src="https://media.assettype.com/outlookmoney/2024-07/6352e65d-fa4e-415a-936d-ac114bc4f06b/shutterstock_2037588638.jpg?w=801&auto=format%2Ccompress&fit=max&format=webp&dpr=1.0"
-              alt="Easy Transactions"
-              className="w-full max-w-2xl mx-auto rounded-lg shadow-lg"
-            />
-          </div>
+          <ImageWithLoader
+            src={`/Images/HomePageImages/TransactionSection.png`}
+            alt="Fresh global trade"
+            className={`w-full max-w-2xl mx-auto rounded-lg shadow-lg mb-9`}
+          />
         </Animation>
 
         {/* Button Animation */}

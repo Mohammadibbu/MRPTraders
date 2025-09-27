@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import Animation from "../../utils/Animation";
-import SkeletonLoader from "../UI/SkeletonLoader";
+
+import ImagewithLoader from "../../utils/imageLoader";
 
 const MissionSection: React.FC = () => {
-  const [imageError, setImageError] = useState(false);
-
-  const imageUrl = "/Images/HomePageImages/mission.png";
-
   return (
     <section className="bg-secondarylight py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,18 +31,11 @@ const MissionSection: React.FC = () => {
           {/* Image Section */}
           <div className="w-full lg:w-1/2">
             <Animation initialX={100}>
-              <>
-                {!imageError && (
-                  <img
-                    src={imageUrl}
-                    alt="Fresh global trade"
-                    onError={() => setImageError(true)}
-                    className={`rounded-lg shadow-lg object-cover w-full h-full max-h-[420px] transition-opacity duration-700`}
-                  />
-                )}
-
-                {imageError && <SkeletonLoader type="image" />}
-              </>
+              <ImagewithLoader
+                src={`/Images/HomePageImages/mission.png`}
+                alt="Fresh global trade"
+                className={`rounded-lg shadow-lg object-cover w-full h-full max-h-[420px] transition-opacity duration-700`}
+              />
             </Animation>
           </div>
           {/* Text Block */}

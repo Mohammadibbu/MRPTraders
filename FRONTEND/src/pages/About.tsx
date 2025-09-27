@@ -1,8 +1,9 @@
 import React from "react";
 import { Award, Users, Globe, Shield, Heart } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import Animation from "../utils/Animation";
 import JoinUsSection from "../components/Home/JoinUsSection";
+import ImageWithLoader from "../utils/imageLoader";
 
 const certifications = [
   {
@@ -100,13 +101,11 @@ const About: React.FC = () => {
                 </div>
               </Animation>
               <Animation initialX={100}>
-                <div className="relative">
-                  <img
-                    src="/Images/AboutPage/about1.png"
-                    alt="Our Mission"
-                    className="w-3/4"
-                  />
-                </div>
+                <ImageWithLoader
+                  src="/Images/AboutPage/about1.png"
+                  alt="Our Mission"
+                  className={`mx-auto`}
+                />
               </Animation>
             </div>
           </div>
@@ -117,13 +116,11 @@ const About: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2  gap-12 items-center">
               <Animation initialX={-100}>
-                <div className="relative">
-                  <img
-                    src="/Images/AboutPage/about2.png"
-                    alt="Certifications"
-                    className="rounded-lg shadow-xl"
-                  />
-                </div>
+                <ImageWithLoader
+                  src="/Images/AboutPage/about2.png"
+                  alt="Certifications & Standards"
+                  className={`w-full max-w-2xl mx-auto rounded-lg shadow-xl `}
+                />
               </Animation>
               <div>
                 <Animation initialY={-100}>

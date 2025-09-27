@@ -97,7 +97,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
       case "image":
         return (
           <div
-            className={`w-full h-72 bg-gray-300 rounded-lg overflow-hidden ${className}`}
+            className={` bg-gray-300 rounded-lg overflow-hidden ${className}`}
           >
             <ShimmerEffect height="h-full" />
           </div>

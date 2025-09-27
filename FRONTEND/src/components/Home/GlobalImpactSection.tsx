@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Users, TrendingUp, Globe, Heart } from "lucide-react";
 import Animation from "../../utils/Animation";
-import SkeletonLoader from "../UI/SkeletonLoader";
+import ImageWithLoader from "../../utils/imageLoader";
 
 const GlobalImpactSection: React.FC = () => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   return (
     <section className="bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center ">
@@ -67,18 +65,11 @@ const GlobalImpactSection: React.FC = () => {
 
         {/* Image Fade-In Animation with Skeleton */}
         <Animation initialY={50}>
-          <div className="max-w-3xl mx-auto">
-            {!imageLoaded && <SkeletonLoader type="image" />}
-            <img
-              src="/Images/HomePageImages/Globalimpact.png"
-              alt="Global Local Impact"
-              className={`w-full rounded-lg shadow-lg transition-opacity duration-700 ${
-                imageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageLoaded(false)}
-            />
-          </div>
+          <ImageWithLoader
+            src="/Images/HomePageImages/Globalimpact.png"
+            alt="Fresh global trade"
+            className={`w-full max-w-2xl mx-auto rounded-lg shadow-lg mb-9`}
+          />
         </Animation>
       </div>
     </section>
