@@ -51,6 +51,7 @@ const LoginPage = () => {
           "warning",
           5000
         );
+        return;
       }
 
       showtoast(

@@ -85,23 +85,30 @@ html {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 7px;
+@media screen and (max-width: 768px) {
+  /* Scrollbar width */
+  ::-webkit-scrollbar {
+    width: 5px; /* Vertical scrollbar width */
+    height: 7px; /* Horizontal scrollbar height */
+  }
+
+  /* Track (background) */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background for track */
+  }
+
+  /* Thumb (handle) */
+  ::-webkit-scrollbar-thumb {
+    background: #5f1a35; /* Dark thumb color */
+    border-radius: 4px;
+  }
+
+  /* Thumb hover effect */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #782042; /* Darker thumb color on hover */
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #5f1a35;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #782042;
-}
 #nprogress .bar {
   background: #f1f1f1;
 }
