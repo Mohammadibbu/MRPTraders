@@ -9,5 +9,6 @@ yarn-error.log*
 .vscode/
 
 *.log
-serviceAccountKey.js
+serviceAccountKey.json
+
 
