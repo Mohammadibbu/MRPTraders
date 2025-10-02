@@ -95,7 +95,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
               </p>
             </div>
           </div>
-          <div className="px-4 py-2 bg-gray-50 rounded-md shadow-sm max-w-sm mx-auto">
+          <div className="px-4 py-2 bg-gray-50 rounded-md shadow-sm max-w-sm mx-auto mb-5 sm:mb-0  ">
             <div className="flex items-center mb-2">
               <span className="font-bold text-primary mr-2">Category :</span>
               <span className="font-semibold text-gray-900">
@@ -103,7 +103,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
               </span>
             </div>
             {!isExpanded && (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 ">
                 Click
                 <button
                   className="font-medium text-indigo-600 underline cursor-pointer mx-2"
