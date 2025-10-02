@@ -69,7 +69,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
     filters.origin !== "All" ||
     filters.availability !== "All";
 
-  const availabilityOptions = ["All", "In Stock", "Out of Stock"];
+  // const availabilityOptions = ["All", "In Stock", "Out of Stock"];
 
   return (
     <div
@@ -247,13 +247,13 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
             placeholder="All Origins"
           />
 
-          <CustomSelect
+          {/* <CustomSelect
             label="Availability"
             value={filters.availability}
             options={availabilityOptions}
             onChange={(value) => handleFilterChange("availability", value)}
             placeholder="All Availability"
-          />
+          /> */}
         </div>
       </div>
     </div>

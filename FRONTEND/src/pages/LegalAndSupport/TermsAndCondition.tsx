@@ -145,10 +145,10 @@ const TermsAndConditions = () => {
                 <p className="text-gray-800">
                   📧 <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:contact@mrpglobaltraders.com"
+                    href="mailto: mrpglobaltraders2004@gmail.com"
                     className="text-primary underline hover:text-primary-dark"
                   >
-                    contact@mrpglobaltraders.com
+                    mrpglobaltraders2004@gmail.com
                   </a>
                 </p>
               </div>

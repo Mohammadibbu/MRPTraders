@@ -23,7 +23,8 @@ const Home: React.FC = () => {
     <>
       <Banner
         mainText="Sourcing You Can Trust"
-        text="Premium agricultural exports, ethically sourced across Asia with full traceability."
+        text="MRP GLOBAL Traders delivers ethical, sustainable, high-quality agricultural products worldwide.
+"
         buttonText="Contact Us"
         onButtonClick={handleButtonClick}
       />
