@@ -166,7 +166,7 @@ const Footer: React.FC = () => {
               {[
                 {
                   icon: Mail,
-                  text: "contact@mrpglobal.com",
+                  text: "mrpglobaltraders2004@gmail.com",
                 },
                 {
                   icon: Phone,

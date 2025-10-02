@@ -16,10 +16,7 @@ const ImageWithLoader: React.FC<ImageLoaderProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  useEffect(() => {
-    setIsLoading(true);
-    setHasError(false);
-  }, [src]);
+
   const handleImageLoad = () => {
     setIsLoading(false);
   };

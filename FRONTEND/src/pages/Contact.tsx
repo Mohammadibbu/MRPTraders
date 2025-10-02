@@ -180,9 +180,9 @@ const Contact: React.FC = () => {
                         Email Addresses
                       </h3>
                       <p className="text-gray-600">
-                        info@mrpglobaltraders.com
-                        <br />
-                        sales@mrpglobaltraders.com
+                        mrpglobaltraders2004@gmail.com
+                        {/* <br />
+                        sales@mrpglobaltraders.com */}
                       </p>
                     </div>
                   </div>
@@ -321,8 +321,8 @@ const Contact: React.FC = () => {
 
         {/* Map Section */}
         <Animation initialX={100}>
-          <section className="mt-16">
-            <div className="bg-white rounded-lg shadow-lg p-6">
+          <section className="">
+            <div className="bg-white p-10 rounded-lg shadow-lg ">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Find Us
               </h3>

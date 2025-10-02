@@ -43,12 +43,9 @@ const Header: React.FC = () => {
         visible ? "translate-y-0" : "-translate-y-full"
       } ${
         scrolled
-          ? "backdrop-blur-xl shadow-xl border-b border-secondarylight/30"
-          : "backdrop-blur-sm"
+          ? "backdrop-blur-xl shadow-xl border-b border-secondarylight/30 bg-primary/95"
+          : "backdrop-blur-sm bg-primary"
       }`}
-      style={{
-        backgroundColor: scrolled ? "rgba(95, 26, 53, 0.95)" : "#5F1A35",
-      }}
     >
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-secondarylight to-transparent "></div>
 
