@@ -30,6 +30,8 @@ const verificationApi = baseURL + "/admin/verifyadmin";
 const AddProductApi = baseURL + "/admin/addproduct";
 const AddBulkProductApi = baseURL + "/admin/addproduct/bulkupload";
 const getProductsApi = baseURL + "/admin/allproducts";
+const productcount = baseURL + "/admin/productcount";
+
 const DeleteProductApi = baseURL + "/admin/delproduct";
 
 export {
@@ -44,5 +46,6 @@ export {
   DeleteProductApi,
   getProductsApi,
   AddBulkProductApi,
+  productcount,
 };
 export default axiosInstance;
