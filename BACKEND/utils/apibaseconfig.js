@@ -11,6 +11,7 @@ const AdminAddProduct = `${Base_EndPoint}/admin/addproduct`;
 const AdminAddBulkProduct = `${Base_EndPoint}/admin/addproduct/bulkupload`;
 const AdminGetProduct = `${Base_EndPoint}/admin/allproducts/`;
 const AdminDeleteProduct = `${Base_EndPoint}/admin/delProduct/:productid`;
+const Productcounts = `${Base_EndPoint}/admin/productcount`;
 
 const AdminRoutes = {
   CreateAdminEndPOint,
@@ -23,6 +24,7 @@ const AdminRoutes = {
   AdminAddBulkProduct,
   AdminGetProduct,
   AdminDeleteProduct,
+  Productcounts,
 };
 
 export { AdminRoutes };

@@ -13,6 +13,7 @@ import {
   addProduct,
   DeleteProduct,
   getProducts,
+  ProductCounts,
 } from "../Controllers/HandleProducts.js";
 const router = Router();
 // GET /alladmins - get all admins
@@ -30,6 +31,8 @@ router.post(AdminRoutes.AdminVerification, AdminAuth, verifyVerificationToken);
 
 //Handle Products
 router.get(AdminRoutes.AdminGetProduct, getProducts);
+// Count Products
+router.get(AdminRoutes.Productcounts, ProductCounts);
 
 router.post(AdminRoutes.AdminAddProduct, AdminAuth, addProduct);
 

@@ -151,5 +151,27 @@ const DeleteProduct = async (req, res) => {
     });
   }
 };
+const ProductCounts = async (req, res) => {
+  try {
+    const productsRef = db.collection("products");
 
-export { addProduct, addbulkproduct, getProducts, DeleteProduct };
+    const snapshot = await productsRef.count().get();
+
+    const totalCount = snapshot.data().count;
+
+    return res.status(200).json({ totalCount, success: true });
+  } catch (error) {
+    console.error("Error counting products:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to count products", success: false });
+  }
+};
+
+export {
+  addProduct,
+  addbulkproduct,
+  getProducts,
+  DeleteProduct,
+  ProductCounts,
+};
