@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   Facebook,
-  Twitter,
   Instagram,
   Linkedin,
   Mail,
@@ -67,11 +66,7 @@ const Footer: React.FC = () => {
                   href: "https://facebook.com/mrpglobal",
                   label: "Facebook",
                 },
-                {
-                  icon: Twitter,
-                  href: "https://twitter.com/mrpglobal",
-                  label: "Twitter",
-                },
+
                 {
                   icon: Instagram,
                   href: "https://instagram.com/mrpglobal",

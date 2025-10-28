@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Search, Menu, X } from "lucide-react";
-import { useApp } from "../../context/AppContext";
+import { Search, Menu, Facebook, Instagram, Linkedin, X } from "lucide-react";
+
+// import { useApp } from "../../context/AppContext";
 import logo from "../../assets/images/logo.png";
-import SearchBar from "../UI/Searchbar";
+// import SearchBar from "../UI/Searchbar";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
 
-  const { searchTerm, setSearchTerm } = useApp();
+  // const { searchTerm, setSearchTerm } = useApp();
 
   const lastScrollY = useRef(0);
 
@@ -96,7 +97,43 @@ const Header: React.FC = () => {
           </nav>
 
           {/* SearchBar */}
-          <SearchBar />
+          {/* <SearchBar /> */}
+          {/* Social Media Links */}
+          <div className="hidden sm:block">
+            <div className="flex space-x-4  ">
+              {[
+                {
+                  icon: Facebook,
+                  href: "https://facebook.com/mrpglobal",
+                  label: "Facebook",
+                },
+
+                {
+                  icon: Instagram,
+                  href: "https://instagram.com/mrpglobal",
+                  label: "Instagram",
+                },
+                {
+                  icon: Linkedin,
+                  href: "https://linkedin.com/company/mrpglobal",
+                  label: "LinkedIn",
+                },
+              ].map(({ icon: Icon, href, label }, index) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative p-2 text-secondary hover:text-dustyTaupe transition-all duration-300 hover:scale-110 transform"
+                  aria-label={label}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                  <Icon className="h-5 w-5 relative z-10 group-hover:animate-bounce-slow" />
+                </a>
+              ))}
+            </div>
+          </div>
 
           {/* Mobile Menu Toggle */}
           <button
@@ -118,24 +155,11 @@ const Header: React.FC = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div
-          className="lg:hidden backdrop-blur-xl border-t border-secondarylight/30 shadow-2xl"
+          className="lg:hidden backdrop-blur-xl border-t border-secondarylight/30 shadow-2xl  "
           style={{ backgroundColor: "#e8e0da" }}
         >
-          <div className="px-4 py-4 space-y-7">
+          <div className="px-4 py-4 space-y-7 ">
             {/* Mobile Search */}
-            <div className="mb-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary h-5 w-5" />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-secondarylight/50 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  style={{ backgroundColor: "#F7F4F1", color: "#5F1A35" }}
-                />
-              </div>
-            </div>
 
             {/* Mobile Navigation */}
             {[
@@ -156,6 +180,43 @@ const Header: React.FC = () => {
                 </span>
               </Link>
             ))}
+          </div>
+          <div className="pb-5">
+            <div className="relative">
+              <div className="flex space-x-4">
+                {[
+                  {
+                    icon: Facebook,
+                    href: "https://facebook.com/mrpglobal",
+                    label: "Facebook",
+                  },
+
+                  {
+                    icon: Instagram,
+                    href: "https://instagram.com/mrpglobal",
+                    label: "Instagram",
+                  },
+                  {
+                    icon: Linkedin,
+                    href: "https://linkedin.com/company/mrpglobal",
+                    label: "LinkedIn",
+                  },
+                ].map(({ icon: Icon, href, label }, index) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative p-2 text-primary hover:text-dustyTaupe transition-all duration-300 hover:scale-110 transform"
+                    aria-label={label}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-primary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    <Icon className="h-5 w-5 relative z-10 group-hover:animate-bounce-slow" />
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}

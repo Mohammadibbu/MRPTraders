@@ -17,57 +17,12 @@ import ImportExportSection from "../Home/ImportExportSection";
 import { useApp } from "../../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Accordion from "../UI/Accordian";
+import ProductSection from "../Home/ProductSection";
 
 const ProductDetails: React.FC = () => {
   const { products } = useApp();
   const { productid } = useParams();
   const navigate = useNavigate();
-
-  // Ensure valid productid and product list
-  if (!products || products.length === 0 || !productid) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
-        <h2 className="text-4xl font-bolder text-primary mb-2">
-          Oops! Something went wrong.
-        </h2>
-        <p className="text-gray-600 mb-4">
-          We're sorry, but we couldn't retrieve detailed information for this
-          product at the moment. Please try again later or return to the product
-          list.
-        </p>
-        <button
-          onClick={() => navigate("/products")}
-          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
-        >
-          Go Back to Products
-        </button>
-      </div>
-    );
-  }
-
-  const product = products.find((val) => val.id === productid);
-
-  if (!product) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
-        <h2 className="text-4xl font-bold text-primary mb-2">
-          Product Information Unavailable
-        </h2>
-        <p className="text-gray-600 mb-4">
-          We're sorry, but we couldn't retrieve detailed information for this
-          product at the moment. Please try again later or return to the product
-          list.
-        </p>
-
-        <button
-          onClick={() => navigate("/products")}
-          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
-        >
-          Go Back to Products
-        </button>
-      </div>
-    );
-  }
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
@@ -121,6 +76,51 @@ const ProductDetails: React.FC = () => {
     { id: "certifications", label: "Certifications", icon: Shield },
   ];
 
+  // Ensure valid productid and product list
+  if (!products || products.length === 0 || !productid) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
+        <h2 className="text-4xl font-bolder text-primary mb-2">
+          Oops! Something went wrong.
+        </h2>
+        <p className="text-gray-600 mb-4">
+          We're sorry, but we couldn't retrieve detailed information for this
+          product at the moment. Please try again later or return to the product
+          list.
+        </p>
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
+        >
+          Go Back to Products
+        </button>
+      </div>
+    );
+  }
+
+  const product = products.find((val) => val.id === productid);
+
+  if (!product) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
+        <h2 className="text-4xl font-bolder text-primary mb-2">
+          Product Information Unavailable
+        </h2>
+        <p className="text-gray-600 mb-4">
+          We're sorry, but we couldn't retrieve detailed information for this
+          product at the moment. Please try again later or return to the product
+          list.
+        </p>
+
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
+        >
+          Go Back to Products
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
       {/* Hero Section */}
@@ -361,6 +361,7 @@ const ProductDetails: React.FC = () => {
 
       {/* Mission, Import Export and Join Us sections */}
 
+      <ProductSection />
       <MissionSection />
       <ImportExportSection />
       <Accordion count={3} className="bg-secondarylight" />

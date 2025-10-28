@@ -38,21 +38,21 @@ const GradientButton: React.FC<GradientButtonProps> = ({
 
   const variantClasses = {
     primary: `
-      bg-gradient-to-r from-[#9B1F65] to-[#6A0D4F] text-white 
-      hover:from-[#9B1F65]/90 hover:to-[#6A0D4F]/90 
-      focus:ring-[#9B1F65]/50 
+      bg-gradient-to-r from-primary to-[#6A0D4F] text-white 
+      hover:from-primary/90 hover:to-[#6A0D4F]/90 
+      focus:ring-primary/50 
       shadow-xl hover:shadow-2xl
     `,
     secondary: `
-      bg-gradient-to-r from-[#6A0D4F] to-[#9B1F65] text-secondary
-      hover:from-[#6A0D4F]/90 hover:to-[#9B1F65]/90
+      bg-gradient-to-r from-[#6A0D4F] to-primary text-secondary
+      hover:from-[#6A0D4F]/90 hover:to-primary/90
       focus:ring-[#6A0D4F]/50
       shadow-lg hover:shadow-xl
     `,
     outline: `
-      border-2 border-[#9B1F65] text-[#9B1F65] bg-transparent
+      border-2 border-primary text-primary bg-transparent
        hover:text-primary
-      focus:ring-[#9B1F65]/50
+      focus:ring-primary/50
     `,
   };
 

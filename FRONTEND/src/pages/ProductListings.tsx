@@ -7,94 +7,22 @@ import { motion } from "framer-motion";
 import { Product } from "../types";
 import { showtoast } from "../utils/Toast";
 import JoinUsSection from "../components/Home/JoinUsSection";
-import axios, { getProductsApi, productcount } from "../utils/AxiosInstance";
+import { useSearchParams } from "react-router-dom";
 
 const PRODUCTS_PER_PAGE = 8;
 
 const ProductListings: React.FC = () => {
-  const { products = [], searchTerm, setProducts } = useApp();
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { products = [], loading, searchTerm } = useApp();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get("category");
   const [filters, setFilters] = useState({
-    category: "All",
+    category: category || "All",
     origin: "All",
     searchTerm: searchTerm || "",
     availability: "All",
   });
-  // Encode data to Base64 string
-  // Encode data to Base64
-  function encodeData(data: any): string {
-    return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-  }
-
-  // Decode Base64 string to object
-  function decodeData(encodedStr: string): any | null {
-    try {
-      return JSON.parse(decodeURIComponent(escape(atob(encodedStr))));
-    } catch (e) {
-      console.error("Failed to decode data:", e);
-      return null;
-    }
-  }
-
-  useEffect(() => {
-    const cacheKey = "productsCache";
-    const fetchProducts = async () => {
-      const now = Date.now();
-
-      try {
-        const countRes = await axios.get(productcount);
-        const currentCount = countRes?.data?.totalCount;
-
-        if (!currentCount) {
-          console.warn("Could not fetch product count");
-          setLoading(false);
-          return;
-        }
-
-        const cachedRaw = localStorage.getItem(cacheKey);
-        const cached = cachedRaw ? decodeData(cachedRaw) : null;
-
-        if (cached && cached.totalCount === currentCount) {
-          // Cache is valid
-          localStorage.setItem(
-            cacheKey,
-            encodeData({ ...cached, timestamp: now })
-          );
-          setProducts(cached.data);
-        } else {
-          // Cache missing or outdated
-          console.log("API CALL HAPPENED");
-          const res = await axios.get(getProductsApi);
-          const freshData = res.data;
-
-          const newCache = {
-            data: freshData,
-            timestamp: now,
-            totalCount: currentCount,
-          };
-
-          localStorage.setItem(cacheKey, encodeData(newCache));
-          setProducts(freshData);
-        }
-      } catch (err) {
-        console.error("Error fetching products:", err);
-
-        // Fallback to cache
-        const fallbackRaw = localStorage.getItem(cacheKey);
-        const fallback = fallbackRaw ? decodeData(fallbackRaw) : null;
-
-        if (fallback?.data) {
-          setProducts(fallback.data);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
 
   // Reset to page 1 on filters change
   useEffect(() => {

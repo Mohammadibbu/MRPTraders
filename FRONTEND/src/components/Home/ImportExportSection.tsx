@@ -8,7 +8,7 @@ const ImportExportSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Title Animation */}
         <Animation initialY={-50}>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
             Simplifying Global Trade, One Shipment at a Time
           </h2>
         </Animation>
@@ -63,7 +63,7 @@ const ImportExportSection: React.FC = () => {
               <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <Package className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-primary mb-2">
                 Certified Quality
               </h3>
               <p className="text-gray-600">

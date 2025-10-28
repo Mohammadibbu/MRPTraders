@@ -4,6 +4,7 @@ import { AppProvider } from "./context/AppContext";
 import AppRoutes from "./AppRoutes";
 import { Toaster } from "sonner";
 import RouteChangeLoader from "./utils/RouteChangeLoader";
+import LoadingScreen from "./utils/LoadingScreen";
 
 function App() {
   return (
@@ -11,6 +12,8 @@ function App() {
       <Router>
         <RouteChangeLoader />
         <AppRoutes />
+        <LoadingScreen />
+
         <Toaster
           position="bottom-right"
           richColors

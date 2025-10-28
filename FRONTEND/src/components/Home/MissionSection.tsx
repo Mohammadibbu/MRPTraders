@@ -12,7 +12,7 @@ const MissionSection: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <Animation initialY={-100}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
               Our Mission
             </h2>
           </Animation>

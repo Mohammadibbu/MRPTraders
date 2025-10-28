@@ -9,7 +9,7 @@ const QualitySection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Title Animation */}
         <Animation initialY={-50}>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
             Commitment to Excellence & Quality
           </h2>
         </Animation>
