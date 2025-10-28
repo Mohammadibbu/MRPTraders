@@ -99,7 +99,7 @@ const Header: React.FC = () => {
           {/* SearchBar */}
           {/* <SearchBar /> */}
           {/* Social Media Links */}
-          <div className="hidden sm:block">
+          <div className="hidden lg:block">
             <div className="flex space-x-4  ">
               {[
                 {

@@ -15,7 +15,7 @@ const ProductListings: React.FC = () => {
   const { products = [], loading, searchTerm } = useApp();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const [filters, setFilters] = useState({
     category: category || "All",
