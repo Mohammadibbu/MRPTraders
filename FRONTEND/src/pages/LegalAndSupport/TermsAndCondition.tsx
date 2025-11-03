@@ -1,5 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import Animation from "../../utils/Animation";
+import { contactDetails } from "../../utils/ContactDetails";
 
 const TermsAndConditions = () => {
   return (
@@ -30,7 +31,7 @@ const TermsAndConditions = () => {
         <Animation initialY={-50}>
           <main className="max-w-5xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-14">
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 1. Introduction
               </h2>
               <p className="text-gray-700">
@@ -41,7 +42,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 2. Use of Website
               </h2>
               <p className="text-gray-700">
@@ -53,7 +54,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 3. Intellectual Property
               </h2>
               <p className="text-gray-700">
@@ -65,7 +66,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 4. Product Information
               </h2>
               <p className="text-gray-700">
@@ -76,7 +77,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 5. Orders & Payment
               </h2>
               <p className="text-gray-700">
@@ -88,7 +89,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 6. Shipping & Delivery
               </h2>
               <p className="text-gray-700">
@@ -99,7 +100,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 7. Limitation of Liability
               </h2>
               <p className="text-gray-700">
@@ -110,7 +111,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 8. Governing Law
               </h2>
               <p className="text-gray-700">
@@ -122,7 +123,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 9. Changes to Terms
               </h2>
               <p className="text-gray-700">
@@ -134,7 +135,7 @@ const TermsAndConditions = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-primary mb-4">
                 10. Contact Us
               </h2>
               <p className="text-gray-700 mb-2">
@@ -145,10 +146,10 @@ const TermsAndConditions = () => {
                 <p className="text-gray-800">
                   📧 <strong>Email:</strong>{" "}
                   <a
-                    href="mailto: mrpglobaltraders2004@gmail.com"
+                    href={`mailto:${contactDetails.mail}`}
                     className="text-primary underline hover:text-primary-dark"
                   >
-                    mrpglobaltraders2004@gmail.com
+                    {contactDetails.mail}
                   </a>
                 </p>
               </div>

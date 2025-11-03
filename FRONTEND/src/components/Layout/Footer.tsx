@@ -11,20 +11,20 @@ import {
   Globe,
 } from "lucide-react";
 import logo from "../../assets/images/logo.png";
-
+import { companyDetails, contactDetails } from "../../utils/ContactDetails";
 const Footer: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer className="relative bg-primary text-secondarylight overflow-hidden">
+    <footer className="relative bg-secondaryDark text-secondarylight overflow-hidden">
       {/* Animated gradient border */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-secondarylight to-transparent animate-shimmer"></div>
 
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-gradient-to-br from-dustyTaupe/10 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-secondarylight/10 to-transparent"></div>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -40,12 +40,12 @@ const Footer: React.FC = () => {
                 />
               </div>
               <div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-secondarylight via-dustyTaupe to-secondarylight bg-clip-text text-transparent animate-shimmer">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-secondarylight via-secondarylight to-secondarylight bg-clip-text text-transparent animate-shimmer">
                   MRPGlobal Traders
                 </h2>
                 <div className="flex items-center space-x-1 mt-1">
-                  <Globe className="h-3 w-3 text-dustyTaupe animate-pulse-slow" />
-                  <span className="text-xs text-dustyTaupe font-medium">
+                  <Globe className="h-3 w-3 text-secondarylight animate-pulse-slow" />
+                  <span className="text-xs text-secondarylight font-medium">
                     Global Food & Fruit Exporters
                   </span>
                 </div>
@@ -63,31 +63,30 @@ const Footer: React.FC = () => {
               {[
                 {
                   icon: Facebook,
-                  href: "https://facebook.com/mrpglobal",
+                  href: contactDetails?.facebook || "",
                   label: "Facebook",
                 },
-
                 {
                   icon: Instagram,
-                  href: "https://instagram.com/mrpglobal",
+                  href: contactDetails?.instagram || "",
                   label: "Instagram",
                 },
                 {
                   icon: Linkedin,
-                  href: "https://linkedin.com/company/mrpglobal",
+                  href: contactDetails?.linkedin || "",
                   label: "LinkedIn",
                 },
               ].map(({ icon: Icon, href, label }, index) => (
                 <a
                   key={label}
-                  href={href}
+                  href={href?.toString()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-2 text-secondary hover:text-dustyTaupe transition-all duration-300 hover:scale-110 transform"
+                  className="group relative p-2 text-secondary hover:text-secondarylight transition-all duration-300 hover:scale-110 transform"
                   aria-label={label}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                   <Icon className="h-5 w-5 relative z-10 group-hover:animate-bounce-slow" />
                 </a>
               ))}
@@ -96,9 +95,9 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="space-y-6">
-            <h3 className="text-xl font-bold text-dustyTaupe p-2 relative group">
+            <h3 className="text-xl font-bold text-secondarylight p-2 relative group">
               <span className="relative z-10">Quick Links</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/10 to-transparent rounded-lg"></div>
             </h3>
             <div className="space-y-3">
               {[
@@ -111,10 +110,10 @@ const Footer: React.FC = () => {
                 <Link
                   key={label}
                   to={to}
-                  className="group flex items-center space-x-2 text-secondary hover:text-dustyTaupe transition-all duration-300 animate-shimmer"
+                  className="group flex items-center space-x-2 text-secondary hover:text-secondarylight transition-all duration-300 animate-shimmer"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="w-2 h-1 bg-dustyTaupe rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="w-2 h-1 bg-secondarylight rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="group-hover:translate-x-1 transition-transform duration-300">
                     {label}
                   </span>
@@ -125,9 +124,9 @@ const Footer: React.FC = () => {
 
           {/* Legal & Support */}
           <div className="space-y-6">
-            <h3 className="text-xl font-bold text-dustyTaupe p-2 relative group">
+            <h3 className="text-xl font-bold text-secondarylight p-2 relative group">
               <span className="relative z-10">Legal & Support</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg transition-transform duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/10 to-transparent rounded-lg transition-transform duration-300"></div>
             </h3>
             <div className="space-y-3">
               {[
@@ -139,10 +138,10 @@ const Footer: React.FC = () => {
                 <Link
                   key={label}
                   to={to}
-                  className="group flex items-center space-x-2 text-secondary hover:text-dustyTaupe transition-all duration-300 animate-shimmer"
+                  className="group flex items-center space-x-2 text-secondary hover:text-secondarylight transition-all duration-300 animate-shimmer"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="w-2 h-1 bg-dustyTaupe rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="w-2 h-1 bg-secondarylight rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="group-hover:translate-x-1 transition-transform duration-300">
                     {label}
                   </span>
@@ -153,33 +152,35 @@ const Footer: React.FC = () => {
 
           {/* Contact Info */}
           <div className="space-y-6">
-            <h3 className="text-xl font-bold p-2 text-dustyTaupe relative group">
+            <h3 className="text-xl font-bold p-2 text-secondarylight relative group">
               <span className="relative z-10">Get In Touch</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/10 to-transparent rounded-lg transition-transform duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/10 to-transparent rounded-lg transition-transform duration-300"></div>
             </h3>
             <div className="space-y-4">
               {[
                 {
                   icon: Mail,
-                  text: "mrpglobaltraders2004@gmail.com",
+                  text: contactDetails.mail,
                 },
                 {
                   icon: Phone,
-                  text: "+91 935 638 0766",
+                  text: contactDetails.phoneNumber
+                    ?.replace(/^(\+\d{2})(\d{3})(\d{3})(\d{4})$/, "$1 $2 $3 $4")
+                    .trim(),
                 },
                 {
                   icon: MapPin,
-                  text: "MRP Global Traders , chennai , India",
+                  text: contactDetails.location,
                 },
               ].map(({ icon: Icon, text }, index) => (
                 <span
                   key={text}
-                  className="group flex items-start space-x-3 text-secondary hover:text-dustyTaupe transition-all duration-300"
+                  className="group flex items-start space-x-3 text-secondary hover:text-secondarylight transition-all duration-300"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <div className="relative mt-0.5">
-                    <Icon className="h-5 w-5 text-dustyTaupe" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-secondary/20 rounded-full scale-0 group-hover:scale-150 transition-transform duration-300"></div>
+                    <Icon className="h-5 w-5 text-secondarylight" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-secondarylight/20 to-secondary/20 rounded-full scale-0 group-hover:scale-150 transition-transform duration-300"></div>
                   </div>
                   <span className="text-sm leading-relaxed group-hover:translate-x-1 transition-transform duration-300">
                     {text}
@@ -191,26 +192,30 @@ const Footer: React.FC = () => {
             {/* Back to Top Button */}
             <button
               onClick={scrollToTop}
-              className="group mt-6 flex items-center space-x-2 text-dustyTaupe hover:text-secondarylight transition-all duration-300 hover:scale-105 transform"
+              className="group mt-6 flex items-center space-x-2 text-secondarylight hover:text-secondarylight transition-all duration-300 hover:scale-105 transform"
             >
-              <div className="relative p-2 bg-dustyTaupe/10 rounded-full group-hover:bg-dustyTaupe/20 transition-colors duration-300">
+              <div className="relative p-2 bg-secondarylight/10 rounded-full group-hover:bg-secondarylight/20 transition-colors duration-300">
                 <ArrowUp className="h-4 w-4 group-hover:animate-bounce-slow" />
               </div>
               <span className="text-sm font-medium">Back to Top</span>
             </button>
           </div>
         </div>
+        <div className="flex space-x-5 text-sm justify-between m-3 p-3 text-secondary">
+          <span>GSTIN : {companyDetails.GSTN}</span>
 
+          <span>FSSAI CERTIFICATE NUMBER : {companyDetails.FSSAI}</span>
+        </div>
         {/* Bottom Section */}
         <div className="relative mt-16 pt-8">
           {/* Animated divider */}
-          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-dustyTaupe/50 to-transparent animate-shimmer"></div>
+          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-secondarylight/50 to-transparent animate-shimmer"></div>
 
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-secondary text-sm">
                 &copy; {new Date().getFullYear()}{" "}
-                <span className="font-semibold text-dustyTaupe">
+                <span className="font-semibold text-secondarylight">
                   MRPGlobal Traders
                 </span>
                 . All rights reserved.
@@ -233,7 +238,7 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Bottom glow effect */}
-      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-dustyTaupe to-transparent animate-pulse-slow"></div>
+      <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-secondarylight to-transparent animate-pulse-slow"></div>
     </footer>
   );
 };

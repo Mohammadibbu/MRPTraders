@@ -1,5 +1,6 @@
 import React from "react";
 import Accordion from "../../components/UI/Accordian";
+import { Link } from "react-router-dom";
 
 const FAQPage: React.FC = () => {
   return (
@@ -38,12 +39,12 @@ const FAQPage: React.FC = () => {
             We're here to help! Reach out to us anytime and we'll get back to
             you promptly.
           </p>
-          <a
-            href="/contact"
+          <Link
+            to="/contact"
             className="inline-block bg-secondary hover:bg-primary-dark text-primary font-semibold py-3 px-8 rounded-lg transition-colors"
           >
             Contact Us
-          </a>
+          </Link>
         </div>
       </section>
     </main>

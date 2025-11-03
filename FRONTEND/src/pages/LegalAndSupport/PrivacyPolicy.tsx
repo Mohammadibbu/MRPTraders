@@ -3,7 +3,7 @@
 import React from "react";
 import { AnimatePresence } from "framer-motion";
 import Animation from "../../utils/Animation";
-
+import { contactDetails } from "../../utils/ContactDetails";
 const PrivacyPolicy: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
@@ -33,7 +33,7 @@ const PrivacyPolicy: React.FC = () => {
         <Animation initialY={-50}>
           <main className="max-w-5xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-14">
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 1. Introduction
               </h2>
               <p className="text-gray-700 leading-relaxed">
@@ -45,7 +45,7 @@ const PrivacyPolicy: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 2. Information We Collect
               </h2>
               <p className="text-gray-700 mb-2">
@@ -62,7 +62,7 @@ const PrivacyPolicy: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 3. How We Use Your Information
               </h2>
               <ul className="list-disc list-inside text-gray-700 space-y-1">
@@ -74,7 +74,7 @@ const PrivacyPolicy: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 4. Sharing of Information
               </h2>
               <p className="text-gray-700">
@@ -91,7 +91,7 @@ const PrivacyPolicy: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 5. Data Security
               </h2>
               <p className="text-gray-700">
@@ -103,7 +103,7 @@ const PrivacyPolicy: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 6. Your Rights
               </h2>
               <p className="text-gray-700 mb-2">
@@ -114,17 +114,17 @@ const PrivacyPolicy: React.FC = () => {
                 <p className="text-gray-800">
                   📧 <strong>Email:</strong>{" "}
                   <a
-                    href="mailto: mrpglobaltraders2004@gmail.com"
+                    href={`mailto:${contactDetails.mail}`}
                     className="text-primary underline hover:text-primary-dark"
                   >
-                    mrpglobaltraders2004@gmail.com
+                    {contactDetails.mail}
                   </a>
                 </p>
               </div>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 7. Third-Party Links
               </h2>
               <p className="text-gray-700">
@@ -136,7 +136,7 @@ const PrivacyPolicy: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 8. Policy Updates
               </h2>
               <p className="text-gray-700">
@@ -148,7 +148,7 @@ const PrivacyPolicy: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-primary mb-4">
                 9. Contact Us
               </h2>
               <p className="text-gray-700 mb-2">
@@ -159,10 +159,10 @@ const PrivacyPolicy: React.FC = () => {
                 <p className="text-gray-800">
                   📧 <strong>Email:</strong>{" "}
                   <a
-                    href="mailto: mrpglobaltraders2004@gmail.com"
+                    href={`mailto:${contactDetails.mail}`}
                     className="text-primary underline hover:text-primary-dark"
                   >
-                    mrpglobaltraders2004@gmail.com
+                    {contactDetails.mail}
                   </a>
                 </p>
               </div>

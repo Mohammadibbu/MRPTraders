@@ -7,7 +7,7 @@ import Animation from "../utils/Animation"; // Import the Animation component
 import GradientButton from "../components/UI/GradientButton";
 import axios, { GoogleSheetApi } from "../utils/AxiosInstance";
 import Accordion from "../components/UI/Accordian";
-
+import { contactDetails, companyDetails } from "../utils/ContactDetails";
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,7 +15,7 @@ const Contact: React.FC = () => {
     phone: "",
     message: "",
   });
-  const whatsappNumber = "919356380766";
+  const whatsappNumber = contactDetails.phoneNumber;
   const defaultMessage =
     "Hi there! I'm interested in sourcing high-quality agricultural products. I'd like to learn more about your export services.";
 
@@ -136,7 +136,7 @@ const Contact: React.FC = () => {
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Animation initialY={-100}>
-              <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
+              <h2 className="text-3xl font-bold text-primary text-center mb-8">
                 We're Here to Help
               </h2>
             </Animation>
@@ -151,9 +151,7 @@ const Contact: React.FC = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
                         Serving customers from
                       </h3>
-                      <p className="text-gray-600">
-                        MRP Global Trade Center, Chennai
-                      </p>
+                      <p className="text-gray-600">{contactDetails.location}</p>
                     </div>
                   </div>
                 </Animation>
@@ -166,7 +164,14 @@ const Contact: React.FC = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
                         Phone Number
                       </h3>
-                      <p className="text-gray-600">+91 935 638 0766</p>
+                      <p className="text-gray-600">
+                        {contactDetails.phoneNumber
+                          ?.replace(
+                            /^(\+\d{2})(\d{3})(\d{3})(\d{4})$/,
+                            "$1 $2 $3 $4"
+                          )
+                          .trim()}
+                      </p>
                     </div>
                   </div>
                 </Animation>
@@ -180,7 +185,7 @@ const Contact: React.FC = () => {
                         Email Addresses
                       </h3>
                       <p className="text-gray-600">
-                        mrpglobaltraders2004@gmail.com
+                        {contactDetails.mail}
                         {/* <br />
                         sales@mrpglobaltraders.com */}
                       </p>
@@ -274,7 +279,12 @@ const Contact: React.FC = () => {
                           value={formData.phone}
                           onChange={handleChange}
                           className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:shadow-xl focus:border-primary outline-none"
-                          placeholder="+1 (555) 123-4567"
+                          placeholder={contactDetails.phoneNumber
+                            ?.replace(
+                              /^(\+\d{2})(\d{3})(\d{3})(\d{4})$/,
+                              "$1 $2 $3 $4"
+                            )
+                            .trim()}
                         />
                       </div>
                       <div>
@@ -332,7 +342,7 @@ const Contact: React.FC = () => {
                     <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-500">Interactive map coming soon</p>
                     <p className="text-sm text-gray-400 mt-2">
-                      MRP Global Traders , chennai, India
+                      {contactDetails.location}
                     </p>
                   </div>
                 </div>

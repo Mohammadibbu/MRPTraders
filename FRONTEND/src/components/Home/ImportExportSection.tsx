@@ -31,7 +31,7 @@ const ImportExportSection: React.FC = () => {
               <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <ArrowDownCircle className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-secondaryDark mb-2">
                 Import Essentials
               </h3>
               <p className="text-gray-600">
@@ -47,7 +47,7 @@ const ImportExportSection: React.FC = () => {
               <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <ArrowUpCircle className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-secondaryDark mb-2">
                 Export with Confidence
               </h3>
               <p className="text-gray-600">
@@ -63,7 +63,7 @@ const ImportExportSection: React.FC = () => {
               <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <Package className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-primary mb-2">
+              <h3 className="text-xl font-semibold text-secondaryDark mb-2">
                 Certified Quality
               </h3>
               <p className="text-gray-600">
@@ -79,7 +79,7 @@ const ImportExportSection: React.FC = () => {
               <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <Globe className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-secondaryDark mb-2">
                 Global Reach
               </h3>
               <p className="text-gray-600">

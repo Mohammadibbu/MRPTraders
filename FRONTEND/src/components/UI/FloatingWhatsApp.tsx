@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Phone } from "lucide-react";
-
+import { contactDetails } from "../../utils/ContactDetails";
 const FloatingWhatsApp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const whatsappNumber = "+919356380766";
+  const whatsappNumber = contactDetails.phoneNumber;
   const defaultMessage =
     "Hi! I'm interested in your products. Can you help me?";
 

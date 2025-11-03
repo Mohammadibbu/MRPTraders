@@ -1,96 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Leaf,
-  Award,
-  Calendar,
-  CheckCircle,
-  Phone,
-  Globe,
-  Zap,
-  ChevronLeft,
-  ChevronRight,
-  Shield,
-} from "lucide-react";
-import MissionSection from "../Home/MissionSection";
-import JoinUsSection from "../Home/JoinUsSection";
-import ImportExportSection from "../Home/ImportExportSection";
+import React, { useState } from "react";
+import { ArrowLeft, Award, Shield, Truck, Phone, Mail } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
-import Accordion from "../UI/Accordian";
 import ProductSection from "../Home/ProductSection";
-
+import ImportExportSection from "../Home/ImportExportSection";
+import Accordion from "../UI/Accordian";
+import JoinUsSection from "../Home/JoinUsSection";
+import { contactDetails } from "../../utils/ContactDetails";
 const ProductDetails: React.FC = () => {
   const { products } = useApp();
   const { productid } = useParams();
   const navigate = useNavigate();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [activeSection, setActiveSection] = useState("overview");
-  const [imageError, setImageError] = useState(false);
-  const tabNavRef = useRef<HTMLDivElement | null>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [imageErrorIndexes, setImageErrorIndexes] = useState<number[]>([]);
 
-  useEffect(() => {
-    const checkScroll = () => {
-      const el = tabNavRef.current;
-      if (!el) return;
-
-      setCanScrollLeft(el.scrollLeft > 0);
-      setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth);
-    };
-
-    const el = tabNavRef.current;
-    if (!el) return;
-
-    checkScroll();
-    el.addEventListener("scroll", checkScroll);
-    window.addEventListener("resize", checkScroll);
-
-    return () => {
-      el.removeEventListener("scroll", checkScroll);
-      window.removeEventListener("resize", checkScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-  const scrollTabs = (amount: number) => {
-    tabNavRef.current?.scrollBy({ left: amount, behavior: "smooth" });
-  };
-
-  const handleContactUs = () => {
-    const message = `Hello, I am interested in purchasing ${product?.name}. Could you please provide more details?`;
-    const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(whatsappUrl, "_blank");
-  };
-
-  const sections = [
-    { id: "overview", label: "Overview", icon: Globe },
-    { id: "benefits", label: "Benefits", icon: Leaf },
-    { id: "applications", label: "Applications", icon: Zap },
-    { id: "certifications", label: "Certifications", icon: Shield },
-  ];
-
-  // Ensure valid productid and product list
   if (!products || products.length === 0 || !productid) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
-        <h2 className="text-4xl font-bolder text-primary mb-2">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
           Oops! Something went wrong.
         </h2>
         <p className="text-gray-600 mb-4">
-          We're sorry, but we couldn't retrieve detailed information for this
-          product at the moment. Please try again later or return to the product
-          list.
+          Could not retrieve product details. Please try again later.
         </p>
         <button
           onClick={() => navigate("/products")}
-          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
+          className="bg-primary hover:bg-green-700 text-white px-5 py-2 rounded transition"
         >
           Go Back to Products
         </button>
@@ -98,272 +34,243 @@ const ProductDetails: React.FC = () => {
     );
   }
 
-  const product = products.find((val) => val.id === productid);
+  const product = products.find((p) => p.id === productid);
 
   if (!product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-4">
-        <h2 className="text-4xl font-bolder text-primary mb-2">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
           Product Information Unavailable
         </h2>
         <p className="text-gray-600 mb-4">
-          We're sorry, but we couldn't retrieve detailed information for this
-          product at the moment. Please try again later or return to the product
-          list.
+          Could not retrieve product details. Please try again later.
         </p>
-
         <button
           onClick={() => navigate("/products")}
-          className="bg-primary hover:bg-primary/80 text-secondarylight px-5 py-2 rounded transition"
+          className="bg-primary hover:bg-green-700 text-white px-5 py-2 rounded transition"
         >
           Go Back to Products
         </button>
       </div>
     );
   }
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-      {/* Hero Section */}
-      <section className="relative py-20">
-        <div className="absolute inset-0">
-          <img
-            src="/Images/ProductPage.png"
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/50 to-primary/40" />
-        </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={`text-center transform transition-all duration-1000 ${
-              isVisible
-                ? "translate-y-0 opacity-100"
-                : "translate-y-10 opacity-0"
-            }`}
-          >
-            <div className="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-md rounded-full text-white text-sm font-medium mb-8 border border-white/20">
-              <Calendar className="w-4 h-4 mr-2" />
-              Season: {product?.season}
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight leading-none">
-              {product?.name}
-            </h1>
+  const phoneNumber = contactDetails.phoneNumber;
+  const handleContactUs = () => {
+    const message = `Hello, I am interested in purchasing ${product.name}. Could you please provide more details?`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(whatsappUrl, "_blank");
+  };
+  const handleCallUs = () => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
+  const handleImageError = (index: number) => {
+    setImageErrorIndexes((prev) => [...prev, index]);
+  };
+
+  return (
+    <div className="min-h-screen">
+      {/* Back Button */}
+      <div className="bg-secondary/30">
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <button
+              onClick={() => navigate("/products")}
+              className="flex items-center text-secondaryDark border-2 rounded px-3 py-2 hover:text-primary transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              Back to Products
+            </button>
           </div>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-          {/* Left Section: Product Image Gallery */}
-          <div
-            className={`space-y-8 transform transition-all duration-1000 ${
-              isVisible
-                ? "translate-x-0 opacity-100"
-                : "-translate-x-10 opacity-0"
-            }`}
-          >
-            <div className="relative group">
-              <div className="aspect-square bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8   py-12">
+          <div className="grid lg:grid-cols-2 gap-12 mb-12">
+            {/* Left Column: Images */}
+            <div className="space-y-8">
+              {/* Main Image */}
+              <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-5 flex items-center justify-center mb-6">
                 <img
                   src={
-                    imageError
+                    imageErrorIndexes.includes(selectedImageIndex)
                       ? "/Images/fallback.png"
-                      : product?.photos[selectedImageIndex].base64
+                      : product.photos[selectedImageIndex]?.base64
                   }
-                  alt={`${product?.name} - Image ${selectedImageIndex + 1}`}
-                  onError={() => setImageError(true)}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  alt={`${product.name} - Image ${selectedImageIndex + 1}`}
+                  className="w-full max-h-[400px] object-contain rounded-md"
+                  onError={() => handleImageError(selectedImageIndex)}
                 />
               </div>
 
-              <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
-                {selectedImageIndex + 1} / {product?.photos.length}
+              {/* Thumbnails */}
+              <div className="grid grid-cols-4 sm:grid-cols-6 gap-4">
+                {product.photos.map((photo, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setSelectedImageIndex(i)}
+                    className={`bg-gray-100 rounded-lg p-2 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-secondaryDark transition-all ${
+                      selectedImageIndex === i ? "ring-4 ring-primary" : ""
+                    }`}
+                  >
+                    <img
+                      src={
+                        imageErrorIndexes.includes(i)
+                          ? "/Images/fallback.png"
+                          : photo.base64
+                      }
+                      alt={`${product.name} thumbnail ${i + 1}`}
+                      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded"
+                      onError={() => handleImageError(i)}
+                    />
+                  </div>
+                ))}
               </div>
-            </div>
 
-            {/* Image Thumbnails */}
-            <div className="flex gap-4 overflow-x-auto pb-2">
-              {product?.photos.map((photo, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImageIndex(index)}
-                  className={`flex-shrink-0 w-24 h-24 rounded-2xl overflow-hidden transition-all duration-300 transform hover:scale-105 ${
-                    selectedImageIndex === index
-                      ? "ring-4 ring-primary shadow-xl scale-105"
-                      : "hover:ring-2 ring-gray-300 hover:shadow-lg"
-                  }`}
-                >
-                  <img
-                    src={imageError ? "/Images/fallback.png" : photo.base64}
-                    onError={() => setImageError(true)}
-                    alt={`${product?.name} thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Section: Product Details */}
-          <div
-            className={`space-y-8 transform transition-all duration-1000 ${
-              isVisible
-                ? "translate-x-0 opacity-100"
-                : "translate-x-10 opacity-0"
-            }`}
-          >
-            {/* Navigation Tabs */}
-            <div className="select-none relative">
-              {/* Left Arrow */}
-              {canScrollLeft && (
-                <button
-                  onClick={() => scrollTabs(-150)}
-                  className="absolute -left-3 -bottom-2 z-10 bg-white/80 hover:bg-white rounded-full shadow p-1 transition"
-                >
-                  <ChevronLeft className="w-5 h-5 text-primary" />
-                </button>
-              )}
-
-              {/* Right Arrow */}
-              {canScrollRight && (
-                <button
-                  onClick={() => scrollTabs(150)}
-                  className="absolute -right-3 -bottom-2 z-10 bg-white/80 hover:bg-white rounded-full shadow p-1 transition"
-                >
-                  <ChevronRight className="w-5 h-5 text-primary" />
-                </button>
-              )}
-
+              {/* Why Choose Us */}
               <div>
-                <nav
-                  ref={tabNavRef}
-                  className="flex gap-4 py-4 overflow-x-auto px-10 bg-gradient-to-r from-dustyTaupe/20 to-primary/20 text-primary rounded-lg border border-dustyTaupe/30 hover:from-dustyTaupe/30 hover:to-primary/30 transition-all duration-200 whitespace-nowrap scroll-smooth"
-                  style={{ WebkitOverflowScrolling: "touch" }}
-                >
-                  {sections.map((section) => {
-                    const Icon = section.icon;
-                    return (
-                      <button
-                        key={section.id}
-                        onClick={() => setActiveSection(section.id)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                          activeSection === section.id
-                            ? "bg-secondarylight text-primary shadow-md"
-                            : "text-gray-600 hover:text-primary hover:bg-secondarylight"
-                        }`}
-                      >
-                        <Icon className="w-5 h-5" />
-                        {section.label}
-                      </button>
-                    );
-                  })}
-                </nav>
-              </div>
-            </div>
-
-            {/* Content Sections */}
-            {activeSection === "overview" && (
-              <div className="space-y-4">
-                <h2 className="text-3xl font-bold text-primary">Overview</h2>
-                <p className="text-lg text-gray-700">{product?.description}</p>
-              </div>
-            )}
-            {activeSection === "benefits" && (
-              <div className="space-y-4">
-                <h2 className="text-3xl font-bold text-primary">
-                  Health Benefits
+                <h2 className="text-2xl sm:text-3xl font-bold text-primary my-5">
+                  Why Choose Us
                 </h2>
                 <ul className="space-y-2 text-lg text-gray-700">
-                  {product?.health_benefits?.map((benefit, index) => (
+                  {product.why_choose_us?.map((feature, index) => (
                     <li key={index} className="flex items-start">
-                      <CheckCircle className="w-6 h-6 text-primary mr-2" />
-                      {benefit}
+                      <Award className="w-5 h-5 sm:w-6 sm:h-6 text-primary mr-2 flex-shrink-0" />
+                      {feature}
                     </li>
                   ))}
                 </ul>
               </div>
-            )}
-            {activeSection === "applications" && (
-              <div className="space-y-4">
-                <h2 className="text-3xl font-bold text-primary">
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ">
+                <div className="bg-blue-50 rounded-lg p-4 flex items-start shadow-md">
+                  <Truck className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-gray-900 mb-1">
+                      Fast Delivery
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Global shipping available
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-green-50 rounded-lg p-4 flex items-start shadow-md">
+                  <Shield className="w-5 h-5 text-primary mr-3 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-gray-900 mb-1">
+                      Quality Assured
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Premium certified products
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Details */}
+            <div className="sm:bg-white rounded-lg p-5 sm:shadow-sm flex flex-col">
+              <div>
+                <div className="flex flex-wrap items-center gap-2 mb-5">
+                  <span className="bg-secondary text-primary px-3 py-1 rounded-full text-sm font-semibold">
+                    {product.category}
+                  </span>
+                  {product.certifications?.length > 0 && (
+                    <div className="flex items-center bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      <Shield className="w-3 h-3 mr-1" />
+                      FSSAI Certified
+                    </div>
+                  )}
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 break-words">
+                  {product.name}
+                </h1>
+
+                <div className="bg-secondarylight rounded-lg p-4 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <div>
+                        <span className="text-sm text-gray-600 font-bold mb-4 mr-5">
+                          Origin
+                        </span>
+                        {product?.origin?.map((val, i) => (
+                          <span
+                            key={i}
+                            className="px-3 mx-0.5 py-1 bg-gradient-to-r from-secondary/20 to-primary/20 text-primary text-xs font-medium rounded-full border border-secondary/30 hover:from-dustyTaupe/30 hover:to-primary/30 transition-all duration-200"
+                          >
+                            {val}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-gray-700 leading-relaxed mb-6 break-words">
+                  {product.description}
+                </p>
+
+                {/* Additional Info */}
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Applications
                 </h2>
-                <ul className="space-y-2 text-lg text-gray-700">
-                  {product?.applications?.map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle className="w-6 h-6 text-primary mr-2" />
-                      {benefit}
-                    </li>
+                <ul className="list-disc pl-5 text-gray-700 mb-6">
+                  {product.applications?.map((app, i) => (
+                    <li key={i}>{app}</li>
                   ))}
                 </ul>
-              </div>
-            )}
-            {activeSection === "certifications" && (
-              <div className="space-y-4">
-                <h2 className="text-3xl font-bold text-primary">
-                  Certifications
+
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Health Benefits
                 </h2>
-                <ul className="space-y-2 text-lg text-gray-700">
-                  {product?.certifications?.map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle className="w-6 h-6 text-primary mr-2" />
-                      {benefit}
-                    </li>
+                <ul className="list-disc pl-5 text-gray-700 mb-6">
+                  {product.health_benefits?.map((benefit, i) => (
+                    <li key={i}>{benefit}</li>
                   ))}
                 </ul>
+
+                {product.certifications?.length > 0 && (
+                  <>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                      Certifications
+                    </h2>
+                    <ul className="list-disc pl-5 text-gray-700 mb-6">
+                      {product.certifications.map((cert, i) => (
+                        <li key={i}>{cert}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
               </div>
-            )}
 
-            {/* Origin Section */}
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold text-primary my-5">Origin</h2>
-              {product?.origin?.map((val, i) => (
-                <span
-                  key={i}
-                  className="px-3 mx-0.5 py-1 bg-gradient-to-r from-dustyTaupe/20 to-primary/20 text-primary text-xs font-medium rounded-full border border-dustyTaupe/30 hover:from-dustyTaupe/30 hover:to-primary/30 transition-all duration-200"
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mt-7">
+                <button
+                  onClick={handleContactUs}
+                  className="flex-1 bg-red-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl flex items-center justify-center"
                 >
-                  {val}
-                </span>
-              ))}
-            </div>
-
-            {/* Why Choose Us */}
-            <div>
-              <h2 className="text-3xl font-bold text-primary my-5">
-                Why Choose Us
-              </h2>
-              <ul className="space-y-2 text-lg text-gray-700">
-                {product?.why_choose_us?.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <Award className="w-6 h-6 text-primary mr-2" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact Us */}
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold text-primary">Contact Us</h2>
-              <button
-                onClick={handleContactUs}
-                className="w-full inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-semibold rounded-full transition-all duration-300 transform hover:bg-primary/80"
-              >
-                <Phone className="w-5 h-5 mr-3" />
-                Contact Us on WhatsApp
-              </button>
+                  <Mail className="w-5 h-5 mr-2" />
+                  Request Quote
+                </button>
+                <button
+                  onClick={handleCallUs}
+                  className="flex-1 border-2 border-primary text-primary px-6 py-4 rounded-lg font-semibold hover:bg-primary hover:text-white transition-all flex items-center justify-center"
+                >
+                  <Phone className="w-5 h-5 mr-2" />
+                  Call Us
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mission, Import Export and Join Us sections */}
-
       <ProductSection />
-      <MissionSection />
+
       <ImportExportSection />
+
       <Accordion count={3} className="bg-secondarylight" />
       <JoinUsSection />
     </div>

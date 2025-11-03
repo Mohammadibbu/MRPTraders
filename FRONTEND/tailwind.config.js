@@ -4,10 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        dustyTaupe: "#CCBBAE",
-        secondary: "#e8e0da",
-        secondarylight: "#F7F4F1",
-        primary: "#5F1A35",
+        dustyTaupe: "#351212",
+        secondary: "#edced3",
+        secondarylight: "#faf7fc",
+        primary: "#b50421",
+        gradientsecondary: "#111827",
+        accent: "#D64550",
+        secondaryDark: "#111827",
       },
       animation: {
         shimmer: "shimmer 2s infinite",

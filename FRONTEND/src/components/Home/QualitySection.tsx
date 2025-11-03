@@ -5,7 +5,7 @@ import Animation from "../../utils/Animation";
 
 const QualitySection: React.FC = () => {
   return (
-    <section className="bg-[#F7F4F1] py-16">
+    <section className="bg-secondarylight py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Title Animation */}
         <Animation initialY={-50}>

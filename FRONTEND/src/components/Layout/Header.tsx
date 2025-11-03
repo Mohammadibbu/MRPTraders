@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Search, Menu, Facebook, Instagram, Linkedin, X } from "lucide-react";
-
+import { Menu, Facebook, Instagram, Linkedin, X } from "lucide-react";
+import { contactDetails } from "../../utils/ContactDetails";
 // import { useApp } from "../../context/AppContext";
 import logo from "../../assets/images/logo.png";
 // import SearchBar from "../UI/Searchbar";
@@ -104,31 +104,31 @@ const Header: React.FC = () => {
               {[
                 {
                   icon: Facebook,
-                  href: "https://facebook.com/mrpglobal",
+                  href: contactDetails.facebook,
                   label: "Facebook",
                 },
 
                 {
                   icon: Instagram,
-                  href: "https://instagram.com/mrpglobal",
+                  href: contactDetails.instagram,
                   label: "Instagram",
                 },
                 {
                   icon: Linkedin,
-                  href: "https://linkedin.com/company/mrpglobal",
+                  href: contactDetails.instagram,
                   label: "LinkedIn",
                 },
               ].map(({ icon: Icon, href, label }, index) => (
                 <a
                   key={label}
-                  href={href}
+                  href={href?.toString()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-2 text-secondary hover:text-dustyTaupe transition-all duration-300 hover:scale-110 transform"
+                  className="group relative p-2 text-secondary hover:text-secondary transition-all duration-300 hover:scale-110 transform"
                   aria-label={label}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-secondary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                   <Icon className="h-5 w-5 relative z-10 group-hover:animate-bounce-slow" />
                 </a>
               ))}
@@ -156,7 +156,7 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div
           className="lg:hidden backdrop-blur-xl border-t border-secondarylight/30 shadow-2xl  "
-          style={{ backgroundColor: "#e8e0da" }}
+          style={{ backgroundColor: "#d4e8d5" }}
         >
           <div className="px-4 py-4 space-y-7 ">
             {/* Mobile Search */}
@@ -207,11 +207,11 @@ const Header: React.FC = () => {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative p-2 text-primary hover:text-dustyTaupe transition-all duration-300 hover:scale-110 transform"
+                    className="group relative p-2 text-primary hover:text-secondary transition-all duration-300 hover:scale-110 transform"
                     aria-label={label}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-dustyTaupe/20 to-primary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-primary/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                     <Icon className="h-5 w-5 relative z-10 group-hover:animate-bounce-slow" />
                   </a>
                 ))}

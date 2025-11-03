@@ -64,7 +64,7 @@ const Banner: React.FC<BannerProps> = ({
                     <MailCheck className="h-4 w-4 sm:h-5 sm:w-5 text-primary animate-pulse-slow flex-shrink-0" />
                     <div className="text-center sm:text-left">
                       <p className="text-xs sm:text-sm md:text-base lg:text-lg text-primary font-medium leading-tight">
-                        <span className="font-bold bg-gradient-to-r from-primary via-dustyTaupe to-primary bg-clip-text text-transparent animate-shimmer">
+                        <span className="font-bold bg-gradient-to-r from-primary via-secondaryDark to-primary bg-clip-text text-transparent animate-shimmer">
                           {mainText}
                         </span>
                         <span className="hidden sm:inline"> - </span>

@@ -5,7 +5,6 @@ import CustomSelect from "./CustomSelect";
 interface ProductFilterProps {
   filters: FilterOptions;
   products: Product[] | null | undefined;
-
   onFilterChange: (filters: FilterOptions) => void;
 }
 
@@ -38,7 +37,6 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
     const uniqueCategories = Array.from(
       new Set(products?.map((product) => product.category))
     );
-
     const uniqueOrigins = Array.from(
       new Set(products?.flatMap((product) => product.origin))
     );
@@ -48,10 +46,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   }, [products]);
 
   const handleFilterChange = (key: keyof FilterOptions, value: string) => {
-    onFilterChange({
-      ...filters,
-      [key]: value,
-    });
+    onFilterChange({ ...filters, [key]: value });
   };
 
   const clearFilters = () => {
@@ -69,58 +64,61 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
     filters.origin !== "All" ||
     filters.availability !== "All";
 
-  // const availabilityOptions = ["All", "In Stock", "Out of Stock"];
-
   return (
     <div
-      className={`relative bg-white rounded-2xl shadow-xl border border-gray-100 mb-8 overflow-auto transition-all duration-500 ${
+      className={`relative bg-white rounded-2xl shadow-lg border border-gray-100 mb-8 overflow-hidden transition-all duration-500 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
     >
-      {/* Header Section */}
-      <div className="sticky top-0  z-10 bg-white backdrop:blur-lg px-6 py-4 border-b border-gray-200">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center mb-4 sm:mb-0">
-            <div className="p-2 bg-primary rounded-lg mr-3">
+      {/* ===== Header Section ===== */}
+      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-4 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          {/* Left Side: Title */}
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary rounded-lg">
               <Filter className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900">
                 Filter Products
               </h3>
               <p className="text-sm text-gray-600">
                 {hasActiveFilters
                   ? "Active filters applied"
-                  : "Refine your search"}
+                  : "Refine your search below"}
               </p>
             </div>
           </div>
-          <div className="px-4 py-2 bg-gray-50 rounded-md shadow-sm max-w-sm mx-auto mb-5 sm:mb-0  ">
-            <div className="flex items-center mb-2">
-              <span className="font-bold text-primary mr-2">Category :</span>
-              <span className="font-semibold text-gray-900">
+
+          {/* Middle Section (Selected Category Info) */}
+          <div className="bg-gray-50 border border-gray-200 rounded-md px-4 py-3 text-sm sm:text-base flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm flex-1 sm:flex-none">
+            <div className="flex items-center justify-between sm:justify-start">
+              <span className="font-semibold text-primary mr-2">Category:</span>
+              <span className="font-medium text-gray-900 truncate">
                 {filters.category}
               </span>
             </div>
+
             {!isExpanded && (
-              <p className="text-sm text-gray-600 ">
-                Click
+              <p className="text-sm text-gray-600 mt-2 sm:mt-0 sm:ml-3">
+                Click{" "}
                 <button
-                  className="font-medium text-indigo-600 underline cursor-pointer mx-2"
+                  className="font-medium text-indigo-600 underline mx-1"
                   onClick={() => setIsExpanded(true)}
                 >
                   Show Filters
                 </button>
-                to adjust categories and more.
+                to adjust filters.
               </p>
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          {/* Right Side: Buttons */}
+          <div className="flex items-center justify-end gap-2 sm:gap-3">
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-primary transition-colors duration-200"
+                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-600 hover:text-primary transition"
               >
                 <X className="w-4 h-4" />
                 Clear All
@@ -128,7 +126,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
             )}
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200 transform hover:scale-105"
+              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200 transform hover:scale-105 text-xs sm:text-sm"
             >
               <Filter className="w-4 h-4" />
               {isExpanded ? "Hide Filters" : "Show Filters"}
@@ -140,71 +138,48 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
             </button>
           </div>
         </div>
-        {/* Active Filters Display */}
+
+        {/* Active Filter Tags */}
         {hasActiveFilters && (
-          <div className="mt-6 pt-6 border-t border-gray-200 ">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-sm font-medium text-gray-700">
-                Active Filters:
-              </span>
-            </div>
+          <div className="mt-5 pt-4 border-t border-gray-200">
             <div className="flex flex-wrap gap-2">
               {filters.searchTerm && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                  Search: "{filters.searchTerm}"
-                  <button
-                    onClick={() => handleFilterChange("searchTerm", "")}
-                    className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
+                <FilterTag
+                  label={`Search: "${filters.searchTerm}"`}
+                  onClear={() => handleFilterChange("searchTerm", "")}
+                />
               )}
               {filters.category !== "All" && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                  Category: {filters.category}
-                  <button
-                    onClick={() => handleFilterChange("category", "All")}
-                    className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
+                <FilterTag
+                  label={`Category: ${filters.category}`}
+                  onClear={() => handleFilterChange("category", "All")}
+                />
               )}
               {filters.origin !== "All" && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                  Origin: {filters.origin}
-                  <button
-                    onClick={() => handleFilterChange("origin", "All")}
-                    className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
+                <FilterTag
+                  label={`Origin: ${filters.origin}`}
+                  onClear={() => handleFilterChange("origin", "All")}
+                />
               )}
               {filters.availability !== "All" && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                  Availability: {filters.availability}
-                  <button
-                    onClick={() => handleFilterChange("availability", "All")}
-                    className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
+                <FilterTag
+                  label={`Availability: ${filters.availability}`}
+                  onClear={() => handleFilterChange("availability", "All")}
+                />
               )}
             </div>
           </div>
         )}
       </div>
 
-      {/* Filter Content */}
+      {/* ===== Filter Inputs ===== */}
       <div
-        className={`p-6 ${
+        className={`p-4 sm:p-6 ${
           isExpanded ? "block" : "hidden"
-        } max-w-full transition-all duration-200`}
+        } transition-all duration-200`}
       >
-        <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {/* Search Bar */}
           <div className="lg:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search Products
@@ -217,13 +192,13 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                   handleFilterChange("searchTerm", e.target.value)
                 }
                 placeholder="Search by name, description..."
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 pl-12 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 hover:border-gray-400"
+                className="w-full border border-gray-300 rounded-xl px-4 py-2.5 pl-10 focus:ring-2 focus:ring-primary focus:border-primary transition duration-200 text-sm sm:text-base"
               />
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 sm:w-5 h-4 sm:h-5" />
               {filters.searchTerm && (
                 <button
                   onClick={() => handleFilterChange("searchTerm", "")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -231,6 +206,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
             </div>
           </div>
 
+          {/* Dropdowns */}
           <CustomSelect
             label="Category"
             value={filters.category}
@@ -246,18 +222,29 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
             onChange={(value) => handleFilterChange("origin", value)}
             placeholder="All Origins"
           />
-
-          {/* <CustomSelect
-            label="Availability"
-            value={filters.availability}
-            options={availabilityOptions}
-            onChange={(value) => handleFilterChange("availability", value)}
-            placeholder="All Availability"
-          /> */}
         </div>
       </div>
     </div>
   );
 };
+
+/* ===== Reusable Filter Tag Component ===== */
+const FilterTag = ({
+  label,
+  onClear,
+}: {
+  label: string;
+  onClear: () => void;
+}) => (
+  <span className="inline-flex items-center gap-1 sm:gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs sm:text-sm">
+    {label}
+    <button
+      onClick={onClear}
+      className="hover:bg-primary/20 rounded-full p-0.5 transition"
+    >
+      <X className="w-3 h-3" />
+    </button>
+  </span>
+);
 
 export default ProductFilter;
