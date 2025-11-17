@@ -31,9 +31,12 @@ const AddProductApi = baseURL + "/admin/addproduct";
 const AddBulkProductApi = baseURL + "/admin/addproduct/bulkupload";
 const getProductsApi = baseURL + "/admin/allproducts";
 const productcount = baseURL + "/admin/productcount";
-
 const DeleteProductApi = baseURL + "/admin/delproduct";
-
+//categories
+const getcategoriesApi = baseURL + "/admin/allcategories";
+const AddcategoriesApi = baseURL + "/admin/addcategories";
+const DeleteCategoryApi = baseURL + "/admin/delcategory";
+const categoriescount = baseURL + "/admin/categoriescount";
 export {
   GoogleSheetApi,
   AdminLoginApi,
@@ -47,5 +50,10 @@ export {
   getProductsApi,
   AddBulkProductApi,
   productcount,
+  //categories
+  getcategoriesApi,
+  AddcategoriesApi,
+  DeleteCategoryApi,
+  categoriescount,
 };
 export default axiosInstance;

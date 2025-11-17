@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   Upload,
   User2,
+  TableProperties,
 } from "lucide-react";
 import AdminHeader from "./AdminHeader";
 
@@ -28,15 +29,20 @@ const AdminLayout = () => {
       path: "/admin/Alladmins",
       icon: <Users size={20} />,
     },
+    // {
+    //   name: "Add Product",
+    //   path: "/admin/products/add",
+    //   icon: <PlusCircle size={20} />,
+    // },
+    {
+      name: "Manage Categories",
+      path: "/admin/categories",
+      icon: <TableProperties size={20} />,
+    },
     {
       name: "Manage Products",
       path: "/admin/products",
       icon: <Package size={20} />,
-    },
-    {
-      name: "Add Product",
-      path: "/admin/products/add",
-      icon: <PlusCircle size={20} />,
     },
     {
       name: "Bulk upload",

@@ -12,6 +12,11 @@ const AdminAddBulkProduct = `${Base_EndPoint}/admin/addproduct/bulkupload`;
 const AdminGetProduct = `${Base_EndPoint}/admin/allproducts/`;
 const AdminDeleteProduct = `${Base_EndPoint}/admin/delProduct/:productid`;
 const Productcounts = `${Base_EndPoint}/admin/productcount`;
+//categories
+const AdminAddcategory = `${Base_EndPoint}/admin/addcategories`;
+const AdminGetcategory = `${Base_EndPoint}/admin/allcategories`;
+const CategoriesCounts = `${Base_EndPoint}/admin/categoriescount`;
+const AdminDeletecategory = `${Base_EndPoint}/admin/delcategory/:categoryid`;
 
 const AdminRoutes = {
   CreateAdminEndPOint,
@@ -25,6 +30,11 @@ const AdminRoutes = {
   AdminGetProduct,
   AdminDeleteProduct,
   Productcounts,
+  //categories
+  AdminAddcategory,
+  AdminGetcategory,
+  AdminDeletecategory,
+  CategoriesCounts,
 };
 
 export { AdminRoutes };

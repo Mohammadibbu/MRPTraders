@@ -206,7 +206,7 @@ const UserTable: React.FC = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-center gap-2">
-                      <GradientButton
+                      {/* <GradientButton
                         variant="secondary"
                         size="sm"
                         icon={Edit}
@@ -221,7 +221,7 @@ const UserTable: React.FC = () => {
                         disabled={user.role === "superadmin"}
                       >
                         Edit
-                      </GradientButton>
+                      </GradientButton> */}
                       <GradientButton
                         variant="outline"
                         size="sm"

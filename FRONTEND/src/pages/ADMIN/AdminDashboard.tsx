@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import SkeletonLoader from "../../components/UI/SkeletonLoader";
 
 type AdminContextType = {
-  name: string;
+  username: string;
   role: string;
 };
 
@@ -32,13 +32,13 @@ const AdminDashboard: React.FC = () => {
       {/* Header */}
       <div className="bg-white shadow rounded-lg p-6">
         <h1 className="text-2xl font-semibold text-gray-800">
-          Welcome, {context?.name ?? "Admin"}
+          Welcome, {context?.username ?? "Admin"}
         </h1>
         <p className="text-gray-600">Role: {context?.role ?? "Super Admin"}</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-primary text-white p-5 rounded-lg shadow">
           <h2 className="text-lg font-medium">Total Admins</h2>
           <p className="text-3xl font-bold mt-2">5</p>
@@ -53,7 +53,7 @@ const AdminDashboard: React.FC = () => {
           <h2 className="text-lg font-medium">New Orders</h2>
           <p className="text-3xl font-bold mt-2">32</p>
         </div>
-      </div>
+      </div> */}
 
       {/* Placeholder */}
       <div className="bg-white p-6 rounded-lg shadow">

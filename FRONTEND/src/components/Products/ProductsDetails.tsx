@@ -26,8 +26,9 @@ const ProductDetails: React.FC = () => {
         </p>
         <button
           onClick={() => navigate("/products")}
-          className="bg-primary hover:bg-green-700 text-white px-5 py-2 rounded transition"
+          className="bg-primary hover:bg-secondary hover:text-primary text-white px-5 py-2 rounded transition"
         >
+          <ArrowLeft className="mr-2" />
           Go Back to Products
         </button>
       </div>
@@ -47,8 +48,10 @@ const ProductDetails: React.FC = () => {
         </p>
         <button
           onClick={() => navigate("/products")}
-          className="bg-primary hover:bg-green-700 text-white px-5 py-2 rounded transition"
+          className="bg-primary inline-flex hover:bg-secondary hover:text-primary text-white px-5 py-2 rounded transition"
         >
+          {" "}
+          <ArrowLeft className="mr-2" />
           Go Back to Products
         </button>
       </div>

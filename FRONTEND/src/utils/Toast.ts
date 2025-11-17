@@ -34,11 +34,11 @@ const toastOptions = (description: string, duration: number) => ({
   description,
   duration,
   style: {
-    backgroundColor: "#F7F4F1",
-    color: "#5F1A35",
+    backgroundColor: "#111827",
+    color: "#faf7fc",
     fontSize: "14px",
     border: "none",
-    boxShadow: "rgb(95, 26, 53) 2px 2px 5px 0px",
+    // boxShadow: "rgb(95, 26, 53) 2px 2px 5px 0px",
     userSelect: "none" as "none",
   },
 });
@@ -59,11 +59,11 @@ export const showToastPromise = <T>(
     error: messages.error,
     duration,
     style: {
-      backgroundColor: "#F7F4F1",
-      color: "#5F1A35",
+      backgroundColor: "#111827",
+      color: "#faf7fc",
       fontSize: "14px",
       border: "none",
-      boxShadow: "rgb(95, 26, 53) 2px 2px 5px 0px",
+      // boxShadow: "rgb(95, 26, 53) 2px 2px 5px 0px",
     },
   });
 };

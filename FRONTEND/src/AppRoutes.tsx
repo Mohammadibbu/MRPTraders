@@ -29,6 +29,8 @@ import TermsAndConditions from "./pages/LegalAndSupport/TermsAndCondition";
 import ProductDetails from "./components/Products/ProductsDetails";
 
 import BulkUploadPage from "./pages/ADMIN/BulkUpload";
+import ManageCategories from "./pages/ADMIN/ManageCategories";
+import AddCategory from "./pages/ADMIN/AddCategories";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -72,6 +74,8 @@ const AppRoutes = () => {
           <Route path="products" element={<ManageProducts />} />
           <Route path="products/add" element={<AddProduct />} />
           <Route path="products/bulkupload" element={<BulkUploadPage />} />
+          <Route path="categories" element={<ManageCategories />} />
+          <Route path="categories/add" element={<AddCategory />} />
           <Route path="*" element={<NotFoundInAdminPage />} />
         </Route>
       </Route>

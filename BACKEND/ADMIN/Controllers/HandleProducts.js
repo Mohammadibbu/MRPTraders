@@ -77,6 +77,149 @@ const addProduct = async (req, res) => {
   }
 };
 
+const addProductCategory = async (req, res) => {
+  try {
+    const { name, photos } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({
+        message: "Category name required",
+        success: false,
+      });
+    }
+
+    // Convert comma-separated names → array
+    const categoriesToAdd = name
+      .split(",")
+      .map((cat) => cat.trim())
+      .filter(Boolean);
+
+    if (categoriesToAdd.length === 0) {
+      return res.status(400).json({
+        message: "No valid categories provided",
+        success: false,
+      });
+    }
+
+    const addedCategories = [];
+    const skipped = [];
+
+    for (const catName of categoriesToAdd) {
+      const docId = catName.toLowerCase().trim();
+
+      const categoryRef = db.collection("categories").doc(docId);
+      const snapshot = await categoryRef.get();
+
+      if (snapshot.exists) {
+        skipped.push(catName);
+        continue; // already exists → skip
+      }
+
+      const newCategory = {
+        id: docId,
+        name: catName,
+        photos,
+        createdAt: new Date(),
+        productIds: [], // always initialize clean structure
+      };
+
+      await categoryRef.set(newCategory);
+      addedCategories.push(newCategory);
+    }
+
+    if (addedCategories.length === 0) {
+      return res.status(400).json({
+        message: "All categories already exist",
+        skipped,
+        success: false,
+      });
+    }
+
+    res.status(201).json({
+      message: "Categories added successfully",
+      added: addedCategories,
+      skipped,
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error adding categories:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+/**
+ * Get all categories from the 'categories' document
+ */
+const getAllCategories = async (req, res) => {
+  try {
+    const categoriesCollectionRef = db.collection("categories");
+    const snapshot = await categoriesCollectionRef.get();
+
+    const categories = [];
+
+    snapshot.forEach((doc) => {
+      categories.push(doc.data());
+    });
+
+    res.status(200).json({ success: true, categories });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
+  }
+};
+
+/**
+ * Delete a category by its ID from the 'categories' document
+ */
+const deleteCategory = async (req, res) => {
+  try {
+    const { categoryid } = req.params;
+
+    if (!categoryid) {
+      return res
+        .status(400)
+        .json({ message: "Category ID is required", success: false });
+    }
+
+    const categoryRef = db.collection("categories").doc(categoryid);
+    const docSnapshot = await categoryRef.get();
+
+    if (!docSnapshot.exists) {
+      return res
+        .status(404)
+        .json({ message: "Category not found", success: false });
+    }
+
+    // Delete the category document
+    await categoryRef.delete();
+
+    res
+      .status(200)
+      .json({ message: "Category deleted successfully", success: true });
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
+  }
+};
+const CategoriesCounts = async (req, res) => {
+  try {
+    const productsRef = db.collection("categories");
+
+    const snapshot = await productsRef.count().get();
+
+    const totalCount = snapshot.data().count;
+
+    return res.status(200).json({ totalCount, success: true });
+  } catch (error) {
+    console.error("Error counting products:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to count products", success: false });
+  }
+};
 const addbulkproduct = async (req, res) => {
   const productsData = req.body;
 
@@ -174,4 +317,9 @@ export {
   getProducts,
   DeleteProduct,
   ProductCounts,
+  //categories
+  addProductCategory,
+  getAllCategories,
+  deleteCategory,
+  CategoriesCounts,
 };

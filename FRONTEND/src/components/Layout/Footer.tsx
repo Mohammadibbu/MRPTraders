@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-secondary text-sm leading-relaxed">
+            <p className="text-secondarylight text-sm leading-relaxed">
               Bridging farmers and suppliers with international markets,
               delivering fresh, premium quality fruits and food products
               worldwide.
@@ -82,7 +82,7 @@ const Footer: React.FC = () => {
                   href={href?.toString()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-2 text-secondary hover:text-secondarylight transition-all duration-300 hover:scale-110 transform"
+                  className="group relative p-2 text-secondarylight hover:text-secondarya transition-all duration-300 hover:scale-110 transform"
                   aria-label={label}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
@@ -110,7 +110,7 @@ const Footer: React.FC = () => {
                 <Link
                   key={label}
                   to={to}
-                  className="group flex items-center space-x-2 text-secondary hover:text-secondarylight transition-all duration-300 animate-shimmer"
+                  className="group flex items-center space-x-2 text-secondarylight hover:text-secondary transition-all duration-300 animate-shimmer"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="w-2 h-1 bg-secondarylight rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -138,7 +138,7 @@ const Footer: React.FC = () => {
                 <Link
                   key={label}
                   to={to}
-                  className="group flex items-center space-x-2 text-secondary hover:text-secondarylight transition-all duration-300 animate-shimmer"
+                  className="group flex items-center space-x-2 text-secondarylight hover:text-secondary transition-all duration-300 animate-shimmer"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="w-2 h-1 bg-secondarylight rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -175,7 +175,7 @@ const Footer: React.FC = () => {
               ].map(({ icon: Icon, text }, index) => (
                 <span
                   key={text}
-                  className="group flex items-start space-x-3 text-secondary hover:text-secondarylight transition-all duration-300"
+                  className="group flex items-start space-x-3 text-secondarylight hover:text-secondary transition-all duration-300"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <div className="relative mt-0.5">
@@ -201,7 +201,7 @@ const Footer: React.FC = () => {
             </button>
           </div>
         </div>
-        <div className="flex space-x-5 text-sm justify-between m-3 p-3 text-secondary">
+        <div className="flex space-x-5 text-sm justify-between m-3 p-3 text-secondarylight">
           <span>GSTIN : {companyDetails.GSTN}</span>
 
           <span>FSSAI CERTIFICATE NUMBER : {companyDetails.FSSAI}</span>
@@ -213,19 +213,19 @@ const Footer: React.FC = () => {
 
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
-              <p className="text-secondary text-sm">
+              <p className="text-secondarylight text-sm">
                 &copy; {new Date().getFullYear()}{" "}
                 <span className="font-semibold text-secondarylight">
                   MRPGlobal Traders
                 </span>
                 . All rights reserved.
               </p>
-              <p className="text-secondary/80 text-xs mt-1">
+              <p className="text-secondarylight/80 text-xs mt-1">
                 Connecting the world through fresh, quality food products.
               </p>
             </div>
 
-            <div className="flex items-center space-x-4 text-xs text-secondary/80">
+            <div className="flex items-center space-x-4 text-xs text-secondarylight/80">
               <span className="flex items-center space-x-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse-slow"></div>
                 <span>Global Network, Trusted Service</span>

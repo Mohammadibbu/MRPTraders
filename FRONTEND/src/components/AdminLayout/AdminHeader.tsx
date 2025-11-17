@@ -9,6 +9,7 @@ const AdminHeader: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
+    sessionStorage.clear();
     navigate("/admin/login");
     showtoast(
       "Logged out",

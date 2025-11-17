@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { RefreshCw, Edit, Trash2 } from "lucide-react";
+import { RefreshCw, Trash2, PlusCircle } from "lucide-react";
 import SkeletonLoader from "../../components/UI/SkeletonLoader";
 import DialogComponent from "../../components/UI/DialogModel";
 import GradientButton from "../../components/UI/GradientButton";
 import axios, {
   getProductsApi,
   DeleteProductApi,
-  // EditProductApi,
+  productcount,
 } from "../../utils/AxiosInstance";
 import { Product } from "../../types";
 import { showtoast } from "../../utils/Toast";
+import SearchableSelect from "../../components/UI/SearchableSelect";
+import { useNavigate } from "react-router-dom";
+import ProductImageCell from "../../components/AdminComp/ProductImageCell";
+import { encryptData, decryptData } from "../../utils/crypto";
 
 const ManageProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -20,22 +24,55 @@ const ManageProducts: React.FC = () => {
   const [category, setCategory] = useState("");
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch products from API
   const fetchProducts = async () => {
+    const countRes = await axios.get(productcount);
+
+    const serverCount = countRes.data?.totalCount ?? 0;
+
+    // 2️⃣ Check session cache
+    const encryptedCache = sessionStorage.getItem("products_encrypted(admin)");
+    const cachedCount = Number(sessionStorage.getItem("productcount(admin)"));
+
+    if (encryptedCache && cachedCount === serverCount) {
+      // Cache valid → use it
+      const cachedData = decryptData(encryptedCache);
+
+      if (cachedData) {
+        setProducts(cachedData);
+        setLoading(false);
+        return;
+      }
+    }
+    console.log("api call happened (products)");
+
     setLoading(true);
     try {
       const res = await axios.get(getProductsApi);
-
       const fetched: Product[] = res.data.data ?? res.data;
+
       setProducts(fetched);
+      // 4️⃣ Save encrypted data + count in sessionStorage
+      sessionStorage.setItem("products_encrypted(admin)", encryptData(fetched));
+      sessionStorage.setItem("productcount(admin)", serverCount.toString());
       showtoast(
         "Data Retrieval Successful",
         "The data has been successfully fetched from the server.",
         "success"
       );
     } catch (err: any) {
-      // console.error("Error fetching products:", err);
+      console.log(err.response.data.message);
+      if (err?.response?.data?.message === "No products found.") {
+        showtoast(
+          "No Products Found",
+          "We couldn't find any products in the database. If you'd like, you can add a new product using the 'Add Product' button.",
+          "info"
+        );
+
+        return;
+      }
       showtoast(
         "Data Fetching Failed",
         "There was an issue while fetching the data from the server. Please try again later.",
@@ -51,20 +88,38 @@ const ManageProducts: React.FC = () => {
   }, []);
 
   // Unique categories
-  const categories = Array.from(new Set(products.map((p) => p.category)));
+  const categories = Array.from(
+    new Set(products.map((p) => p.category ?? "Uncategorized"))
+  );
 
-  // Filter + sort
+  const sortOptions = [
+    { label: "Sort By", value: "" },
+    { label: "A-Z", value: "az" },
+    { label: "Z-A", value: "za" },
+  ];
+
+  const categoryOptions = [
+    { label: "All Categories", value: "" },
+    ...categories.map((cat) => ({ label: cat, value: cat })),
+  ];
+
+  // Filter + sort safely
   const filteredProducts = products
-    .filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
-    .filter((p) => (category ? p.category === category : true))
+    .filter(
+      (p) =>
+        typeof p.name === "string" &&
+        p.name.toLowerCase().includes(search.toLowerCase())
+    )
+    .filter((p) => (category ? (p.category ?? "") === category : true))
     .sort((a, b) => {
-      if (sort === "az") return a.name.localeCompare(b.name);
+      if (sort === "az") return (a.name ?? "").localeCompare(b.name ?? "");
+      if (sort === "za") return (b.name ?? "").localeCompare(a.name ?? "");
       return 0;
     });
 
   const handleDeleteConfirm = async () => {
-    setDelbtnloading(true);
     if (deleteId === null) return;
+    setDelbtnloading(true);
 
     try {
       await axios.delete(`${DeleteProductApi}/${deleteId}`);
@@ -73,10 +128,8 @@ const ManageProducts: React.FC = () => {
         "The product has been successfully deleted.",
         "success"
       );
-
       setProducts((prev) => prev.filter((p) => p.id !== deleteId));
     } catch (err: any) {
-      // console.error("Error deleting product:", err);
       showtoast(
         "Deletion Failed",
         "The product could not be deleted. Please try again.",
@@ -84,48 +137,34 @@ const ManageProducts: React.FC = () => {
       );
     } finally {
       setDelbtnloading(false);
-
       setDeleteId(null);
       setOpenDialog(false);
     }
   };
-
-  // const handleEdit = async (id: number) => {
-  //   // You might want to navigate to an edit page or open a modal
-  //   // For simple update, you might do:
-  //   try {
-  //     const productToEdit = products.find((p) => p.id === id);
-  //     if (!productToEdit) {
-  //       console.warn("Product to edit not found");
-  //       return;
-  //     }
-  //     // Example: open edit modal, let user change, then call API
-  //     const updatedData: Partial<Product> = {
-  //       // example: name: "New Name"
-  //     };
-  //     const res = await axios.put(`${EditProductApi}/${id}`, updatedData);
-  //     const updated: Product = res.data.data ?? res.data;
-
-  //     // Update local state
-  //     setProducts((prev) => prev.map((p) => (p.id === id ? updated : p)));
-  //   } catch (err: any) {
-  //     console.error("Error editing product:", err);
-  //   }
-  // };
 
   return (
     <div className="p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Manage Products</h2>
-        <GradientButton
-          variant="outline"
-          size="sm"
-          icon={RefreshCw}
-          onClick={fetchProducts}
-        >
-          Refresh
-        </GradientButton>
+        <div className="flex space-x-6">
+          <GradientButton
+            variant="outline"
+            size="sm"
+            icon={RefreshCw}
+            onClick={fetchProducts}
+          >
+            Refresh
+          </GradientButton>
+          <GradientButton
+            variant="primary"
+            size="sm"
+            icon={PlusCircle}
+            onClick={() => navigate("/admin/products/add")}
+          >
+            Add New Product
+          </GradientButton>
+        </div>
       </div>
 
       {/* Filters */}
@@ -138,27 +177,24 @@ const ManageProducts: React.FC = () => {
           className="border px-3 py-2 rounded-lg w-64"
         />
 
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="border px-3 py-2 rounded-lg"
-        >
-          <option value="">Sort By</option>
-          <option value="az">A-Z</option>
-        </select>
+        {/* Sort Select */}
+        <div className="w-48">
+          <SearchableSelect
+            options={sortOptions}
+            placeholder="Sort By"
+            onSelect={(option) => setSort(option.value.toString())}
+          />
+        </div>
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border px-3 py-2 rounded-lg"
-        >
-          <option value="">All Categories</option>
-          {categories.map((cat, idx) => (
-            <option key={idx} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+        {/* Category Select */}
+        <div className="w-48">
+          <SearchableSelect
+            options={categoryOptions}
+            placeholder="All Categories"
+            onSelect={(option) => setCategory(option.value.toString())}
+          />
+        </div>
+
         <span className="text-sm bg-secondary py-2 px-4 rounded-lg font-medium text-primary">
           {`Total Products: `}
           <span className="font-semibold text-red-600 mx-1">
@@ -177,41 +213,30 @@ const ManageProducts: React.FC = () => {
               <tr>
                 <th className="py-3 px-4 text-left">Photo</th>
                 <th className="py-3 px-4 text-left">Name</th>
-                <th className="py-3 px-4 text-left">Availability</th>
                 <th className="py-3 px-4 text-left">Origin</th>
                 <th className="py-3 px-4 text-left">Category</th>
                 <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="text-gray-700">
-              {filteredProducts.map((p, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
+              {filteredProducts.map((p) => (
+                <tr key={p.id} className="border-b hover:bg-gray-50">
                   <td className="py-3 px-4">
-                    <img
-                      src={p.photos[0].base64 || "/Images/fallback.png"}
-                      alt={p.name}
-                      onError={(e) =>
-                        ((e.target as HTMLImageElement).src =
-                          "/Images/fallback.png")
-                      }
-                      className="h-14 w-14 object-cover rounded-md"
+                    <ProductImageCell
+                      src={p.photos?.[0]?.base64 || "/Images/fallback.png"}
+                      alt={p.name ?? "Product Image"}
                     />
                   </td>
-                  <td className="py-3 px-4">{p.name}</td>
-                  <td className="py-3 px-4">{p.availability}</td>
+                  <td className="py-3 px-4">{p.name ?? "Unnamed Product"}</td>
                   <td className="py-3 px-4">
-                    {p.origin.join(", ").length > 30
-                      ? p.origin.join(", ").slice(0, 30) + "..."
-                      : p.origin.join(", ")}
+                    {Array.isArray(p.origin)
+                      ? p.origin.join(", ").length > 30
+                        ? p.origin.join(", ").slice(0, 30) + "..."
+                        : p.origin.join(", ")
+                      : "Unknown"}
                   </td>
-                  <td className="py-3 px-4">{p.category}</td>
+                  <td className="py-3 px-4">{p.category ?? "Uncategorized"}</td>
                   <td className="py-3 px-4 text-center space-x-3">
-                    {/* <button
-                      onClick={() => handleEdit(p.id)}
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      <Edit />
-                    </button> */}
                     <button
                       onClick={() => {
                         setDeleteId(p.id);
@@ -224,6 +249,7 @@ const ManageProducts: React.FC = () => {
                   </td>
                 </tr>
               ))}
+
               {filteredProducts.length === 0 && (
                 <tr>
                   <td

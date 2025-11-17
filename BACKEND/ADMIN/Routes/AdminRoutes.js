@@ -14,6 +14,11 @@ import {
   DeleteProduct,
   getProducts,
   ProductCounts,
+  //categories
+  addProductCategory,
+  getAllCategories,
+  deleteCategory,
+  CategoriesCounts,
 } from "../Controllers/HandleProducts.js";
 const router = Router();
 // GET /alladmins - get all admins
@@ -40,4 +45,14 @@ router.post(AdminRoutes.AdminAddBulkProduct, AdminAuth, addbulkproduct);
 
 router.delete(AdminRoutes.AdminDeleteProduct, AdminAuth, DeleteProduct);
 
+//categories
+// router.get(AdminRoutes.AdminGetcategory,)
+router.post(AdminRoutes.AdminAddcategory, AdminAuth, addProductCategory);
+
+router.get(AdminRoutes.AdminGetcategory, AdminAuth, getAllCategories);
+
+router.delete(AdminRoutes.AdminDeletecategory, AdminAuth, deleteCategory);
+
+// Count Categories
+router.get(AdminRoutes.CategoriesCounts, AdminAuth, CategoriesCounts);
 export default router;
