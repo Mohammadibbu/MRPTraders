@@ -9,15 +9,15 @@ type Category = {
 };
 
 type CategoryCardProps = {
-  categoriesToDisplay: Category[];
+  categoriesToDisplay: Category[] | undefined;
 };
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ categoriesToDisplay }) => {
   return (
     <>
       {/* Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-        {categoriesToDisplay.map((category: Category) => (
+      <div className="grid grid-cols-1 px-8 sm:px-5 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+        {categoriesToDisplay!.map((category: Category) => (
           <Link
             key={category.id}
             to={category.link}
@@ -40,7 +40,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ categoriesToDisplay }) => {
             </div>
 
             {/* Title */}
-            <div className="p-6 text-center">
+            <div className="p-6 text-center bg-gradient-to-b from-secondaryDark/10  to-transparent">
               <h3 className="text-xl font-semibold text-primary hover:text-primary/90 transition-colors duration-200">
                 {category.name}
               </h3>

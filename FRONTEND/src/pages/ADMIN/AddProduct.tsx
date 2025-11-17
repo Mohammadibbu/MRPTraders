@@ -38,7 +38,6 @@ const AddProduct: React.FC = () => {
   const [categoryOption, setCategoryOption] = useState<Option[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
 
-  // Fetch categories with loading state
   const fetchProducts = async () => {
     setLoadingCategories(true);
     try {
@@ -247,7 +246,9 @@ const AddProduct: React.FC = () => {
           name="name"
           value={formData.name}
           onChange={handleChange}
+          placeholder="Enter the product name"
         />
+
         <div className="flex flex-col w-full">
           <label className="font-medium mb-1">Category</label>
 
@@ -274,6 +275,7 @@ const AddProduct: React.FC = () => {
               name="category"
               value={formData.category}
               onChange={handleChange}
+              placeholder="Enter category"
             />
           )}
         </div>
@@ -283,42 +285,55 @@ const AddProduct: React.FC = () => {
           name="description"
           value={formData.description}
           onChange={handleChange}
+          placeholder="Write a brief description of the product"
         />
+
         <Input
           label="Quality"
           name="quality"
           value={formData.quality}
           onChange={handleChange}
+          placeholder="Enter product quality"
         />
+
         <Input
           label="Origin (comma-separated)"
           name="origin"
           value={formData.origin}
           onChange={handleChange}
+          placeholder="e.g., India, USA"
         />
+
         <Input
           label="Shelf Life"
           name="shelf_life"
           value={formData.shelf_life}
           onChange={handleChange}
+          placeholder="Enter shelf life duration"
         />
+
         <Input
           label="Storage Conditions"
           name="storage_conditions"
           value={formData.storage_conditions}
           onChange={handleChange}
+          placeholder="e.g., Store in a cool, dry place"
         />
+
         <Input
           label="Best Shipment Modes (comma-separated)"
           name="best_shipment_modes"
           value={formData.best_shipment_modes}
           onChange={handleChange}
+          placeholder="e.g., Air, Sea, Road"
         />
+
         <Input
           label="Certifications (comma-separated)"
           name="certifications"
           value={formData.certifications}
           onChange={handleChange}
+          placeholder="e.g., Organic, ISO 9001"
         />
 
         {/* Image Upload */}
@@ -375,18 +390,23 @@ const AddProduct: React.FC = () => {
           name="health_benefits"
           value={formData.health_benefits}
           onChange={handleChange}
+          placeholder="e.g., Improves immunity, Rich in antioxidants"
         />
+
         <Textarea
           label="Applications (comma-separated)"
           name="applications"
           value={formData.applications}
           onChange={handleChange}
+          placeholder="e.g., Cooking, Cosmetics, Medicine"
         />
+
         <Textarea
           label="Why Choose Us (comma-separated)"
           name="why_choose_us"
           value={formData.why_choose_us}
           onChange={handleChange}
+          placeholder="e.g., High quality, Sustainable sourcing"
         />
 
         <Input
@@ -394,6 +414,7 @@ const AddProduct: React.FC = () => {
           name="contact_info"
           value={formData.contact_info}
           onChange={handleChange}
+          placeholder="Enter email or phone number"
         />
 
         <div className="md:col-span-2">
@@ -412,7 +433,7 @@ const AddProduct: React.FC = () => {
 
 /* Reusable Components */
 
-const Input = ({ label, name, value, onChange }: any) => (
+const Input = ({ label, name, value, onChange, placeholder }: any) => (
   <div className="flex flex-col">
     {label && <label className="font-medium mb-1">{label}</label>}
     <input
@@ -420,19 +441,21 @@ const Input = ({ label, name, value, onChange }: any) => (
       name={name}
       value={value}
       onChange={onChange}
+      placeholder={placeholder}
       className="border px-4 py-2 rounded w-full"
       required
     />
   </div>
 );
 
-const Textarea = ({ label, name, value, onChange }: any) => (
+const Textarea = ({ label, name, value, onChange, placeholder }: any) => (
   <div className="flex flex-col md:col-span-2">
     <label className="font-medium mb-1">{label}</label>
     <textarea
       name={name}
       value={value}
       onChange={onChange}
+      placeholder={placeholder}
       rows={3}
       className="border px-4 py-2 rounded resize-none w-full"
       required

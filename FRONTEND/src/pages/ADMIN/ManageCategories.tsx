@@ -13,14 +13,7 @@ import { useNavigate } from "react-router-dom";
 import SearchableSelect from "../../components/UI/SearchableSelect";
 import ProductImageCell from "../../components/AdminComp/ProductImageCell";
 import { encryptData, decryptData } from "../../utils/crypto";
-
-type Category = {
-  id: string;
-  name: string;
-  createdAt?: { _seconds: number; _nanoseconds: number };
-  productIds?: string[];
-  photos?: { base64: string }[];
-};
+import { Category } from "../../types";
 
 const ManageCategories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);

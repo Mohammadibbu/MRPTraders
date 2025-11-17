@@ -435,23 +435,22 @@ const BulkUploadPage: React.FC = () => {
             </ul>
             <pre className="bg-gray-100 text-xs p-3 rounded border overflow-auto max-h-64">
               {`[
-  {
-    "name": "Masoor Dal",
-    "alias": "Red Lentil",
-    "origin": ["Erode", "Salem"],
-    "health_benefits": ["Protein", "Fiber"],
-    "category": "Pulses",
-    "photos": ["https://example.com/photo1.jpg"],
-    "availability": "In Stock",
-    "quality": "Grade A",
-    "season": "Year-round",
-    "certifications": ["ISO", "FSSAI"],
-    "description": "Nutritious lentil rich in folate and fiber.",
-    "applications": ["Curries", "Soups"],
-    "why_choose_us": ["Reliable", "Affordable"],
-    "contact_info": "Contact our team for pricing.",
-    "price": 140
-  }
+ {
+  name: "Organic Turmeric Powder",
+  origin: "India, Kerala",
+  health_benefits: "Anti-inflammatory, Antioxidant, Boosts immunity",
+  category: "Spices",
+  
+  quality: "Premium Grade A",
+  certifications: "USDA Organic, FSSAI",
+  description: "Finely ground organic turmeric powder with rich aroma.",
+  applications: "Cooking, Beverages, Skin care",
+  why_choose_us: "100% organic, ethically sourced, lab-tested",
+  contact_info: "contact@organicspices.com",
+  shelf_life: "24 months",
+  storage_conditions: "Store in a cool, dry place away from sunlight",
+  best_shipment_modes: "Air freight, Refrigerated truck"
+}
 ]`}
             </pre>
           </div>

@@ -5,10 +5,15 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { Product } from "../types";
-
+import { Product, Category } from "../types";
+import { encryptData, decryptData } from "../utils/crypto";
 // import mockProducts from "../data/mock"; // Mock data for initial state
-import axios, { getProductsApi, productcount } from "../utils/AxiosInstance";
+import axios, {
+  getProductsApi,
+  productcount,
+  categoriescount,
+  getcategoriesApi,
+} from "../utils/AxiosInstance";
 
 interface AppContextType {
   products: Product[] | null | undefined;
@@ -16,6 +21,7 @@ interface AppContextType {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   loading: Boolean;
+  categories: Category[] | null | undefined;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -25,26 +31,55 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   // Initialize state with mock data or empty array if mock data is unavailable
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setloading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  // Encode data to Base64 string
-  // Encode data to Base64
-  function encodeData(data: any): string {
-    return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-  }
-
-  // Decode Base64 string to object
-  function decodeData(encodedStr: string): any | null {
+  const fetchCategories = async () => {
     try {
-      return JSON.parse(decodeURIComponent(escape(atob(encodedStr))));
-    } catch (e) {
-      console.error("Failed to decode data:", e);
-      return null;
-    }
-  }
+      // 1️⃣ Fetch count from backend
+      const countRes = await axios.get(categoriescount);
+
+      const serverCount = countRes.data?.totalCount ?? 0;
+
+      // 2️⃣ Check session cache
+      const encryptedCache = localStorage.getItem("categories_encrypted");
+      const cachedCount = Number(localStorage.getItem("categories_count"));
+
+      if (encryptedCache && cachedCount === serverCount) {
+        // Cache valid → use it
+        const cachedData = decryptData(encryptedCache);
+
+        if (cachedData) {
+          console.log(cachedCount);
+
+          setCategories(cachedData);
+
+          return;
+        }
+      }
+      console.log("api call happened (categories)");
+
+      // 3️⃣ Cache missing OR mismatch → fetch from server
+      const res = await axios.get(getcategoriesApi);
+
+      let fetched: Category[] = [];
+      if (Array.isArray(res?.data?.categories)) {
+        fetched = res.data.categories;
+      } else if (Array.isArray(res?.data)) {
+        fetched = res.data;
+      }
+
+      setCategories(fetched);
+
+      // 4️⃣ Save encrypted data + count in localStorage
+      localStorage.setItem("categories_encrypted", encryptData(fetched));
+      localStorage.setItem("categories_count", serverCount.toString());
+    } catch (err) {}
+  };
 
   useEffect(() => {
+    fetchCategories();
     const cacheKey = "productsCache";
     const fetchProducts = async () => {
       const now = Date.now();
@@ -60,13 +95,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         }
 
         const cachedRaw = localStorage.getItem(cacheKey);
-        const cached = cachedRaw ? decodeData(cachedRaw) : null;
+        const cached = cachedRaw ? decryptData(cachedRaw) : null;
 
         if (cached && cached.totalCount === currentCount) {
           // Cache is valid
           localStorage.setItem(
             cacheKey,
-            encodeData({ ...cached, timestamp: now })
+            encryptData({ ...cached, timestamp: now })
           );
           setProducts(cached.data);
           setloading(false);
@@ -82,7 +117,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
             totalCount: currentCount,
           };
 
-          localStorage.setItem(cacheKey, encodeData(newCache));
+          localStorage.setItem(cacheKey, encryptData(newCache));
           setProducts(freshData);
           setloading(false);
         }
@@ -91,7 +126,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
         // Fallback to cache
         const fallbackRaw = localStorage.getItem(cacheKey);
-        const fallback = fallbackRaw ? decodeData(fallbackRaw) : null;
+        const fallback = fallbackRaw ? decryptData(fallbackRaw) : null;
 
         if (fallback?.data) {
           setloading(false);
@@ -105,7 +140,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
   return (
     <AppContext.Provider
-      value={{ products, setProducts, searchTerm, setSearchTerm, loading }}
+      value={{
+        products,
+        setProducts,
+        searchTerm,
+        setSearchTerm,
+        loading,
+        categories,
+      }}
     >
       {children}
     </AppContext.Provider>

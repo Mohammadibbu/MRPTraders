@@ -8,6 +8,7 @@ import { ArrowLeft } from "lucide-react";
 const AddCategory: React.FC = () => {
   const initialFormData = {
     name: "",
+    description: "",
     photos: [] as { base64: string; size: number }[],
   };
 
@@ -140,6 +141,7 @@ const AddCategory: React.FC = () => {
         const newCategory = {
           name: categoryName,
           photos: formData.photos,
+          description: formData.description,
         };
 
         const response = await axios.post(AddcategoriesApi, newCategory);
@@ -192,20 +194,22 @@ const AddCategory: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         <Input
-          label="Category Name(s)"
+          label="Category Name"
           name="name"
           value={formData.name}
           onChange={handleChange}
         />
-        <p className="text-sm text-gray-500">
-          You can add multiple categories at once by separating names with
-          commas.
-        </p>
 
+        <Input
+          label="Category description"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+        />
         {/* Image Upload */}
         <div className="flex flex-col">
           <label className="font-medium mb-1">
-            Upload Category Images (1–4)
+            Upload Category Images (1-2)
           </label>
           <input
             type="file"

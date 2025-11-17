@@ -1,4 +1,4 @@
-import db from "../../FirebaseDB/DBConnection.js";
+import db, { admin } from "../../FirebaseDB/DBConnection.js";
 
 // Function to get all products
 const getProducts = async (req, res) => {
@@ -26,7 +26,6 @@ const getProducts = async (req, res) => {
 const addProduct = async (req, res) => {
   const productData = req.body;
 
-  // Check if all required fields are provided and not null
   if (
     !productData.name ||
     !productData.category ||
@@ -39,7 +38,7 @@ const addProduct = async (req, res) => {
   }
 
   try {
-    // Check if the product already exists based on the name
+    // Check if product already exists
     const existingProductSnapshot = await db
       .collection("products")
       .where("name", "==", productData.name)
@@ -52,15 +51,26 @@ const addProduct = async (req, res) => {
       });
     }
 
-    // Add product with the 'id' field directly in one call
+    // Add product
     const productRef = db.collection("products").doc();
+    const newProduct = {
+      ...productData,
+      id: productRef.id,
+      createdAt: new Date(),
+    };
+    await productRef.set(newProduct);
 
-    // Set the product data with the custom ID and createdAt field
-    await productRef.set({
-      ...productData, // Spread the existing product data
-      id: productRef.id, // Assign the generated ID from Firestore
-      createdAt: new Date(), // Add the createdAt timestamp
-    });
+    // Add product ID to the corresponding category
+    const categoryRef = db
+      .collection("categories")
+      .doc(productData?.category?.toLowerCase().trim());
+
+    await categoryRef.set(
+      {
+        products: admin.firestore.FieldValue.arrayUnion(productRef.id),
+      },
+      { merge: true } // Merge with existing data
+    );
 
     res.status(201).json({
       message: "Product added successfully",
@@ -79,7 +89,7 @@ const addProduct = async (req, res) => {
 
 const addProductCategory = async (req, res) => {
   try {
-    const { name, photos } = req.body;
+    const { name, description, photos } = req.body;
 
     if (!name || !name.trim()) {
       return res.status(400).json({
@@ -119,6 +129,7 @@ const addProductCategory = async (req, res) => {
         id: docId,
         name: catName,
         photos,
+        description: description,
         createdAt: new Date(),
         productIds: [], // always initialize clean structure
       };

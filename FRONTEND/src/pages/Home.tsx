@@ -15,29 +15,6 @@ import Banner from "../components/Home/Banner";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  // const categoriesMap = new Map<string, string>();
-
-  // products?.forEach((product) => {
-  //   if (!categoriesMap.has(product.category)) {
-  //     // Pick a random image from this product's photos
-  //     const photos = product.photos || [];
-
-  //     const randomImage: any =
-  //       photos[Math.floor(Math.random() * photos.length)].base64 || "";
-
-  //     categoriesMap.set(product.category, randomImage);
-  //   }
-  // });
-
-  // // Convert Map to desired array format
-  // const categories = Array.from(categoriesMap.entries()).map(
-  //   ([name, image], index) => ({
-  //     id: index + 1,
-  //     name,
-  //     image,
-  //     link: `/products?category=${name}`,
-  //   })
-  // );
 
   const handleButtonClick = useCallback(() => {
     navigate("/contact");

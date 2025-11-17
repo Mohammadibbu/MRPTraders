@@ -41,3 +41,11 @@ export interface Product {
 //   date: string;
 //   total: string;
 // }
+
+export type Category = {
+  id: string;
+  name: string;
+  createdAt?: { _seconds: number; _nanoseconds: number };
+  productIds?: string[];
+  photos?: { base64: string }[];
+};

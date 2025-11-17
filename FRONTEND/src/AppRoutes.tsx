@@ -31,6 +31,7 @@ import ProductDetails from "./components/Products/ProductsDetails";
 import BulkUploadPage from "./pages/ADMIN/BulkUpload";
 import ManageCategories from "./pages/ADMIN/ManageCategories";
 import AddCategory from "./pages/ADMIN/AddCategories";
+import CategoryListings from "./pages/CategoryListing";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -50,8 +51,9 @@ const AppRoutes = () => {
         <Route element={<Layout />}>
           <Route index path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/products" element={<CategoryListings />} />
           <Route path="/products/:productid" element={<ProductDetails />} />
-          <Route path="/products" element={<ProductListings />} />
+          <Route path="/sss" element={<ProductListings />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsAndConditions />} />

@@ -34,11 +34,6 @@ router.post(AdminRoutes.AdminLogin, AdminLogin);
 
 router.post(AdminRoutes.AdminVerification, AdminAuth, verifyVerificationToken);
 
-//Handle Products
-router.get(AdminRoutes.AdminGetProduct, getProducts);
-// Count Products
-router.get(AdminRoutes.Productcounts, ProductCounts);
-
 router.post(AdminRoutes.AdminAddProduct, AdminAuth, addProduct);
 
 router.post(AdminRoutes.AdminAddBulkProduct, AdminAuth, addbulkproduct);
@@ -49,10 +44,16 @@ router.delete(AdminRoutes.AdminDeleteProduct, AdminAuth, DeleteProduct);
 // router.get(AdminRoutes.AdminGetcategory,)
 router.post(AdminRoutes.AdminAddcategory, AdminAuth, addProductCategory);
 
-router.get(AdminRoutes.AdminGetcategory, AdminAuth, getAllCategories);
-
 router.delete(AdminRoutes.AdminDeletecategory, AdminAuth, deleteCategory);
 
+//without Auth Routes
+//Handle Products
+router.get(AdminRoutes.AdminGetProduct, getProducts);
+// Count Products
+router.get(AdminRoutes.Productcounts, ProductCounts);
+// getAllCategories
+router.get(AdminRoutes.AdminGetcategory, getAllCategories);
 // Count Categories
-router.get(AdminRoutes.CategoriesCounts, AdminAuth, CategoriesCounts);
+router.get(AdminRoutes.CategoriesCounts, CategoriesCounts);
+
 export default router;
