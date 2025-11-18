@@ -83,8 +83,15 @@ export default {
         "4xl": "2rem",
       },
       screens: {
-        xs: "475px",
-        "3xl": "1600px",
+        xs: "390px",
+      },
+      spacing: {
+        card: "1.25rem",
+        "card-sm": "1rem",
+        "card-lg": "1.5rem",
+      },
+      borderRadius: {
+        card: "0.875rem",
       },
       zIndex: {
         60: "60",

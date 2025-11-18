@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 const faqData = [
   {
@@ -67,40 +67,49 @@ const AccordionItem = ({
   onClick: () => void;
 }) => {
   return (
-    <div className="border border-primary/30 rounded-lg overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-md bg-white">
+    <div
+      className={`group border rounded-2xl overflow-hidden transition-all duration-300 ${
+        isOpen
+          ? "bg-white border-primary/20 shadow-lg shadow-primary/5"
+          : "bg-white border-gray-100 hover:border-primary/20 hover:shadow-md"
+      }`}
+    >
       <button
         onClick={onClick}
-        className="w-full px-6 py-4 flex justify-between items-center text-left group focus:outline-none"
+        className="w-full px-6 py-5 flex justify-between items-center text-left cursor-pointer focus:outline-none"
         aria-expanded={isOpen}
-        aria-controls={`faq-${question.replace(/\s+/g, "-").toLowerCase()}`}
-        id={`faq-header-${question.replace(/\s+/g, "-").toLowerCase()}`}
       >
-        <span className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors duration-300">
+        <span
+          className={`text-lg font-semibold transition-colors duration-300 pr-8 ${
+            isOpen ? "text-primary" : "text-gray-800 group-hover:text-primary"
+          }`}
+        >
           {question}
         </span>
-        <ChevronDown
-          className={`w-5 h-5 transform transition-transform duration-300 ${
-            isOpen ? "rotate-180 text-primary" : "text-gray-500"
+        <div
+          className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ${
+            isOpen
+              ? "bg-primary text-white rotate-180 shadow-md"
+              : "bg-gray-50 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary"
           }`}
-          aria-hidden="true"
-        />
+        >
+          <ChevronDown className="w-5 h-5" />
+        </div>
       </button>
 
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
-            layout
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="px-6 pb-5 text-gray-600 text-base leading-relaxed"
-            id={`faq-${question.replace(/\s+/g, "-").toLowerCase()}`}
-            role="region"
-            aria-labelledby={`faq-header-${question
-              .replace(/\s+/g, "-")
-              .toLowerCase()}`}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            {answer}
+            <div className="px-6 pb-6 pt-0">
+              <p className="text-base text-gray-600 leading-relaxed border-t border-dashed border-gray-100 pt-4">
+                {answer}
+              </p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -127,18 +136,23 @@ const Accordion: React.FC<AccordionProps> = ({
   const visibleFaqs = faqData.slice(0, safeCount);
 
   return (
-    <section className={`${className} py-20`} id="faq">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+    <section className={`${className} py-20 sm:py-24`} id="faq">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center p-2 bg-primary/10 rounded-xl mb-4">
+            <HelpCircle className="w-6 h-6 text-primary" />
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Got questions? We’ve got answers to help you get started with MRP
-            GLOBAL Traders.
+            Have questions? We’ve compiled answers to the most common inquiries
+            about our export services and products.
           </p>
         </div>
 
+        {/* List */}
         <div className="space-y-4">
           {visibleFaqs.map((item, index) => (
             <AccordionItem

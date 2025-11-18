@@ -9,7 +9,7 @@ interface ProductFilterProps {
 }
 
 interface FilterOptions {
-  category: string;
+  // category: string;
   origin: string;
   searchTerm: string;
   availability: string;
@@ -26,7 +26,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   products,
   onFilterChange,
 }) => {
-  const [categories, setCategories] = useState<string[]>([]);
+  // const [categories, setCategories] = useState<string[]>([]);
   const [origins, setOrigins] = useState<string[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -34,14 +34,14 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
   useEffect(() => {
     setIsVisible(true);
 
-    const uniqueCategories = Array.from(
-      new Set(products?.map((product) => product.category))
-    );
+    // const uniqueCategories = Array.from(
+    //   new Set(products?.map((product) => product.category))
+    // );
     const uniqueOrigins = Array.from(
       new Set(products?.flatMap((product) => product.origin))
     );
 
-    setCategories(["All", ...uniqueCategories]);
+    // setCategories(["All", ...uniqueCategories]);
     setOrigins(["All", ...uniqueOrigins]);
   }, [products]);
 
@@ -51,7 +51,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 
   const clearFilters = () => {
     onFilterChange({
-      category: "All",
+      // category: "All",
       origin: "All",
       searchTerm: "",
       availability: "All",
@@ -60,7 +60,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 
   const hasActiveFilters =
     filters.searchTerm !== "" ||
-    filters.category !== "All" ||
+    // filters.category !== "All" ||
     filters.origin !== "All" ||
     filters.availability !== "All";
 
@@ -91,7 +91,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
           </div>
 
           {/* Middle Section (Selected Category Info) */}
-          <div className="bg-gray-50 border border-gray-200 rounded-md px-4 py-3 text-sm sm:text-base flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm flex-1 sm:flex-none">
+          {/* <div className="bg-gray-50 border border-gray-200 rounded-md px-4 py-3 text-sm sm:text-base flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-sm flex-1 sm:flex-none">
             <div className="flex items-center justify-between sm:justify-start">
               <span className="font-semibold text-primary mr-2">Category:</span>
               <span className="font-medium text-gray-900 truncate">
@@ -111,7 +111,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                 to adjust filters.
               </p>
             )}
-          </div>
+          </div> */}
 
           {/* Right Side: Buttons */}
           <div className="flex items-center justify-end gap-2 sm:gap-3">
@@ -149,12 +149,12 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
                   onClear={() => handleFilterChange("searchTerm", "")}
                 />
               )}
-              {filters.category !== "All" && (
+              {/* {filters.category !== "All" && (
                 <FilterTag
                   label={`Category: ${filters.category}`}
                   onClear={() => handleFilterChange("category", "All")}
                 />
-              )}
+              )} */}
               {filters.origin !== "All" && (
                 <FilterTag
                   label={`Origin: ${filters.origin}`}
@@ -207,13 +207,13 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
           </div>
 
           {/* Dropdowns */}
-          <CustomSelect
+          {/* <CustomSelect
             label="Category"
             value={filters.category}
             options={categories}
             onChange={(value) => handleFilterChange("category", value)}
             placeholder="All Categories"
-          />
+          /> */}
 
           <CustomSelect
             label="Origin"

@@ -1,4 +1,3 @@
-// src/pages/Home.tsx
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -30,23 +29,25 @@ const Home: React.FC = () => {
       />
 
       <AnimatePresence>
-        <Hero />
+        <div className="overflow-hidden">
+          <Hero />
 
-        <MissionSection />
+          <MissionSection />
 
-        <ProductSection />
+          <ProductSection />
 
-        <ImportExportSection />
+          <ImportExportSection />
 
-        <QualitySection />
+          <QualitySection />
 
-        <GlobalImpactSection />
+          <GlobalImpactSection />
 
-        <TransactionsSection />
+          <TransactionsSection />
 
-        {/* <TestimonialsSection /> */}
+          {/* <TestimonialsSection /> */}
 
-        <JoinUsSection />
+          <JoinUsSection />
+        </div>
       </AnimatePresence>
     </>
   );

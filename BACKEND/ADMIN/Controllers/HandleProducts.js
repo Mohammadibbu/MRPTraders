@@ -67,7 +67,7 @@ const addProduct = async (req, res) => {
 
     await categoryRef.set(
       {
-        products: admin.firestore.FieldValue.arrayUnion(productRef.id),
+        productIds: admin.firestore.FieldValue.arrayUnion(productRef.id),
       },
       { merge: true } // Merge with existing data
     );
@@ -130,8 +130,8 @@ const addProductCategory = async (req, res) => {
         name: catName,
         photos,
         description: description,
+        productIds: [],
         createdAt: new Date(),
-        productIds: [], // always initialize clean structure
       };
 
       await categoryRef.set(newCategory);
@@ -243,6 +243,9 @@ const addbulkproduct = async (req, res) => {
   try {
     const batch = db.batch();
 
+    // To store category updates
+    const categoryUpdates = {};
+
     productsData.forEach((product) => {
       const docRef = db.collection("products").doc();
 
@@ -253,9 +256,34 @@ const addbulkproduct = async (req, res) => {
       };
 
       batch.set(docRef, productData, { merge: true });
+
+      // Prepare category update
+      if (product.category) {
+        const categoryKey = product.category.toLowerCase().trim();
+        if (!categoryUpdates[categoryKey]) {
+          categoryUpdates[categoryKey] = [];
+        }
+        categoryUpdates[categoryKey].push(docRef.id);
+      }
     });
 
+    // Commit all product writes
     await batch.commit();
+
+    // Update categories
+    const categoryPromises = Object.entries(categoryUpdates).map(
+      async ([categoryId, productIds]) => {
+        const categoryRef = db.collection("categories").doc(categoryId);
+        await categoryRef.set(
+          {
+            productIds: admin.firestore.FieldValue.arrayUnion(...productIds),
+          },
+          { merge: true }
+        );
+      }
+    );
+
+    await Promise.all(categoryPromises);
 
     res.status(201).json({
       message: `${productsData.length} products added/updated successfully.`,

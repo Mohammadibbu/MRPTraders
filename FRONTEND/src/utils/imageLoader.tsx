@@ -1,52 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { ImageOff } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import SkeletonLoader from "../components/UI/SkeletonLoader";
 
 interface ImageLoaderProps {
   src: string;
   alt?: string;
-  className?: string;
-  fallbackText?: string; // Optional fallback text
+  className?: string; // Applied to the outer container (width, height, positioning)
+  imageClassName?: string; // Applied specifically to the img tag
+  fallbackText?: string;
 }
 
 const ImageWithLoader: React.FC<ImageLoaderProps> = ({
   src,
   alt = "Image",
   className = "",
-  fallbackText = "Image failed to load",
+  imageClassName = "object-cover",
+  fallbackText = "Image unavailable",
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const handleImageLoad = () => {
-    setIsLoading(false);
-  };
-
-  const handleImageError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
-
   return (
-    <div className={`relative `}>
-      {isLoading && !hasError && (
-        <SkeletonLoader
-          type="image"
-          className="absolute top-0 left-0 w-full h-full"
-        />
-      )}
+    <div className={`relative overflow-hidden bg-gray-100 ${className}`}>
+      {/* Skeleton Loader (Visible while loading) */}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 z-10"
+          >
+            <SkeletonLoader type="image" className="w-full h-full" />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {!hasError ? (
-        <img
+      {/* Error State */}
+      {hasError ? (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-400 p-4 text-center border border-gray-200">
+          <ImageOff className="w-8 h-8 mb-2 opacity-50" />
+          <span className="text-xs font-medium">{fallbackText}</span>
+        </div>
+      ) : (
+        /* Actual Image */
+        <motion.img
           src={src}
           alt={alt}
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-          className={`  ${className} ${isLoading ? "invisible" : "visible"}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isLoading ? 0 : 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          onLoad={() => setIsLoading(false)}
+          onError={() => {
+            setIsLoading(false);
+            setHasError(true);
+          }}
+          className={`block w-full h-full ${imageClassName}`}
+          loading="lazy"
         />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center  text-gray-900 opacity-20">
-          {fallbackText}
-        </div>
       )}
     </div>
   );

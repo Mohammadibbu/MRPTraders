@@ -7,10 +7,12 @@ import axios, {
   categoriescount,
 } from "../../utils/AxiosInstance";
 import imageCompression from "browser-image-compression";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Upload, X, Save, ImagePlus, Loader2 } from "lucide-react";
 import { encryptData, decryptData } from "../../utils/crypto";
 import { Option } from "../../components/UI/SearchableSelect";
 import SkeletonLoader from "../../components/UI/SkeletonLoader";
+import GradientButton from "../../components/UI/GradientButton";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AddProduct: React.FC = () => {
   const initialFormData = {
@@ -95,10 +97,7 @@ const AddProduct: React.FC = () => {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || files.length === 0) {
-      showtoast("Upload Error", "Please select at least one image.", "error");
-      return;
-    }
+    if (!files || files.length === 0) return;
 
     const current = formData.photos.length;
 
@@ -115,8 +114,8 @@ const AddProduct: React.FC = () => {
 
     for (const file of Array.from(files)) {
       try {
-        if (file.size > 1 * 1024 * 1024) {
-          showtoast("File Too Large", `${file.name} exceeds 1MB.`, "error");
+        if (file.size > 5 * 1024 * 1024) {
+          showtoast("File Too Large", `${file.name} exceeds 5MB.`, "error");
           continue;
         }
 
@@ -126,16 +125,6 @@ const AddProduct: React.FC = () => {
           useWebWorker: true,
         };
         const compressedFile = await imageCompression(file, options);
-
-        if (compressedFile.size > 500 * 1024) {
-          showtoast(
-            "Compression Failed",
-            `${file.name} couldn't be compressed under 500KB.`,
-            "error"
-          );
-          continue;
-        }
-
         const base64 = await convertToBase64(compressedFile);
         newCompressedImages.push({ base64, size: compressedFile.size });
       } catch (err) {
@@ -147,12 +136,14 @@ const AddProduct: React.FC = () => {
       }
     }
 
-    if (newCompressedImages.length === 0) return;
-
-    setFormData((prev) => ({
-      ...prev,
-      photos: [...prev.photos, ...newCompressedImages],
-    }));
+    if (newCompressedImages.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        photos: [...prev.photos, ...newCompressedImages],
+      }));
+    }
+    // Reset input
+    e.target.value = "";
   };
 
   const convertToBase64 = (file: File): Promise<string> =>
@@ -166,12 +157,10 @@ const AddProduct: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    for (const key in formData) {
-      const value = formData[key as keyof typeof formData];
-      if (typeof value === "string" && !value.trim()) {
-        showtoast("Missing Field", `Please fill "${key}".`, "error");
-        return;
-      }
+    // Basic validation for required fields (expand as needed)
+    if (!formData.name || !formData.category) {
+      showtoast("Missing Fields", "Please fill in required fields.", "error");
+      return;
     }
 
     if (formData.photos.length === 0) {
@@ -183,11 +172,26 @@ const AddProduct: React.FC = () => {
 
     const newProduct = {
       ...formData,
-      origin: formData.origin.split(",").map((o) => o.trim()),
-      health_benefits: formData.health_benefits.split(",").map((h) => h.trim()),
-      certifications: formData.certifications.split(",").map((c) => c.trim()),
-      applications: formData.applications.split(",").map((a) => a.trim()),
-      why_choose_us: formData.why_choose_us.split(",").map((w) => w.trim()),
+      origin: formData.origin
+        .split(",")
+        .map((o) => o.trim())
+        .filter(Boolean),
+      health_benefits: formData.health_benefits
+        .split(",")
+        .map((h) => h.trim())
+        .filter(Boolean),
+      certifications: formData.certifications
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean),
+      applications: formData.applications
+        .split(",")
+        .map((a) => a.trim())
+        .filter(Boolean),
+      why_choose_us: formData.why_choose_us
+        .split(",")
+        .map((w) => w.trim())
+        .filter(Boolean),
     };
 
     try {
@@ -196,6 +200,7 @@ const AddProduct: React.FC = () => {
       if (response?.data?.success) {
         showtoast("Success!", "Product added successfully.", "success");
         setFormData(initialFormData);
+        // navigate("/admin/products"); // Optional redirect
       } else {
         showtoast(
           "Error",
@@ -206,7 +211,7 @@ const AddProduct: React.FC = () => {
     } catch (err: any) {
       showtoast(
         "Error adding product",
-        err?.response?.message || "Try again later.",
+        err?.response?.data?.message || "Try again later.",
         "error"
       );
     } finally {
@@ -215,250 +220,359 @@ const AddProduct: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl w-full mx-auto bg-white p-6 sm:p-8 shadow rounded-md">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <button
-          onClick={() => navigate("/admin/products")}
-          className="flex items-center gap-2 bg-secondarylight px-4 py-2 rounded-md text-primary hover:text-primary/70"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span className="font-medium">Back</span>
-        </button>
-
-        <button
-          onClick={() => navigate("/admin/products/bulkupload")}
-          className="text-sm text-blue-600 underline hover:text-blue-800"
-        >
-          Bulk Upload?
-        </button>
-      </div>
-
-      {/* Title */}
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6">Add New Product</h1>
-
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
-        <Input
-          label="Product Name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Enter the product name"
-        />
-
-        <div className="flex flex-col w-full">
-          <label className="font-medium mb-1">Category</label>
-
-          {loadingCategories ? (
-            <SkeletonLoader type="text" count={1} />
-          ) : categoryOption.length > 0 ? (
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className="border px-4 py-2 rounded w-full"
-              required
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+              Add Product
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Add a new item to your product catalog.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate("/admin/products")}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm"
             >
-              <option value="">Select Category</option>
-              {categoryOption.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <Input
-              label="Category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Enter category"
-            />
-          )}
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </button>
+            <button
+              onClick={() => navigate("/admin/products/bulkupload")}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-100 rounded-xl hover:bg-blue-100 transition-colors shadow-sm"
+            >
+              <Upload className="w-4 h-4" />
+              Bulk Upload
+            </button>
+          </div>
         </div>
 
-        <Textarea
-          label="Product Description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Write a brief description of the product"
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden"
+        >
+          <div className="p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* --- Basic Information --- */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
+                  Basic Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Input
+                    label="Product Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="e.g. Premium Basmati Rice"
+                    required
+                  />
 
-        <Input
-          label="Quality"
-          name="quality"
-          value={formData.quality}
-          onChange={handleChange}
-          placeholder="Enter product quality"
-        />
-
-        <Input
-          label="Origin (comma-separated)"
-          name="origin"
-          value={formData.origin}
-          onChange={handleChange}
-          placeholder="e.g., India, USA"
-        />
-
-        <Input
-          label="Shelf Life"
-          name="shelf_life"
-          value={formData.shelf_life}
-          onChange={handleChange}
-          placeholder="Enter shelf life duration"
-        />
-
-        <Input
-          label="Storage Conditions"
-          name="storage_conditions"
-          value={formData.storage_conditions}
-          onChange={handleChange}
-          placeholder="e.g., Store in a cool, dry place"
-        />
-
-        <Input
-          label="Best Shipment Modes (comma-separated)"
-          name="best_shipment_modes"
-          value={formData.best_shipment_modes}
-          onChange={handleChange}
-          placeholder="e.g., Air, Sea, Road"
-        />
-
-        <Input
-          label="Certifications (comma-separated)"
-          name="certifications"
-          value={formData.certifications}
-          onChange={handleChange}
-          placeholder="e.g., Organic, ISO 9001"
-        />
-
-        {/* Image Upload */}
-        <div className="flex flex-col md:col-span-2">
-          <label className="font-medium mb-1">
-            Upload Product Images (1–4)
-          </label>
-
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageUpload}
-            className="block w-full border px-4 py-2 rounded text-sm file:bg-blue-50 file:text-blue-700 file:px-4 file:py-2 file:rounded file:border-0 hover:file:bg-blue-100"
-          />
-
-          <p className="text-sm text-gray-500 mt-1">
-            Max 4 images — each under{" "}
-            <span className="text-red-600 font-medium">1MB</span>
-          </p>
-
-          {formData.photos.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
-              {formData.photos.map((img, idx) => {
-                const sizeKB = (img.size / 1024).toFixed(0);
-                return (
-                  <div
-                    key={idx}
-                    className="relative flex flex-col items-center"
-                  >
-                    <img
-                      src={img.base64}
-                      className="w-28 h-28 object-cover border rounded"
-                    />
-                    <span className="text-xs mt-1 text-gray-600">
-                      {sizeKB} KB
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(idx)}
-                      className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded-full"
-                    >
-                      ×
-                    </button>
+                  <div className="flex flex-col w-full">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Category <span className="text-red-500">*</span>
+                    </label>
+                    {loadingCategories ? (
+                      <SkeletonLoader
+                        type="text"
+                        count={1}
+                        className="h-11 w-full rounded-xl"
+                      />
+                    ) : (
+                      <div className="relative">
+                        <select
+                          name="category"
+                          value={formData.category}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none"
+                          required
+                        >
+                          <option value="">Select Category</option>
+                          {categoryOption.map((o) => (
+                            <option key={o.value} value={o.value}>
+                              {o.label}
+                            </option>
+                          ))}
+                        </select>
+                        {/* Custom Arrow */}
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                          <svg
+                            className="w-4 h-4 text-gray-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M19 9l-7 7-7-7"
+                            ></path>
+                          </svg>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
 
-        <Textarea
-          label="Health Benefits (comma-separated)"
-          name="health_benefits"
-          value={formData.health_benefits}
-          onChange={handleChange}
-          placeholder="e.g., Improves immunity, Rich in antioxidants"
-        />
+                  <div className="md:col-span-2">
+                    <Textarea
+                      label="Description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      placeholder="Detailed description of the product..."
+                      rows={4}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
 
-        <Textarea
-          label="Applications (comma-separated)"
-          name="applications"
-          value={formData.applications}
-          onChange={handleChange}
-          placeholder="e.g., Cooking, Cosmetics, Medicine"
-        />
+              {/* --- Product Specifications --- */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
+                  Specifications
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Input
+                    label="Quality Grade"
+                    name="quality"
+                    value={formData.quality}
+                    onChange={handleChange}
+                    placeholder="e.g. Grade A, Premium"
+                  />
+                  <Input
+                    label="Shelf Life"
+                    name="shelf_life"
+                    value={formData.shelf_life}
+                    onChange={handleChange}
+                    placeholder="e.g. 12 Months"
+                  />
+                  <Input
+                    label="Storage Conditions"
+                    name="storage_conditions"
+                    value={formData.storage_conditions}
+                    onChange={handleChange}
+                    placeholder="e.g. Cool, dry place"
+                  />
+                  <Input
+                    label="Best Shipment Mode"
+                    name="best_shipment_modes"
+                    value={formData.best_shipment_modes}
+                    onChange={handleChange}
+                    placeholder="e.g. Air Freight, Reefer Container"
+                  />
+                </div>
+              </div>
 
-        <Textarea
-          label="Why Choose Us (comma-separated)"
-          name="why_choose_us"
-          value={formData.why_choose_us}
-          onChange={handleChange}
-          placeholder="e.g., High quality, Sustainable sourcing"
-        />
+              {/* --- Detailed Attributes (Comma Separated) --- */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
+                  {" "}
+                  detailed Attributes
+                </h3>
+                <p className="text-sm text-gray-500 mb-4 -mt-2">
+                  Separate multiple values with a comma (e.g., "Organic, Halal")
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Input
+                    label="Origin"
+                    name="origin"
+                    value={formData.origin}
+                    onChange={handleChange}
+                    placeholder="e.g. India, Vietnam"
+                  />
+                  <Input
+                    label="Certifications"
+                    name="certifications"
+                    value={formData.certifications}
+                    onChange={handleChange}
+                    placeholder="e.g. ISO 22000, FSSAI"
+                  />
+                  <div className="md:col-span-2">
+                    <Textarea
+                      label="Health Benefits"
+                      name="health_benefits"
+                      value={formData.health_benefits}
+                      onChange={handleChange}
+                      placeholder="e.g. Rich in Fiber, High Protein"
+                      rows={2}
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <Textarea
+                      label="Applications / Uses"
+                      name="applications"
+                      value={formData.applications}
+                      onChange={handleChange}
+                      placeholder="e.g. Cooking, Medicinal Use"
+                      rows={2}
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <Textarea
+                      label="Why Choose Us (USP)"
+                      name="why_choose_us"
+                      value={formData.why_choose_us}
+                      onChange={handleChange}
+                      placeholder="e.g. Sustainably Sourced, Direct from Farmers"
+                      rows={2}
+                    />
+                  </div>
+                </div>
+              </div>
 
-        <Input
-          label="Contact Info"
-          name="contact_info"
-          value={formData.contact_info}
-          onChange={handleChange}
-          placeholder="Enter email or phone number"
-        />
+              {/* --- Contact Info --- */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
+                  Contact & Support
+                </h3>
+                <Input
+                  label="Contact Info (for inquiries)"
+                  name="contact_info"
+                  value={formData.contact_info}
+                  onChange={handleChange}
+                  placeholder="e.g. sales@mrpglobal.com"
+                />
+              </div>
 
-        <div className="md:col-span-2">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full bg-primary text-white py-3 rounded hover:bg-opacity-90"
-          >
-            {submitting ? "Adding..." : "Add Product"}
-          </button>
-        </div>
-      </form>
+              {/* --- Image Upload --- */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Product Images
+                  </h3>
+                  <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+                    {formData.photos.length} / 4
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {/* Upload Button */}
+                  {formData.photos.length < 4 && (
+                    <label className="relative flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed border-gray-300 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group bg-gray-50">
+                      <div className="p-3 bg-white rounded-full mb-2 shadow-sm group-hover:shadow-md transition-all">
+                        <ImagePlus className="w-6 h-6 text-gray-400 group-hover:text-primary" />
+                      </div>
+                      <span className="text-xs font-medium text-gray-500 group-hover:text-primary">
+                        Add Image
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+
+                  {/* Image Previews */}
+                  <AnimatePresence>
+                    {formData.photos.map((img, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        className="relative h-32 group rounded-xl overflow-hidden border border-gray-200 shadow-sm"
+                      >
+                        <img
+                          src={img.base64}
+                          alt={`Preview ${idx}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(idx)}
+                            className="p-1.5 bg-white rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm"
+                          >
+                            <X className="w-5 h-5" />
+                          </button>
+                        </div>
+                        <div className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-black/60 text-[10px] text-white rounded backdrop-blur-sm">
+                          {(img.size / 1024).toFixed(0)}KB
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-6 border-t border-gray-100 flex justify-end">
+                <GradientButton
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  icon={Save}
+                  loading={submitting}
+                  disabled={submitting}
+                  className="w-full sm:w-auto px-8"
+                >
+                  {submitting ? "Saving Product..." : "Save Product"}
+                </GradientButton>
+              </div>
+            </form>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };
 
 /* Reusable Components */
-
-const Input = ({ label, name, value, onChange, placeholder }: any) => (
-  <div className="flex flex-col">
-    {label && <label className="font-medium mb-1">{label}</label>}
+const Input = ({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+  required = false,
+}: any) => (
+  <div className="flex flex-col w-full">
+    <label className="block text-sm font-semibold text-gray-700 mb-2">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
     <input
       type="text"
       name={name}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      className="border px-4 py-2 rounded w-full"
-      required
+      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-gray-400"
+      required={required}
     />
   </div>
 );
 
-const Textarea = ({ label, name, value, onChange, placeholder }: any) => (
-  <div className="flex flex-col md:col-span-2">
-    <label className="font-medium mb-1">{label}</label>
+const Textarea = ({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+  rows = 3,
+  required = false,
+}: any) => (
+  <div className="flex flex-col w-full">
+    <label className="block text-sm font-semibold text-gray-700 mb-2">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
     <textarea
       name={name}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      rows={3}
-      className="border px-4 py-2 rounded resize-none w-full"
-      required
+      rows={rows}
+      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none placeholder:text-gray-400"
+      required={required}
     />
   </div>
 );

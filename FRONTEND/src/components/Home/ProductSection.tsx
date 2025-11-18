@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import CategoryCard from "../Products/CategoryCard";
 
-// Define the Category type
+// Define the Category type locally if not imported, or reuse from types
 interface Category {
   id: string;
   name: string;
@@ -11,62 +12,86 @@ interface Category {
   link: string;
 }
 
-interface ProductSectionProps {
-  categories?: Category[];
-}
-
-const ProductSection: React.FC<ProductSectionProps> = () => {
+const ProductSection: React.FC = () => {
+  // Mock data for categories to display on Home
   const defaultCategories: Category[] = [
     {
       id: "1",
       name: "Exotic Fruits",
       image: "/Images/HomePageImages/ProductCategory/exoticfruits.jpeg",
-      link: "/products?category=Exotic Fruits",
+      link: "/products/c/Exotic Fruits",
     },
     {
       id: "2",
       name: "Spices",
       image: "/Images/HomePageImages/ProductCategory/spices.jpg",
-      link: "/products?category=Spices",
+      link: "/products/c/Spices",
     },
     {
       id: "3",
       name: "Vegetables",
       image: "/Images/HomePageImages/ProductCategory/vegetables.jpeg",
-      link: "/products?category=Vegetables",
+      link: "/products/c/Vegetables",
     },
     {
       id: "4",
       name: "Pulses",
       image: "/Images/HomePageImages/ProductCategory/Pulses.jpg",
-      link: "/products?category=Pulses",
+      link: "/products/c/Pulses",
     },
   ];
 
-  const categoriesToDisplay = defaultCategories;
-
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-100">
-      <div className="max-w-7xl mx-auto text-center">
-        {/* Heading */}
-        <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">
-          Explore Our Products Exported Worldwide
-        </h2>
-        <p className="text-lg max-w-2xl mx-auto text-gray-600 mb-8">
-          Handpicked fruits, vegetables, and more, delivered across the globe
-          with quality and freshness guaranteed.
-        </p>
-        <CategoryCard categoriesToDisplay={categoriesToDisplay} />
-        {/* Explore All Products Button */}
-        <div className="mt-8">
+    <section className="relative py-20 sm:py-24 bg-gray-50 overflow-hidden">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50 pointer-events-none"></div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
+              Explore Our <span className="text-primary">Global Exports</span>
+            </h2>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              Handpicked fruits, vegetables, and more, delivered across the
+              globe with quality and freshness guaranteed.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Category Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="-mx-4 sm:-mx-6 lg:-mx-8" // Negative margin to offset CategoryCard's internal padding if necessary, or to align with container
+        >
+          <CategoryCard categoriesToDisplay={defaultCategories} />
+        </motion.div>
+
+        {/* View All Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mt-8 text-center"
+        >
           <Link
             to="/products"
-            className="group inline-flex items-center space-x-2 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-white text-gray-900 border-2 border-gray-200 px-8 py-3.5 rounded-full font-bold hover:border-primary hover:text-primary transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1"
           >
-            <span>Explore all Products</span>
-            <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 duration-300" />
+            <span>View All Products</span>
+            <ArrowRight className="w-5 h-5" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

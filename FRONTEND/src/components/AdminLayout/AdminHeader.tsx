@@ -1,16 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
-import { showtoast } from "../../utils/Toast";
+import React from "react";
 import DialogComponent from "../UI/DialogModel";
+import { showtoast } from "../../utils/Toast";
 const AdminHeader: React.FC = () => {
   const navigate = useNavigate();
   const [logoutDialog, setLogoutDialog] = useState(false);
 
+  // Custom color classes used: primary, accent, secondary, dustyTaupe, secondary/70
+
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     sessionStorage.clear();
+
     navigate("/admin/login");
+
     showtoast(
       "Logged out",
       "You have been successfully logged out",
@@ -20,15 +25,27 @@ const AdminHeader: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow px-6 py-2.5 flex items-center justify-between border-b">
-      <h1 className="text-xl font-semibold text-primary">Admin Dashboard</h1>
-      <div className="flex items-center space-x-4">
+    <header className="bg-white shadow px-4 sm:px-6 py-3 flex items-center justify-between border-b border-secondary">
+      {/* Dashboard Title - Decreased font size on small screens (text-xl) */}
+      <h1 className="text-xl sm:text-2xl font-bold text-primary truncate mr-4">
+        Admin Dashboard
+      </h1>
+
+      {/* Logout Action */}
+      <div className="flex items-center">
         <button
-          className="bg-primary inline-flex font-bold text-white px-4 py-1.5 rounded hover:bg-primary-light transition"
+          className="
+            inline-flex items-center font-semibold text-white 
+            px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg 
+            bg-accent hover:bg-opacity-90 
+            transition duration-200 shadow-md shadow-accent/40
+          "
           onClick={() => setLogoutDialog(true)}
         >
-          Logout
-          <LogOut className="ml-4" />
+          {/* Hide "Logout" text on xs screens, show it on sm and above */}
+          <span className="hidden sm:inline">Logout</span>
+          {/* Ensure icon positioning is correct regardless of text visibility */}
+          <LogOut className="w-5 h-5 sm:ml-2" />
         </button>
 
         {/* Logout Confirmation Dialog */}
@@ -39,9 +56,10 @@ const AdminHeader: React.FC = () => {
           messageDescription="Are you sure you want to log out?"
           okText="Logout"
           cancelText="Cancel"
-          icon={<LogOut className="h-6 w-6 text-red-500" />}
-          okButtonColor="bg-red-600 hover:bg-red-700"
-          cancelButtonColor="bg-gray-100 text-primary hover:bg-gray-200"
+          icon={<LogOut className="h-6 w-6 text-accent" />}
+          // Use custom colors for dialog buttons
+          okButtonColor="bg-accent hover:bg-opacity-90 text-white"
+          cancelButtonColor="bg-secondary text-dustyTaupe hover:bg-secondary/70"
           okButtonAction={handleLogout}
         />
       </div>

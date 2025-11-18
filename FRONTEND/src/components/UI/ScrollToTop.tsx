@@ -1,49 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
-interface ScrollToTopProps {
-  bgColor?: string; // Background color
-  textColor?: string; // Text color
-  hoverColor?: string; // Hover color
-}
+import { motion, AnimatePresence } from "framer-motion";
 
-const ScrollToTop: React.FC<ScrollToTopProps> = ({
-  bgColor = "bg-secondary",
-  textColor = "text-primary",
-  hoverColor = "",
-}) => {
+const ScrollToTop: React.FC = () => {
   const [showButton, setShowButton] = useState(false);
 
-  const handleScroll = () => {
-    if (window.scrollY > window.innerHeight / 2) {
-      setShowButton(true);
-    } else {
-      setShowButton(false);
-    }
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show button after scrolling down 300px
+      if (window.scrollY > 300) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
-    <button
-      onClick={scrollToTop}
-      className={`fixed right-6 bottom-24  animate-float mt-6 flex items-center space-x-2 ${textColor} ${hoverColor}  rounded-full transition-all duration-300 hover:scale-105 transform ${
-        showButton ? "opacity-100" : "opacity-0"
-      } ${showButton ? "pointer-events-auto" : "pointer-events-none"}`}
-      style={{ transition: "opacity 0.8s ease-in-out" }}
-    >
-      <div className={` p-2 ${bgColor} rounded-full hover:bg-secondarylight `}>
-        <ArrowUp className={`h-9 w-9 `} />
-      </div>
-    </button>
+    <AnimatePresence>
+      {showButton && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.5, y: 20 }}
+          transition={{
+            duration: 0.3,
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+          }}
+          onClick={scrollToTop}
+          className="fixed right-6 bottom-24 z-40 p-3 bg-white text-primary border border-gray-100 rounded-full shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300 group"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform duration-300" />
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 };
 

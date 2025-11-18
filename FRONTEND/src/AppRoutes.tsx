@@ -52,8 +52,12 @@ const AppRoutes = () => {
           <Route index path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<CategoryListings />} />
-          <Route path="/products/:productid" element={<ProductDetails />} />
-          <Route path="/sss" element={<ProductListings />} />
+          <Route path="/products/d/:productid" element={<ProductDetails />} />
+
+          <Route
+            path="/products/c/:categoryName"
+            element={<ProductListings />}
+          />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsAndConditions />} />

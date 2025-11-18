@@ -3,7 +3,9 @@ import { showtoast } from "../../utils/Toast";
 import { useNavigate } from "react-router-dom";
 import axios, { AddcategoriesApi } from "../../utils/AxiosInstance";
 import imageCompression from "browser-image-compression";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Upload, X, Save, ImagePlus } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import GradientButton from "../../components/UI/GradientButton";
 
 const AddCategory: React.FC = () => {
   const initialFormData = {
@@ -16,7 +18,9 @@ const AddCategory: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -30,16 +34,13 @@ const AddCategory: React.FC = () => {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || files.length === 0) {
-      showtoast("Upload Error", "Please select at least one image.", "error");
-      return;
-    }
+    if (!files || files.length === 0) return;
 
     const currentImagesCount = formData.photos.length;
     if (files.length + currentImagesCount > 4) {
       showtoast(
         "Upload Limit Exceeded",
-        `You can only upload up to 4 images. You already have ${currentImagesCount}.`,
+        `You can only upload up to 4 images.`,
         "error"
       );
       return;
@@ -49,10 +50,11 @@ const AddCategory: React.FC = () => {
 
     for (const file of Array.from(files)) {
       try {
-        if (file.size > 1 * 1024 * 1024) {
+        // Basic size check before compression (optional, depends on your needs)
+        if (file.size > 5 * 1024 * 1024) {
           showtoast(
             "File Too Large",
-            `File ${file.name} exceeds 1MB. Please choose a smaller image.`,
+            `${file.name} is too large (max 5MB)`,
             "error"
           );
           continue;
@@ -63,34 +65,29 @@ const AddCategory: React.FC = () => {
           maxWidthOrHeight: 1024,
           useWebWorker: true,
         };
+
         const compressedFile = await imageCompression(file, options);
-
-        if (compressedFile.size > 500 * 1024) {
-          showtoast(
-            "Compression Failed",
-            `File ${file.name} couldn't be compressed under 500KB.`,
-            "error"
-          );
-          continue;
-        }
-
         const base64 = await convertToBase64(compressedFile);
         newCompressedImages.push({ base64, size: compressedFile.size });
-      } catch {
+      } catch (err) {
+        console.error(err);
         showtoast(
           "Compression Error",
-          `An error occurred while compressing ${file.name}.`,
+          `Failed to process ${file.name}`,
           "error"
         );
       }
     }
 
-    if (newCompressedImages.length === 0) return;
+    if (newCompressedImages.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        photos: [...prev.photos, ...newCompressedImages],
+      }));
+    }
 
-    setFormData((prev) => ({
-      ...prev,
-      photos: [...prev.photos, ...newCompressedImages],
-    }));
+    // Reset the input so the same file can be selected again if needed
+    e.target.value = "";
   };
 
   const convertToBase64 = (file: File): Promise<string> =>
@@ -105,20 +102,12 @@ const AddCategory: React.FC = () => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      showtoast(
-        "Missing Field",
-        "Please enter at least one category name.",
-        "error"
-      );
+      showtoast("Missing Field", "Please enter category name(s).", "error");
       return;
     }
 
     if (formData.photos.length === 0) {
-      showtoast(
-        "Image Required",
-        "Please upload at least one category image.",
-        "error"
-      );
+      showtoast("Image Required", "Please upload at least one image.", "error");
       return;
     }
 
@@ -130,43 +119,33 @@ const AddCategory: React.FC = () => {
       .map((cat) => cat.trim())
       .filter((cat) => cat.length > 0);
 
-    if (categories.length === 0) {
-      showtoast("Invalid Input", "Please enter valid category names.", "error");
-      setSubmitting(false);
-      return;
-    }
-
     try {
-      for (const categoryName of categories) {
+      // Process additions sequentially or parallel. Parallel is faster.
+      const promises = categories.map((categoryName) => {
         const newCategory = {
           name: categoryName,
           photos: formData.photos,
           description: formData.description,
         };
+        return axios.post(AddcategoriesApi, newCategory);
+      });
 
-        const response = await axios.post(AddcategoriesApi, newCategory);
-
-        if (!response?.data?.success) {
-          showtoast(
-            "Error adding category",
-            response?.data?.message ||
-              `Failed to add category "${categoryName}"`,
-            "error"
-          );
-        }
-      }
+      await Promise.all(promises);
 
       showtoast(
-        "Categories Added",
-        `${categories.join(", ")} successfully added!`,
+        "Success",
+        `${categories.length} categor${
+          categories.length > 1 ? "ies" : "y"
+        } added successfully!`,
         "success"
       );
 
       setFormData(initialFormData);
+      // navigate("/admin/categories"); // Optional: redirect after success
     } catch (e: any) {
       showtoast(
         "Error",
-        e?.response?.message || "An error occurred while adding categories.",
+        e?.response?.data?.message || "Failed to add categories.",
         "error"
       );
     } finally {
@@ -175,120 +154,154 @@ const AddCategory: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-8 shadow rounded-md">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-        <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+              Add Category
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Create new product categories for your catalog.
+            </p>
+          </div>
           <button
             onClick={() => navigate("/admin/categories")}
-            className="flex items-center gap-2 bg-secondarylight p-2 px-4 rounded-md text-primary hover:text-primary/70 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="hidden sm:inline font-medium">Back</span>
+            <ArrowLeft className="w-4 h-4" />
+            Back
           </button>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden"
+        >
+          <div className="p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Name Input */}
+              <div className="space-y-1">
+                <label className="block text-sm font-semibold text-gray-700">
+                  Category Name(s) <span className="text-red-500">*</span>
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Separate multiple categories with a comma (e.g., "Fruits,
+                  Vegetables")
+                </p>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Exotic Fruits"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                />
+              </div>
+
+              {/* Description Input */}
+              <div className="space-y-1">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Description{" "}
+                  <span className="text-gray-400 font-normal">(Optional)</span>
+                </label>
+                <textarea
+                  name="description"
+                  rows={3}
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Brief description of this category..."
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none"
+                />
+              </div>
+
+              {/* Image Upload Section */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    Category Images <span className="text-red-500">*</span>
+                  </label>
+                  <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+                    {formData.photos.length} / 4
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {/* Upload Button */}
+                  {formData.photos.length < 4 && (
+                    <label className="relative flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed border-gray-300 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group">
+                      <div className="p-3 bg-gray-100 rounded-full mb-2 group-hover:bg-white group-hover:text-primary transition-colors">
+                        <ImagePlus className="w-6 h-6 text-gray-400 group-hover:text-primary" />
+                      </div>
+                      <span className="text-xs font-medium text-gray-500 group-hover:text-primary">
+                        Add Image
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+
+                  {/* Image Previews */}
+                  <AnimatePresence>
+                    {formData.photos.map((img, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        className="relative h-32 group rounded-xl overflow-hidden border border-gray-200 shadow-sm"
+                      >
+                        <img
+                          src={img.base64}
+                          alt={`Preview ${idx}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(idx)}
+                            className="p-1.5 bg-white rounded-full text-red-500 hover:bg-red-50 transition-colors"
+                          >
+                            <X className="w-5 h-5" />
+                          </button>
+                        </div>
+                        <div className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-black/60 text-[10px] text-white rounded backdrop-blur-sm">
+                          {(img.size / 1024).toFixed(0)}KB
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-4 border-t border-gray-100 flex justify-end">
+                <GradientButton
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  icon={Save}
+                  loading={submitting}
+                  disabled={submitting}
+                  className="w-full sm:w-auto px-8"
+                >
+                  {submitting ? "Saving..." : "Save Category"}
+                </GradientButton>
+              </div>
+            </form>
+          </div>
+        </motion.div>
       </div>
-
-      <div className="my-5 py-3">
-        <h1 className="text-xl sm:text-2xl font-bold">Add New Category</h1>
-      </div>
-
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
-        <Input
-          label="Category Name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-
-        <Input
-          label="Category description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-        />
-        {/* Image Upload */}
-        <div className="flex flex-col">
-          <label className="font-medium mb-1">
-            Upload Category Images (1-2)
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageUpload}
-            className="block w-full border px-4 py-2 rounded text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
-              file:rounded file:border-0 file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          />
-          {formData.photos.length > 0 && (
-            <div className="flex gap-4 flex-wrap mt-3">
-              {formData.photos.map((img, idx) => {
-                const sizeKB = (img.size / 1024).toFixed(0);
-                return (
-                  <div
-                    key={idx}
-                    className="relative w-24 h-32 flex flex-col items-center justify-between"
-                  >
-                    <img
-                      src={img.base64}
-                      alt={`Preview ${idx + 1}`}
-                      className="w-24 h-24 object-cover border rounded"
-                    />
-                    <span className="text-xs mt-1 text-gray-500">
-                      {sizeKB} KB
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(idx)}
-                      className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded-full hover:bg-red-700"
-                      title="Remove Image"
-                    >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full bg-primary text-white py-3 rounded hover:bg-opacity-90 transition"
-          >
-            {submitting ? "Adding..." : "Add Category"}
-          </button>
-        </div>
-      </form>
     </div>
   );
 };
-
-// Reusable Input Component
-const Input = ({
-  label,
-  name,
-  value,
-  onChange,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-}) => (
-  <div className="flex flex-col">
-    <label className="font-medium mb-1">{label}</label>
-    <input
-      type="text"
-      name={name}
-      value={value}
-      onChange={onChange}
-      className="border px-4 py-2 rounded"
-      required
-    />
-  </div>
-);
 
 export default AddCategory;

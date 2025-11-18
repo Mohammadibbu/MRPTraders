@@ -1,18 +1,18 @@
-import { Dialog, DialogTitle, DialogPanel } from "@headlessui/react";
-import { AlertTriangle, X, Loader } from "lucide-react"; // Added X icon for close functionality
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { AlertTriangle, X, Loader2, CheckCircle, Info } from "lucide-react";
 
 interface DialogProps {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: (open: boolean) => void;
   heading: string;
   messageDescription: string | ReactNode;
   okText: string;
-  cancelText: string;
-  icon?: ReactNode; // Optional icon
-  iconColor?: string; // Optional icon color (defaults to primary color)
-  okButtonColor?: string; // Optional ok button color
-  cancelButtonColor?: string; // Optional cancel button color
+  cancelText?: string;
+  icon?: ReactNode;
+  variant?: "danger" | "success" | "info" | "default"; // New: Preset styles
+  okButtonColor?: string;
+  cancelButtonColor?: string;
   okButtonAction?: () => void;
   loading?: boolean;
 }
@@ -23,86 +23,150 @@ const DialogComponent: React.FC<DialogProps> = ({
   heading,
   messageDescription,
   okText,
-  cancelText,
-  icon = <AlertTriangle className="text-primary h-6 w-6" />, // Default icon is AlertTriangle
-  // iconColor = "text-red-400", // Default icon color
-  okButtonColor = "bg-primary", // Default OK button color (primary)
-  cancelButtonColor = "bg-secondarylight", // Default cancel button color (secondarylight)
+  cancelText = "Cancel",
+  icon,
+  variant = "default",
+  okButtonColor,
+  cancelButtonColor,
   okButtonAction,
   loading = false,
 }) => {
-  return (
-    <Dialog
-      open={open}
-      onClose={() => setOpen(false)}
-      className="relative z-10"
-    >
-      {/* Custom backdrop using Tailwind styles */}
-      <div className="fixed  inset-0 bg-gray-900/50 transition-opacity" />
+  // Determine styles based on variant
+  const getVariantStyles = () => {
+    switch (variant) {
+      case "danger":
+        return {
+          iconBg: "bg-red-100",
+          iconColor: "text-red-600",
+          defaultIcon: <AlertTriangle className="h-6 w-6 text-red-600" />,
+          btnColor: "bg-red-600 hover:bg-red-700",
+        };
+      case "success":
+        return {
+          iconBg: "bg-green-100",
+          iconColor: "text-green-600",
+          defaultIcon: <CheckCircle className="h-6 w-6 text-green-600" />,
+          btnColor: "bg-green-600 hover:bg-green-700",
+        };
+      case "info":
+        return {
+          iconBg: "bg-blue-100",
+          iconColor: "text-blue-600",
+          defaultIcon: <Info className="h-6 w-6 text-blue-600" />,
+          btnColor: "bg-blue-600 hover:bg-blue-700",
+        };
+      default:
+        return {
+          iconBg: "bg-primary/10",
+          iconColor: "text-primary",
+          defaultIcon: <AlertTriangle className="h-6 w-6 text-primary" />,
+          btnColor: "bg-primary hover:bg-primary/90",
+        };
+    }
+  };
 
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
-          <DialogPanel className="relative transform overflow-hidden rounded-lg bg-secondary text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-            <div className="bg-secondarylight px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-500/10 sm:mx-0 sm:size-10">
-                  {icon}
-                </div>
-                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                  <DialogTitle
-                    as="h3"
-                    className="text-base font-semibold text-primary"
-                  >
-                    {heading}
-                  </DialogTitle>
-                  <div className="mt-2">
-                    <p className="text-sm text-primary/70">
-                      {messageDescription}
-                    </p>
+  const styles = getVariantStyles();
+  const finalIcon = icon || styles.defaultIcon;
+  const finalOkBtnColor = okButtonColor || styles.btnColor;
+  const finalCancelBtnColor =
+    cancelButtonColor ||
+    "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50";
+
+  return (
+    <Transition show={open} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-[100]"
+        onClose={() => setOpen(false)}
+      >
+        {/* Backdrop */}
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 z-10 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            {/* Panel Animation */}
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <Dialog.Panel className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full sm:max-w-lg border border-gray-100">
+                {/* Close Button (Absolute) */}
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="absolute top-4 right-4 p-1 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <div className="px-6 pt-6 pb-6">
+                  <div className="sm:flex sm:items-start">
+                    {/* Icon Bubble */}
+                    <div
+                      className={`mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${styles.iconBg} sm:mx-0 sm:h-10 sm:w-10`}
+                    >
+                      {finalIcon}
+                    </div>
+
+                    <div className="mt-4 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-semibold leading-6 text-gray-900"
+                      >
+                        {heading}
+                      </Dialog.Title>
+                      <div className="mt-2">
+                        <div className="text-sm text-gray-500 leading-relaxed">
+                          {messageDescription}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="bg-primary/10 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              {/* OK Button */}
-              <button
-                type="button"
-                // onClick={() => setOpen(false)}
-                onClick={() => {
-                  okButtonAction?.();
-                }}
-                disabled={loading}
-                className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto ${okButtonColor} shadow-button-primary hover:shadow-button-hover`}
-              >
-                {okText}
-                {loading ? (
-                  <Loader className="animate-spin ms-2 h-5 w-5" />
-                ) : (
-                  ""
-                )}
-              </button>
-              {/* Cancel Button */}
-              <button
-                type="button"
-                data-autofocus
-                onClick={() => setOpen(false)}
-                className={`mt-3 inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-primary/90 inset-ring inset-ring-white/5 hover:bg-secondary hover:text-primary sm:mt-0 sm:w-auto ${cancelButtonColor}`}
-              >
-                {cancelText}
-              </button>
-            </div>
-            {/* Close Button (X Icon) */}
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="absolute top-2 right-2 text-primary/50 hover:text-primary"
-            >
-              <X className="text-xl font-bold" />
-            </button>
-          </DialogPanel>
+
+                {/* Footer Buttons */}
+                <div className="bg-gray-50 px-6 py-4 sm:flex sm:flex-row-reverse gap-3">
+                  <button
+                    type="button"
+                    onClick={okButtonAction}
+                    disabled={loading}
+                    className={`inline-flex w-full justify-center items-center rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all sm:ml-3 sm:w-auto ${finalOkBtnColor} disabled:opacity-70 disabled:cursor-not-allowed`}
+                  >
+                    {loading && (
+                      <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                    )}
+                    {okText}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    disabled={loading}
+                    className={`mt-3 inline-flex w-full justify-center rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm sm:mt-0 sm:w-auto ${finalCancelBtnColor} transition-colors`}
+                  >
+                    {cancelText}
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
         </div>
-      </div>
-    </Dialog>
+      </Dialog>
+    </Transition>
   );
 };
 

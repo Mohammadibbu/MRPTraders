@@ -1,7 +1,7 @@
 // contactDetails.ts
 
 interface ContactDetails {
-  mail?: string;
+  email?: string;
   phoneNumber?: string;
   linkedin?: string;
   instagram?: String;
@@ -13,7 +13,7 @@ interface companyDetails {
   FSSAI?: string;
 }
 export const contactDetails: ContactDetails = {
-  mail: "mrpglobaltraders2004@gmail.com",
+  email: "mrpglobaltraders2004@gmail.com",
   phoneNumber: "+919356380766",
   linkedin: "https://linkedin.com/company/mrpglobal",
   instagram: "https://instagram.com/mrpglobal",

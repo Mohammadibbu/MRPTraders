@@ -3,202 +3,354 @@ import { useApp } from "../context/AppContext";
 import ProductCard from "../components/Products/ProductCard";
 import ProductFilter from "../components/Products/ProductFilter";
 import SkeletonLoader from "../components/UI/SkeletonLoader";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Product } from "../types";
 import { showtoast } from "../utils/Toast";
 import JoinUsSection from "../components/Home/JoinUsSection";
-import { useSearchParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import {
+  ArrowLeft,
+  PackageX,
+  SearchX,
+  Home,
+  ChevronRight,
+  SlidersHorizontal,
+  Filter,
+  X,
+} from "lucide-react";
 
-const PRODUCTS_PER_PAGE = 8;
+const PRODUCTS_PER_PAGE = 12;
 
 const ProductListings: React.FC = () => {
-  const { products = [], loading, searchTerm } = useApp();
+  const { products = [], categories = [], loading, searchTerm } = useApp();
+  const { categoryName } = useParams<{ categoryName: string }>();
+  const navigate = useNavigate();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchParams] = useSearchParams();
-  const category = searchParams.get("category");
+  // Get category from the categories list
+  const Thiscategory = categories?.find(
+    (cat) => cat.id === categoryName?.toLowerCase().trim()
+  );
+
+  // If specific category requested but not found, redirect to 404
+  useEffect(() => {
+    if (categoryName && !Thiscategory && !loading) {
+      navigate("/404");
+    }
+  }, [categoryName, Thiscategory, navigate, loading]);
+
+  // CORRECTED LOGIC: Return all products if no category selected, otherwise filter by category
+  const ThiscatProducts = useMemo(() => {
+    if (!products) return [];
+
+    // If a specific category is selected
+    if (Thiscategory) {
+      if (!Thiscategory.productIds || !Array.isArray(Thiscategory.productIds)) {
+        return [];
+      }
+      return products.filter((product) =>
+        Thiscategory?.productIds?.includes(product.id)
+      );
+    }
+
+    // If no category selected (All Products View)
+    return products;
+  }, [Thiscategory, products]);
+
+  // Filters applied inside the selected category only
   const [filters, setFilters] = useState({
-    category: category || "All",
-    origin: "All",
     searchTerm: searchTerm || "",
+    origin: "All",
     availability: "All",
   });
 
-  // Reset to page 1 on filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(false); // Toggle for top filters
 
-  // Filtered products
+  useEffect(() => setCurrentPage(1), [filters]);
+
+  // Apply filters ONLY to category products
   const filteredProducts = useMemo(() => {
-    return products?.filter((product: Product) => {
-      const matchesSearch =
-        !filters.searchTerm ||
-        product.name.toLowerCase().includes(filters.searchTerm.toLowerCase());
+    return (
+      ThiscatProducts?.filter((product: Product) => {
+        const matchesSearch =
+          !filters.searchTerm ||
+          product.name.toLowerCase().includes(filters.searchTerm.toLowerCase());
 
-      const matchesCategory =
-        filters.category === "All" || product.category === filters.category;
+        const matchesOrigin =
+          filters.origin === "All" || product.origin?.includes(filters.origin);
 
-      const matchesOrigin =
-        filters.origin === "All" || product.origin.includes(filters.origin);
+        const matchesAvailability =
+          filters.availability === "All" ||
+          product.availability === filters.availability;
 
-      const matchesAvailability =
-        filters.availability === "All" ||
-        product.availability === filters.availability;
+        return matchesSearch && matchesOrigin && matchesAvailability;
+      }) || []
+    );
+  }, [ThiscatProducts, filters]);
 
-      return (
-        matchesSearch && matchesCategory && matchesOrigin && matchesAvailability
-      );
-    });
-  }, [products, filters]);
-
-  // Paginated products
-  const totalPages = Math.ceil(filteredProducts!.length / PRODUCTS_PER_PAGE);
-  useEffect(() => {
-    window.scrollTo({ top: 300, behavior: "smooth" });
-  }, [currentPage]);
+  // Pagination logic
+  const totalPages =
+    Math.ceil((filteredProducts?.length || 0) / PRODUCTS_PER_PAGE) || 1;
 
   const currentProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    return filteredProducts?.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    return filteredProducts?.slice(start, start + PRODUCTS_PER_PAGE);
   }, [filteredProducts, currentPage]);
 
-  // Handle product addition
   const handleAddToCart = (product: Product) => {
     showtoast(`Added ${product.name} to inquiry list!`);
   };
 
+  // Dynamic Background Image Source
+  const heroBgImage =
+    Thiscategory?.photos?.[0]?.base64 ?? "/Images/ProductPage.png";
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary via-dustyTaupe to-secondary py-20 overflow-hidden">
-        <motion.div
-          className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full"
-          animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <div className="absolute inset-0">
+    <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
+      {/* --- Breadcrumb Navigation --- */}
+      <div className="bg-white/80 border-b sticky top-0 z-30 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
+          <nav className="flex items-center text-sm text-gray-500 font-medium">
+            <Link
+              to="/"
+              className="hover:text-primary transition-colors p-1 rounded-md hover:bg-gray-100"
+            >
+              <Home className="w-4 h-4" />
+            </Link>
+            <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
+            <Link
+              to="/products"
+              className={`hover:text-primary transition-colors ${
+                !Thiscategory ? "text-gray-900 font-semibold" : ""
+              }`}
+            >
+              Products
+            </Link>
+            {Thiscategory && (
+              <>
+                <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
+                <span className="text-gray-900 truncate font-semibold">
+                  {Thiscategory.name}
+                </span>
+              </>
+            )}
+          </nav>
+        </div>
+      </div>
+
+      {/* --- Hero Section with Background Image --- */}
+      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden h-64 sm:h-80 lg:h-96 flex items-center justify-center">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 z-0">
           <img
-            src="/Images/ProductPage.png"
-            alt="Background"
-            className="w-full h-full object-cover"
+            src={heroBgImage}
+            alt={Thiscategory ? Thiscategory.name : "All Products"}
+            className="w-full h-full object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/50 to-primary/40" />
+          {/* Gradient Overlay for Readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-gray-900/30" />
         </div>
-        <motion.div
-          className="absolute bottom-10 right-10 w-16 h-16 bg-white/10 rounded-full"
-          animate={{ y: [0, 20, 0], opacity: [0.2, 0.5, 0.2] }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-        <div className="max-w-7xl relative z-10 mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Product Listings
-          </motion.h1>
-          <motion.p
-            className="text-xl md:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Explore our range of high-quality natural products.
-          </motion.p>
-        </div>
-      </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <ProductFilter
-          filters={filters}
-          products={products}
-          onFilterChange={setFilters}
-        />
-
-        {/* Loading State */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <SkeletonLoader type="product" count={8} />
-          </div>
-        ) : filteredProducts?.length === 0 ? (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div
-            className="text-center py-20"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
-            <div className="text-6xl mb-6">🔍</div>
-            <div className="text-gray-500 text-2xl font-semibold mb-4">
-              No products found
-            </div>
-            <p className="text-gray-400 text-lg max-w-md mx-auto">
-              Try adjusting your filters or search terms.
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4 drop-shadow-lg">
+              {Thiscategory ? (
+                <>
+                  Premium{" "}
+                  <span className="text-primary">{Thiscategory.name}</span>
+                </>
+              ) : (
+                "Our Product Catalog"
+              )}
+            </h1>
+            <p className="text-base sm:text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+              {Thiscategory
+                ? `Explore our handpicked selection of high-quality ${Thiscategory.name.toLowerCase()}, sourced directly from the finest regions.`
+                : "Browse our complete collection of premium export-quality products tailored for global markets."}
             </p>
           </motion.div>
-        ) : (
-          <>
-            {/* Product Grid */}
+        </div>
+      </div>
+
+      {/* --- Main Content --- */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Controls Header: Results Count & Filter Toggle */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+          <div className="text-gray-600 font-medium order-2 sm:order-1">
+            Showing{" "}
+            <span className="text-gray-900 font-bold">
+              {filteredProducts.length}
+            </span>{" "}
+            products
+          </div>
+
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`order-1 sm:order-2 flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold transition-all shadow-sm ${
+              showFilters
+                ? "bg-gray-900 text-white hover:bg-gray-800"
+                : "bg-white text-gray-700 border border-gray-200 hover:border-primary hover:text-primary"
+            }`}
+          >
+            {showFilters ? (
+              <X className="w-4 h-4" />
+            ) : (
+              <SlidersHorizontal className="w-4 h-4" />
+            )}
+            {showFilters ? "Close Filters" : "Filter Products"}
+          </button>
+        </div>
+
+        {/* Top Filters Section (Expandable) */}
+        <AnimatePresence>
+          {showFilters && (
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden mb-8"
             >
-              {currentProducts?.map((product) => (
-                <ProductCard
-                  key={product.id ?? product.name}
-                  product={product}
-                  onAddToCart={handleAddToCart}
-                />
-              ))}
+              <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
+                  <Filter className="w-4 h-4 text-primary" />
+                  <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wider">
+                    Refine Selection
+                  </h3>
+                </div>
+                {/* Filters Component */}
+                <div className="">
+                  {ThiscatProducts.length > 0 ? (
+                    // We pass a className if ProductFilter supported it, otherwise it renders its default layout.
+                    // Assuming ProductFilter renders inputs/selects.
+                    <ProductFilter
+                      filters={filters}
+                      products={ThiscatProducts}
+                      onFilterChange={setFilters}
+                    />
+                  ) : (
+                    <p className="text-gray-500 italic">
+                      No filters available for this selection.
+                    </p>
+                  )}
+                </div>
+              </div>
             </motion.div>
+          )}
+        </AnimatePresence>
 
-            {/* Pagination */}
-            <div className="flex justify-center mt-10 space-x-2">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        {/* Main Content Area */}
+        <div className="w-full">
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <SkeletonLoader type="product" count={8} />
+            </div>
+          ) : ThiscatProducts.length === 0 ? (
+            // Empty Category State
+            <div className="bg-white rounded-3xl p-12 text-center border border-gray-200 shadow-sm">
+              <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <PackageX className="w-10 h-10 text-gray-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                No Products Found
+              </h2>
+              <p className="text-gray-500 mb-8 max-w-md mx-auto">
+                {Thiscategory
+                  ? `We haven't added any products to "${Thiscategory.name}" yet.`
+                  : "Our catalog is currently empty."}
+              </p>
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white bg-primary rounded-xl hover:bg-primary/90 transition-all"
               >
-                Prev
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (pageNum) => (
-                  <button
-                    key={pageNum}
-                    onClick={() => setCurrentPage(pageNum)}
-                    className={`px-4 py-2 rounded ${
-                      currentPage === pageNum
-                        ? "bg-primary text-secondary"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                )
-              )}
-
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Go Home
+              </Link>
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            // Empty Filter Results State
+            <div className="bg-white rounded-3xl p-12 text-center border border-gray-200 shadow-sm">
+              <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <SearchX className="w-10 h-10 text-gray-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                No Matches Found
+              </h2>
+              <p className="text-gray-500 mb-6">
+                We couldn't find any products matching your current filters.
+              </p>
               <button
                 onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  setFilters({
+                    searchTerm: "",
+                    origin: "All",
+                    availability: "All",
+                  })
                 }
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50  disabled:cursor-not-allowed"
+                className="text-primary font-bold hover:underline"
               >
-                Next
+                Clear All Filters
               </button>
             </div>
-          </>
-        )}
+          ) : (
+            <>
+              {/* Correct Responsive Product Grid (4 Cols on Desktop) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {currentProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-12 gap-2">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Previous
+                  </button>
+
+                  <div className="flex gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (num) => (
+                        <button
+                          key={num}
+                          onClick={() => setCurrentPage(num)}
+                          className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
+                            currentPage === num
+                              ? "bg-primary text-white shadow-md shadow-primary/20"
+                              : "text-gray-600 hover:bg-gray-100"
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      )
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(totalPages, p + 1))
+                    }
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <JoinUsSection />
