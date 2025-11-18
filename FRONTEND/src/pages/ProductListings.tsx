@@ -262,12 +262,13 @@ const ProductListings: React.FC = () => {
                   ? `We haven't added any products to "${Thiscategory.name}" yet.`
                   : "Our catalog is currently empty."}
               </p>
+
               <Link
-                to="/"
+                to="/products"
                 className="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white bg-primary rounded-xl hover:bg-primary/90 transition-all"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Go Home
+                Go back to Product collections
               </Link>
             </div>
           ) : filteredProducts.length === 0 ? (
