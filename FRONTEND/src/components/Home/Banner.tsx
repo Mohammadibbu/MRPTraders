@@ -26,6 +26,12 @@ const Banner: React.FC<BannerProps> = ({
     return () => clearTimeout(timer);
   }, []);
 
+  const handleClose = () => {
+    setIsVisible(false);
+    // Optionally set a flag in localStorage to prevent showing again
+    // localStorage.setItem('bannerDismissed', 'true');
+  };
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -34,40 +40,52 @@ const Banner: React.FC<BannerProps> = ({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="fixed bottom-4 left-4 right-4 z-50 flex justify-center pointer-events-none"
+          className="fixed z-100 bottom-4 left-4 right-4  flex justify-center pointer-events-none"
         >
-          <div className="pointer-events-auto max-w-4xl w-full bg-white/95 backdrop-blur-lg border border-gray-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl overflow-hidden">
-            <div className="flex flex-col sm:flex-row items-center justify-between p-4 sm:p-3 sm:pl-6 gap-4 sm:gap-6">
+          <div className="pointer-events-auto max-w-4xl w-full bg-white/95 backdrop-blur-lg border border-secondary shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl overflow-hidden">
+            <div className="flex items-center p-3 sm:p-4 gap-3 sm:gap-6">
               {/* Icon & Text Content */}
-              <div className="flex items-center gap-4 flex-1 text-center sm:text-left">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                {/* Desktop Icon */}
                 <div className="hidden sm:flex p-2.5 bg-primary/10 text-primary rounded-xl shrink-0">
                   <Mail className="w-5 h-5" />
                 </div>
-                <div className="space-y-0.5">
-                  <p className="text-sm font-bold text-gray-900">{mainText}</p>
-                  <p className="text-sm text-gray-500 leading-tight">{text}</p>
+
+                {/* Text Block - Uses min-w-0 to allow truncation */}
+                <div className="min-w-0 space-y-0.5">
+                  <p className="text-sm font-bold text-dustyTaupe truncate">
+                    {mainText}
+                  </p>
+                  <p className="text-xs sm:text-sm text-gradientsecondary leading-tight truncate">
+                    {text}
+                  </p>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-end sm:pr-2">
+              {/* Actions & Close Button */}
+              <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                {/* Primary Action Button */}
                 <button
                   onClick={(e) => {
                     e.preventDefault();
                     onButtonClick();
+                    handleClose(); // Close after action
                   }}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-gray-900 hover:bg-primary text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 whitespace-nowrap group"
+                  className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-primary hover:bg-opacity-90 text-white text-xs sm:text-sm font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg whitespace-nowrap group"
                 >
-                  {buttonText}
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  <span className="truncate max-w-[80px] sm:max-w-none">
+                    {buttonText}
+                  </span>
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1 shrink-0" />
                 </button>
 
+                {/* Close Button - Fixed size/position */}
                 <button
-                  onClick={() => setIsVisible(false)}
-                  className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors"
+                  onClick={handleClose}
+                  className="p-1.5 sm:p-2 text-gradientsecondary hover:text-dustyTaupe hover:bg-secondary rounded-full transition-colors shrink-0"
                   aria-label="Close banner"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
             </div>

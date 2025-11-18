@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Play, Pause } from "lucide-react";
+import { ArrowRight, Play, Pause, ChevronDown } from "lucide-react";
 import herosection from "../../assets/video/herosection.mp4";
 import Animation from "../../utils/Animation";
 
@@ -19,7 +19,13 @@ const Hero: React.FC = () => {
       setIsPlaying(!isPlaying);
     }
   };
-
+  const scrollToContent = () => {
+    // Scrolls 100vh down, assuming the next section starts right after the hero
+    window.scrollBy({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
   return (
     <div className="relative w-full h-[100dvh] min-h-[600px] flex items-center justify-center overflow-hidden bg-gray-900">
       {/* --- Background Media --- */}
@@ -101,7 +107,19 @@ const Hero: React.FC = () => {
           <Play className="w-6 h-6 fill-current ml-1" />
         )}
       </button>
-
+      <div className="md:hidden block">
+        <button
+          onClick={scrollToContent}
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 
+                   flex flex-col items-center text-white/90 cursor-pointer 
+                   animate-pulse transition-opacity duration-500 opacity-90 hover:opacity-100 
+                   group focus:outline-none p-2 rounded-full"
+          aria-label="Scroll down"
+        >
+          <span className="text-sm font-medium mb-1 ">Scroll</span>
+          <ChevronDown className="w-8 h-8 group-hover:scale-110 transition-transform text-primary" />
+        </button>
+      </div>
       {/* --- Scroll Indicator (Hidden on very small screens) --- */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden md:block opacity-70">
         <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1">
