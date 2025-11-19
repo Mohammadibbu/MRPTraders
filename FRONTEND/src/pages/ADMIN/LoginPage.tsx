@@ -4,7 +4,7 @@ import GradientButton from "../../components/UI/GradientButton";
 import axios, { AdminLoginApi } from "../../utils/AxiosInstance";
 import { showtoast } from "../../utils/Toast";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Lock } from "lucide-react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -157,6 +157,12 @@ const LoginPage = () => {
               </GradientButton>
             </form>
           </div>
+        </div>
+        <div>
+          <p className="mt-8 text-center text-[10px] text-gray-400 flex items-center justify-center gap-1">
+            <Lock className="w-3 h-3" /> Restricted Area • Authorized Personnel
+            Only
+          </p>
         </div>
       </div>
     </section>

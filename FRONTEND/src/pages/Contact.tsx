@@ -399,6 +399,7 @@ const Contact: React.FC = () => {
 
         {/* --- FAQ Section --- */}
         <div className="relative">
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent shadow-[0_1px_12px_0_rgba(0,0,0,0.1)]" />
           <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50 pointer-events-none"></div>
           <Accordion count={5} className="bg-gray-50" />
         </div>

@@ -10,7 +10,8 @@ export default {
         primary: "#b50421",
         gradientsecondary: "#111827",
         accent: "#D64550",
-        secondaryDark: "#111827",
+        secondaryDark: "#0B1120",
+        // secondaryDark: "#111827",
       },
       animation: {
         shimmer: "shimmer 2s infinite",
