@@ -107,8 +107,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
       // 3. If cached count matches → use cache
       if (cachedCount === serverCount) {
-        console.log(cachedCount);
-
         const encryptedData = await getItem<string>("products");
         if (encryptedData) {
           const decryptedData = decryptData(encryptedData) as Product[];

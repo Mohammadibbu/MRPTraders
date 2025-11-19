@@ -221,7 +221,7 @@ const ProductDetails: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-32 sm:pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-10 pb-10 ">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           {/* --- LEFT COLUMN: Gallery & Features --- */}
           <div className="lg:col-span-7 space-y-8">

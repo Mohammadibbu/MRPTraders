@@ -7,39 +7,65 @@ import axios, {
   categoriescount,
 } from "../../utils/AxiosInstance";
 import imageCompression from "browser-image-compression";
-import { ArrowLeft, Upload, X, Save, ImagePlus, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Upload,
+  X,
+  Save,
+  ImagePlus,
+  Plus,
+  AlertCircle,
+} from "lucide-react";
 import { encryptData, decryptData } from "../../utils/crypto";
 import { Option } from "../../components/UI/SearchableSelect";
 import SkeletonLoader from "../../components/UI/SkeletonLoader";
 import GradientButton from "../../components/UI/GradientButton";
 import { motion, AnimatePresence } from "framer-motion";
 
+// --- Types ---
+interface ProductForm {
+  name: string;
+  origin: string[]; // Changed to array
+  health_benefits: string[]; // Changed to array
+  category: string;
+  photos: { base64: string; size: number }[];
+  quality: string;
+  certifications: string[]; // Changed to array
+  description: string;
+  applications: string[]; // Changed to array
+  why_choose_us: string[]; // Changed to array
+  contact_info: string;
+  shelf_life: string;
+  storage_conditions: string;
+  best_shipment_modes: string;
+}
+
 const AddProduct: React.FC = () => {
-  const initialFormData = {
+  // --- State Management ---
+  const initialFormData: ProductForm = {
     name: "",
-    origin: "",
-    health_benefits: "",
+    origin: [],
+    health_benefits: [],
     category: "",
-    photos: [] as { base64: string; size: number }[],
+    photos: [],
     quality: "",
-    certifications: "",
+    certifications: [],
     description: "",
-    applications: "",
-    why_choose_us: "",
+    applications: [],
+    why_choose_us: [],
     contact_info: "",
     shelf_life: "",
     storage_conditions: "",
     best_shipment_modes: "",
   };
 
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<ProductForm>(initialFormData);
   const [submitting, setSubmitting] = useState(false);
-
-  const navigate = useNavigate();
-
   const [categoryOption, setCategoryOption] = useState<Option[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
+  const navigate = useNavigate();
 
+  // --- Fetch Categories ---
   const fetchProducts = async () => {
     setLoadingCategories(true);
     try {
@@ -79,6 +105,9 @@ const AddProduct: React.FC = () => {
     fetchProducts();
   }, []);
 
+  // --- Handlers ---
+
+  // Handle standard text inputs
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -88,6 +117,12 @@ const AddProduct: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle Array/Tag inputs (Origin, Applications, etc.)
+  const handleTagsChange = (name: keyof ProductForm, newTags: string[]) => {
+    setFormData((prev) => ({ ...prev, [name]: newTags }));
+  };
+
+  // Handle Image Remove
   const handleRemoveImage = (index: number) => {
     setFormData((prev) => ({
       ...prev,
@@ -95,12 +130,12 @@ const AddProduct: React.FC = () => {
     }));
   };
 
+  // Handle Image Upload
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     const current = formData.photos.length;
-
     if (files.length + current > 4) {
       showtoast(
         "Upload Limit Exceeded",
@@ -128,11 +163,7 @@ const AddProduct: React.FC = () => {
         const base64 = await convertToBase64(compressedFile);
         newCompressedImages.push({ base64, size: compressedFile.size });
       } catch (err) {
-        showtoast(
-          "Compression Error",
-          `Error compressing ${file.name}`,
-          "error"
-        );
+        showtoast("Error", `Error compressing ${file.name}`, "error");
       }
     }
 
@@ -142,7 +173,6 @@ const AddProduct: React.FC = () => {
         photos: [...prev.photos, ...newCompressedImages],
       }));
     }
-    // Reset input
     e.target.value = "";
   };
 
@@ -154,44 +184,54 @@ const AddProduct: React.FC = () => {
       reader.onerror = reject;
     });
 
+  // --- Submit Logic ---
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation for required fields (expand as needed)
+    // 1. Basic Validations
     if (!formData.name || !formData.category) {
       showtoast("Missing Fields", "Please fill in required fields.", "error");
       return;
     }
-
     if (formData.photos.length === 0) {
       showtoast("Image Required", "Please upload at least one image.", "error");
       return;
     }
 
+    // 2. Specific Array Validations (Min 3 items)
+    const minItems = 3;
+    if (formData.applications.length < minItems) {
+      showtoast("Validation", `Please add at least 3 Applications.`, "error");
+      return;
+    }
+    if (formData.health_benefits.length < minItems) {
+      showtoast(
+        "Validation",
+        `Please add at least 3 Health Benefits.`,
+        "error"
+      );
+      return;
+    }
+    if (formData.why_choose_us.length < minItems) {
+      showtoast(
+        "Validation",
+        `Please add at least 3 'Why Choose Us' points.`,
+        "error"
+      );
+      return;
+    }
+
     setSubmitting(true);
 
+    // 3. Prepare Payload (Arrays are already arrays, no need to split)
     const newProduct = {
       ...formData,
-      origin: formData.origin
-        .split(",")
-        .map((o) => o.trim())
-        .filter(Boolean),
-      health_benefits: formData.health_benefits
-        .split(",")
-        .map((h) => h.trim())
-        .filter(Boolean),
-      certifications: formData.certifications
-        .split(",")
-        .map((c) => c.trim())
-        .filter(Boolean),
-      applications: formData.applications
-        .split(",")
-        .map((a) => a.trim())
-        .filter(Boolean),
-      why_choose_us: formData.why_choose_us
-        .split(",")
-        .map((w) => w.trim())
-        .filter(Boolean),
+      // Filter out any empty strings just in case
+      origin: formData.origin.filter(Boolean),
+      health_benefits: formData.health_benefits.filter(Boolean),
+      certifications: formData.certifications.filter(Boolean),
+      applications: formData.applications.filter(Boolean),
+      why_choose_us: formData.why_choose_us.filter(Boolean),
     };
 
     try {
@@ -200,7 +240,7 @@ const AddProduct: React.FC = () => {
       if (response?.data?.success) {
         showtoast("Success!", "Product added successfully.", "success");
         setFormData(initialFormData);
-        // navigate("/admin/products"); // Optional redirect
+        // navigate("/admin/products");
       } else {
         showtoast(
           "Error",
@@ -210,7 +250,7 @@ const AddProduct: React.FC = () => {
       }
     } catch (err: any) {
       showtoast(
-        "Error adding product",
+        "Error",
         err?.response?.data?.message || "Try again later.",
         "error"
       );
@@ -235,17 +275,15 @@ const AddProduct: React.FC = () => {
           <div className="flex gap-3">
             <button
               onClick={() => navigate("/admin/products")}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
             >
-              <ArrowLeft className="w-4 h-4" />
-              Back
+              <ArrowLeft className="w-4 h-4" /> Back
             </button>
             <button
               onClick={() => navigate("/admin/products/bulkupload")}
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-100 rounded-xl hover:bg-blue-100 transition-colors shadow-sm"
             >
-              <Upload className="w-4 h-4" />
-              Bulk Upload
+              <Upload className="w-4 h-4" /> Bulk Upload
             </button>
           </div>
         </div>
@@ -299,7 +337,6 @@ const AddProduct: React.FC = () => {
                             </option>
                           ))}
                         </select>
-                        {/* Custom Arrow */}
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                           <svg
                             className="w-4 h-4 text-gray-500"
@@ -320,20 +357,21 @@ const AddProduct: React.FC = () => {
                   </div>
 
                   <div className="md:col-span-2">
-                    <Textarea
+                    <CharCountTextarea
                       label="Description"
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
                       placeholder="Detailed description of the product..."
                       rows={4}
+                      maxLength={1000}
                       required
                     />
                   </div>
                 </div>
               </div>
 
-              {/* --- Product Specifications --- */}
+              {/* --- Specifications --- */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
                   Specifications
@@ -370,58 +408,68 @@ const AddProduct: React.FC = () => {
                 </div>
               </div>
 
-              {/* --- Detailed Attributes (Comma Separated) --- */}
+              {/* --- Detailed Attributes (Smart Tag Inputs) --- */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
-                  {" "}
-                  detailed Attributes
+                  Detailed Attributes
                 </h3>
-                <p className="text-sm text-gray-500 mb-4 -mt-2">
-                  Separate multiple values with a comma (e.g., "Organic, Halal")
-                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Input
+                  {/* Origin (No Min Limit, just tags) */}
+                  <TagInput
                     label="Origin"
-                    name="origin"
-                    value={formData.origin}
-                    onChange={handleChange}
-                    placeholder="e.g. India, Vietnam"
+                    placeholder="Type and press enter (e.g. India)"
+                    tags={formData.origin}
+                    setTags={(tags) => handleTagsChange("origin", tags)}
                   />
-                  <Input
+
+                  {/* Certifications */}
+                  <TagInput
                     label="Certifications"
-                    name="certifications"
-                    value={formData.certifications}
-                    onChange={handleChange}
                     placeholder="e.g. ISO 22000, FSSAI"
+                    tags={formData.certifications}
+                    setTags={(tags) => handleTagsChange("certifications", tags)}
                   />
+
+                  {/* Health Benefits (Min 3, Max 7) */}
                   <div className="md:col-span-2">
-                    <Textarea
+                    <TagInput
                       label="Health Benefits"
-                      name="health_benefits"
-                      value={formData.health_benefits}
-                      onChange={handleChange}
-                      placeholder="e.g. Rich in Fiber, High Protein"
-                      rows={2}
+                      placeholder="Add benefit (e.g. Rich in Fiber)"
+                      tags={formData.health_benefits}
+                      setTags={(tags) =>
+                        handleTagsChange("health_benefits", tags)
+                      }
+                      minItems={3}
+                      maxItems={7}
+                      helperText="Min 3, Max 7 items allowed."
                     />
                   </div>
+
+                  {/* Applications (Min 3, Max 7) */}
                   <div className="md:col-span-2">
-                    <Textarea
+                    <TagInput
                       label="Applications / Uses"
-                      name="applications"
-                      value={formData.applications}
-                      onChange={handleChange}
-                      placeholder="e.g. Cooking, Medicinal Use"
-                      rows={2}
+                      placeholder="Add application (e.g. Cooking)"
+                      tags={formData.applications}
+                      setTags={(tags) => handleTagsChange("applications", tags)}
+                      minItems={3}
+                      maxItems={7}
+                      helperText="Min 3, Max 7 items allowed."
                     />
                   </div>
+
+                  {/* USP (Min 3, Max 7) */}
                   <div className="md:col-span-2">
-                    <Textarea
+                    <TagInput
                       label="Why Choose Us (USP)"
-                      name="why_choose_us"
-                      value={formData.why_choose_us}
-                      onChange={handleChange}
-                      placeholder="e.g. Sustainably Sourced, Direct from Farmers"
-                      rows={2}
+                      placeholder="Add point (e.g. Sustainably Sourced)"
+                      tags={formData.why_choose_us}
+                      setTags={(tags) =>
+                        handleTagsChange("why_choose_us", tags)
+                      }
+                      minItems={3}
+                      maxItems={7}
+                      helperText="Min 3, Max 7 items allowed."
                     />
                   </div>
                 </div>
@@ -433,7 +481,7 @@ const AddProduct: React.FC = () => {
                   Contact & Support
                 </h3>
                 <Input
-                  label="Contact Info (for inquiries)"
+                  label="Contact Info"
                   name="contact_info"
                   value={formData.contact_info}
                   onChange={handleChange}
@@ -527,7 +575,9 @@ const AddProduct: React.FC = () => {
   );
 };
 
-/* Reusable Components */
+/* --- Reusable Components --- */
+
+// 1. Basic Input
 const Input = ({
   label,
   name,
@@ -552,7 +602,8 @@ const Input = ({
   </div>
 );
 
-const Textarea = ({
+// 2. Textarea with Char Limit
+const CharCountTextarea = ({
   label,
   name,
   value,
@@ -560,21 +611,158 @@ const Textarea = ({
   placeholder,
   rows = 3,
   required = false,
+  maxLength,
 }: any) => (
   <div className="flex flex-col w-full">
-    <label className="block text-sm font-semibold text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
-    </label>
+    <div className="flex justify-between items-center mb-2">
+      <label className="block text-sm font-semibold text-gray-700">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      {maxLength && (
+        <span
+          className={`text-xs font-medium ${
+            value.length >= maxLength ? "text-red-500" : "text-gray-400"
+          }`}
+        >
+          {value.length} / {maxLength}
+        </span>
+      )}
+    </div>
     <textarea
       name={name}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
       rows={rows}
+      maxLength={maxLength}
       className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none placeholder:text-gray-400"
       required={required}
     />
   </div>
 );
+
+// 3. Tag Input (The Mini Button Add System)
+interface TagInputProps {
+  label: string;
+  placeholder: string;
+  tags: string[];
+  setTags: (tags: string[]) => void;
+  minItems?: number;
+  maxItems?: number;
+  helperText?: string;
+}
+
+const TagInput: React.FC<TagInputProps> = ({
+  label,
+  placeholder,
+  tags,
+  setTags,
+  minItems,
+  maxItems,
+  helperText,
+}) => {
+  const [input, setInput] = useState("");
+
+  const handleAddTag = () => {
+    if (!input.trim()) return;
+    if (maxItems && tags.length >= maxItems) {
+      showtoast("Limit Reached", `Maximum ${maxItems} items allowed.`, "error");
+      return;
+    }
+    setTags([...tags, input.trim()]);
+    setInput("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+
+  const removeTag = (index: number) => {
+    setTags(tags.filter((_, i) => i !== index));
+  };
+
+  const isError = minItems && tags.length > 0 && tags.length < minItems;
+  const isMaxReached = maxItems ? tags.length >= maxItems : false;
+
+  return (
+    <div className="flex flex-col w-full">
+      <div className="flex justify-between items-center mb-2">
+        <label className="block text-sm font-semibold text-gray-700">
+          {label}
+        </label>
+        {maxItems && (
+          <span
+            className={`text-xs ${
+              isMaxReached ? "text-red-500 font-bold" : "text-gray-400"
+            }`}
+          >
+            {tags.length} / {maxItems}
+          </span>
+        )}
+      </div>
+
+      <div className="relative flex items-center">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={isMaxReached ? "Limit reached" : placeholder}
+          disabled={isMaxReached}
+          className="w-full pl-4 pr-12 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-gray-400 disabled:bg-gray-50 disabled:text-gray-400"
+        />
+        <button
+          type="button"
+          onClick={handleAddTag}
+          disabled={!input.trim() || isMaxReached}
+          className="absolute right-2 p-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <Plus className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Validation Message */}
+      {helperText && (
+        <div className="flex items-center gap-1 mt-1.5">
+          {isError && <AlertCircle className="w-3 h-3 text-amber-500" />}
+          <p
+            className={`text-xs ${
+              isError ? "text-amber-600 font-medium" : "text-gray-400"
+            }`}
+          >
+            {helperText}
+          </p>
+        </div>
+      )}
+
+      {/* Tags Display */}
+      <div className="flex flex-wrap gap-2 mt-3">
+        <AnimatePresence>
+          {tags.map((tag, index) => (
+            <motion.span
+              key={index}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 border border-gray-200"
+            >
+              {tag}
+              <button
+                type="button"
+                onClick={() => removeTag(index)}
+                className="p-0.5 hover:bg-gray-200 rounded-full transition-colors text-gray-400 hover:text-red-500"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </motion.span>
+          ))}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
 
 export default AddProduct;
