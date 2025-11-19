@@ -43,7 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Badges Container */}
           <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
             {/* Availability Badge */}
-            <span
+            {/* <span
               className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold shadow-sm backdrop-blur-md border border-white/10 ${
                 product.availability === "In Stock"
                   ? "bg-emerald-500/90 text-white"
@@ -52,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             >
               <Package size={12} />
               {product.availability}
-            </span>
+            </span> */}
 
             {/* Quality Badge */}
             <span
