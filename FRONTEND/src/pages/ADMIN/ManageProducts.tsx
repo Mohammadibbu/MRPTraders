@@ -14,6 +14,7 @@ import SearchableSelect from "../../components/UI/SearchableSelect";
 import { useNavigate } from "react-router-dom";
 import ProductImageCell from "../../components/AdminComp/ProductImageCell";
 import { encryptData, decryptData } from "../../utils/crypto";
+import { setItem, getItem } from "../../utils/LocalDB";
 
 const ManageProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -24,63 +25,68 @@ const ManageProducts: React.FC = () => {
   const [category, setCategory] = useState("");
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
+
   const navigate = useNavigate();
 
-  // Fetch products from API
+  // Fetch products with IndexedDB + encrypted caching
   const fetchProducts = async () => {
-    const countRes = await axios.get(productcount);
-
-    const serverCount = countRes.data?.totalCount ?? 0;
-
-    // 2️⃣ Check session cache
-    const encryptedCache = sessionStorage.getItem("products_encrypted(admin)");
-    const cachedCount = Number(sessionStorage.getItem("productcount(admin)"));
-
-    if (encryptedCache && cachedCount === serverCount) {
-      // Cache valid → use it
-      const cachedData = decryptData(encryptedCache);
-
-      if (cachedData) {
-        setProducts(cachedData);
-        setLoading(false);
-        return;
-      }
-    }
-    console.log("api call happened (products)");
-
     setLoading(true);
+
     try {
+      // Get count from backend
+      const countRes = await axios.get(productcount);
+      const serverCount = countRes.data?.totalCount ?? 0;
+
+      const cachedCount = Number(localStorage.getItem("products_count"));
+
+      // If count matches, load encrypted data from IndexedDB
+      if (cachedCount === serverCount) {
+        const encryptedDB = await getItem<string>("adminproducts");
+
+        if (encryptedDB) {
+          const decrypted = decryptData(encryptedDB) as Product[];
+
+          if (Array.isArray(decrypted)) {
+            setProducts(decrypted);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
+      console.log("API call happened (products)");
+
+      // Fetch fresh from server
       const res = await axios.get(getProductsApi);
-      const fetched: Product[] = res.data.data ?? res.data;
+      const fetched: Product[] = res.data?.data ?? res.data;
 
       setProducts(fetched);
-      // 4️⃣ Save encrypted data + count in sessionStorage
-      sessionStorage.setItem("products_encrypted(admin)", encryptData(fetched));
-      sessionStorage.setItem("productcount(admin)", serverCount.toString());
-      showtoast(
-        "Data Retrieval Successful",
-        "The data has been successfully fetched from the server.",
-        "success"
-      );
-    } catch (err: any) {
-      console.log(err.response.data.message);
-      if (err?.response?.data?.message === "No products found.") {
-        showtoast(
-          "No Products Found",
-          "We couldn't find any products in the database. If you'd like, you can add a new product using the 'Add Product' button.",
-          "info"
-        );
 
+      // Save encrypted into IndexedDB
+      const encrypted = encryptData(fetched);
+      await setItem("adminproducts", encrypted);
+
+      // Save count
+      localStorage.setItem("products_count", serverCount.toString());
+
+      showtoast("Success", "Products fetched successfully.", "success");
+    } catch (err: any) {
+      if (err?.response?.data?.message === "No products found.") {
+        showtoast("No Products Found", "You can add a new product.", "info");
         return;
       }
-      showtoast(
-        "Data Fetching Failed",
-        "There was an issue while fetching the data from the server. Please try again later.",
-        "error"
-      );
-    } finally {
-      setLoading(false);
+
+      showtoast("Error", "Failed to fetch products.", "error");
+
+      // Fallback to cached DB
+      const fallback = await getItem<string>("adminproducts");
+      if (fallback) {
+        const decrypted = decryptData(fallback) as Product[];
+        setProducts(decrypted);
+      }
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -105,41 +111,39 @@ const ManageProducts: React.FC = () => {
 
   // Filter + sort safely
   const filteredProducts = products
-    .filter(
-      (p) =>
-        typeof p.name === "string" &&
-        p.name.toLowerCase().includes(search.toLowerCase())
-    )
-    .filter((p) => (category ? (p.category ?? "") === category : true))
+    .filter((p) => p.name?.toLowerCase().includes(search.toLowerCase()))
+    .filter((p) => (category ? p.category === category : true))
     .sort((a, b) => {
       if (sort === "az") return (a.name ?? "").localeCompare(b.name ?? "");
       if (sort === "za") return (b.name ?? "").localeCompare(a.name ?? "");
       return 0;
     });
 
+  // Delete Product
   const handleDeleteConfirm = async () => {
     if (deleteId === null) return;
     setDelbtnloading(true);
 
     try {
       await axios.delete(`${DeleteProductApi}/${deleteId}`);
-      showtoast(
-        "Deletion Successful",
-        "The product has been successfully deleted.",
-        "success"
-      );
-      setProducts((prev) => prev.filter((p) => p.id !== deleteId));
-    } catch (err: any) {
-      showtoast(
-        "Deletion Failed",
-        "The product could not be deleted. Please try again.",
-        "error"
-      );
-    } finally {
-      setDelbtnloading(false);
-      setDeleteId(null);
-      setOpenDialog(false);
+
+      const updatedList = products.filter((p) => p.id !== deleteId);
+      setProducts(updatedList);
+
+      // Update IndexedDB cache
+      await setItem("adminproducts", encryptData(updatedList));
+
+      // Update count
+      localStorage.setItem("products_count", updatedList.length.toString());
+
+      showtoast("Success", "Product deleted successfully.", "success");
+    } catch (err) {
+      showtoast("Error", "Could not delete product.", "error");
     }
+
+    setDelbtnloading(false);
+    setDeleteId(null);
+    setOpenDialog(false);
   };
 
   return (
@@ -177,7 +181,6 @@ const ManageProducts: React.FC = () => {
           className="border px-3 py-2 rounded-lg w-64"
         />
 
-        {/* Sort Select */}
         <div className="w-48">
           <SearchableSelect
             options={sortOptions}
@@ -186,7 +189,6 @@ const ManageProducts: React.FC = () => {
           />
         </div>
 
-        {/* Category Select */}
         <div className="w-48">
           <SearchableSelect
             options={categoryOptions}
@@ -196,7 +198,7 @@ const ManageProducts: React.FC = () => {
         </div>
 
         <span className="text-sm bg-secondary py-2 px-4 rounded-lg font-medium text-primary">
-          {`Total Products: `}
+          Total:
           <span className="font-semibold text-red-600 mx-1">
             {filteredProducts.length}
           </span>
@@ -211,57 +213,49 @@ const ManageProducts: React.FC = () => {
           <table className="min-w-full bg-white border border-gray-200">
             <thead className="bg-gray-100 text-gray-600 uppercase text-sm">
               <tr>
-                <th className="py-3 px-4 text-left">Photo</th>
-                <th className="py-3 px-4 text-left">Name</th>
-                <th className="py-3 px-4 text-left">Origin</th>
-                <th className="py-3 px-4 text-left">Category</th>
+                <th className="py-3 px-4">Photo</th>
+                <th className="py-3 px-4">Name</th>
+                <th className="py-3 px-4">Origin</th>
+                <th className="py-3 px-4">Category</th>
                 <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-gray-700">
-              {filteredProducts.map((p) => (
-                <tr key={p.id} className="border-b hover:bg-gray-50">
-                  <td className="py-3 px-4">
-                    <ProductImageCell
-                      src={p.photos?.[0]?.base64 || "/Images/fallback.png"}
-                      alt={p.name ?? "Product Image"}
-                    />
-                  </td>
-                  <td className="py-3 px-4">{p.name ?? "Unnamed Product"}</td>
-                  <td className="py-3 px-4">
-                    {Array.isArray(p.origin)
-                      ? p.origin.join(", ").length > 30
-                        ? p.origin.join(", ").slice(0, 30) + "..."
-                        : p.origin.join(", ")
-                      : "Unknown"}
-                  </td>
-                  <td className="py-3 px-4">{p.category ?? "Uncategorized"}</td>
-                  <td className="py-3 px-4 text-center space-x-3">
-                    <button
-                      onClick={() => {
-                        setDeleteId(p.id);
-                        setOpenDialog(true);
-                      }}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <Trash2 />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            <tbody>
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((p) => (
+                  <tr key={p.id} className="border-b hover:bg-gray-50">
+                    <td className="py-3 px-4">
+                      <ProductImageCell
+                        src={p.photos?.[0]?.base64 || "/Images/fallback.png"}
+                        alt={p.name}
+                      />
+                    </td>
 
-              {filteredProducts.length === 0 && (
+                    <td className="py-3 px-4">{p.name}</td>
+                    <td className="py-3 px-4">
+                      {Array.isArray(p.origin)
+                        ? p.origin.join(", ").slice(0, 40)
+                        : "Unknown"}
+                    </td>
+                    <td className="py-3 px-4">{p.category}</td>
+
+                    <td className="py-3 px-4 text-center">
+                      <button
+                        onClick={() => {
+                          setDeleteId(p.id);
+                          setOpenDialog(true);
+                        }}
+                        className="text-red-600 hover:text-red-800"
+                      >
+                        <Trash2 />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="py-10 px-4 text-center text-gray-600 bg-gray-50 border-t border-b"
-                  >
-                    <div className="flex flex-col items-center justify-center space-y-2">
-                      <p className="text-base font-medium">No products found</p>
-                      <p className="text-sm text-gray-500">
-                        Try adjusting the filters or search keyword.
-                      </p>
-                    </div>
+                  <td colSpan={5} className="py-10 text-center text-gray-500">
+                    No products found
                   </td>
                 </tr>
               )}
@@ -270,12 +264,12 @@ const ManageProducts: React.FC = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Dialog */}
+      {/* Delete Popup */}
       <DialogComponent
         open={openDialog}
         setOpen={setOpenDialog}
         heading="Delete Product"
-        messageDescription="Are you sure you want to delete this product? This action cannot be undone."
+        messageDescription="Are you sure you want to delete this product?"
         okText="Yes, Delete"
         cancelText="Cancel"
         loading={Delbtnloading}

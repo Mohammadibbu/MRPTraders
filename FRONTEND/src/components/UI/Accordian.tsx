@@ -76,7 +76,7 @@ const AccordionItem = ({
     >
       <button
         onClick={onClick}
-        className="w-full px-6 py-5 flex justify-between items-center text-left cursor-pointer focus:outline-none"
+        className="w-full px-6 py-5 flex justify-between items-center text-left cursor-pointer focus:outline-none "
         aria-expanded={isOpen}
       >
         <span

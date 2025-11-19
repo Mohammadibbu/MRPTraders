@@ -14,6 +14,7 @@ import SearchableSelect from "../../components/UI/SearchableSelect";
 import ProductImageCell from "../../components/AdminComp/ProductImageCell";
 import { encryptData, decryptData } from "../../utils/crypto";
 import { Category } from "../../types";
+import { setItem, getItem } from "../../utils/LocalDB";
 
 const ManageCategories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -26,36 +27,37 @@ const ManageCategories: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // Fetch categories
+  // Fetch categories with IndexedDB caching
   const fetchCategories = async () => {
     setLoading(true);
 
     try {
-      // 1️⃣ Fetch count from backend
+      // Get count from backend
       const countRes = await axios.get(categoriescount);
-
       const serverCount = countRes.data?.totalCount ?? 0;
 
-      // 2️⃣ Check session cache
-      const encryptedCache = sessionStorage.getItem("categories_encrypted");
       const cachedCount = Number(sessionStorage.getItem("categories_count"));
 
-      if (encryptedCache && cachedCount === serverCount) {
-        // Cache valid → use it
-        const cachedData = decryptData(encryptedCache);
+      // If count matches, load encrypted data from IndexedDB
+      if (cachedCount === serverCount) {
+        const encryptedDB = await getItem<string>("admincategories");
 
-        if (cachedData) {
-          setCategories(cachedData);
-          setLoading(false);
-          return;
+        if (encryptedDB) {
+          const decrypted = decryptData(encryptedDB) as Category[];
+          if (Array.isArray(decrypted)) {
+            setCategories(decrypted);
+            setLoading(false);
+            return;
+          }
         }
       }
-      console.log("api call happened (categories)");
 
-      // 3️⃣ Cache missing OR mismatch → fetch from server
+      console.log("API call happened (categories)");
+
+      // Fetch fresh from backend
       const res = await axios.get(getcategoriesApi);
-
       let fetched: Category[] = [];
+
       if (Array.isArray(res?.data?.categories)) {
         fetched = res.data.categories;
       } else if (Array.isArray(res?.data)) {
@@ -64,17 +66,23 @@ const ManageCategories: React.FC = () => {
 
       setCategories(fetched);
 
-      // 4️⃣ Save encrypted data + count in sessionStorage
-      sessionStorage.setItem("categories_encrypted", encryptData(fetched));
+      // Save encrypted in IndexedDB
+      const encrypted = encryptData(fetched);
+      await setItem("admincategories", encrypted);
+
+      // Save count in sessionStorage
       sessionStorage.setItem("categories_count", serverCount.toString());
 
-      showtoast(
-        "Data Retrieval Successful",
-        "Categories fetched successfully.",
-        "success"
-      );
+      showtoast("Success", "Categories fetched successfully.", "success");
     } catch (err) {
-      showtoast("Data Fetching Failed", "Failed to fetch categories.", "error");
+      showtoast("Error", "Failed to fetch categories.", "error");
+
+      // Fallback to cached data if exists
+      const fallback = await getItem<string>("admincategories");
+      if (fallback) {
+        const decrypted = decryptData(fallback) as Category[];
+        setCategories(decrypted);
+      }
     }
 
     setLoading(false);
@@ -84,16 +92,12 @@ const ManageCategories: React.FC = () => {
     fetchCategories();
   }, []);
 
-  // Filter and sort categories safely
+  // Filter + Sort
   const filteredCategories = (Array.isArray(categories) ? categories : [])
-    .filter(
-      (c) =>
-        typeof c.name === "string" &&
-        c.name.toLowerCase().includes(search.toLowerCase())
-    )
+    .filter((c) => c?.name?.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => {
-      if (sort === "az") return (a.name ?? "").localeCompare(b.name ?? "");
-      if (sort === "za") return (b.name ?? "").localeCompare(a.name ?? "");
+      if (sort === "az") return a.name.localeCompare(b.name);
+      if (sort === "za") return b.name.localeCompare(a.name);
       return 0;
     });
 
@@ -103,7 +107,7 @@ const ManageCategories: React.FC = () => {
     { label: "Z-A", value: "za" },
   ];
 
-  // Delete category
+  // Delete Category
   const handleDeleteConfirm = async () => {
     if (!deleteId) return;
     setDelbtnloading(true);
@@ -111,21 +115,18 @@ const ManageCategories: React.FC = () => {
     try {
       await axios.delete(`${DeleteCategoryApi}/${deleteId}`);
 
-      // Update UI
       const updatedList = categories.filter((c) => c.id !== deleteId);
       setCategories(updatedList);
 
-      // Update encrypted cache
-      sessionStorage.setItem("categories_encrypted", encryptData(updatedList));
+      // Update encrypted cache in IndexedDB
+      await setItem("admincategories", encryptData(updatedList));
+
+      // Update count
       sessionStorage.setItem("categories_count", updatedList.length.toString());
 
-      showtoast(
-        "Deletion Successful",
-        "Category deleted successfully.",
-        "success"
-      );
+      showtoast("Success", "Category deleted successfully.", "success");
     } catch (err) {
-      showtoast("Deletion Failed", "Could not delete category.", "error");
+      showtoast("Error", "Could not delete category.", "error");
     }
 
     setDelbtnloading(false);
@@ -168,7 +169,6 @@ const ManageCategories: React.FC = () => {
           className="border px-3 py-2 rounded-lg w-64"
         />
 
-        {/* Sort */}
         <div className="w-48">
           <SearchableSelect
             options={sortOptions}
@@ -178,7 +178,7 @@ const ManageCategories: React.FC = () => {
         </div>
 
         <span className="text-sm bg-secondary py-2 px-4 rounded-lg font-medium text-primary">
-          {`Total Categories: `}
+          Total Categories:
           <span className="font-semibold text-red-600 mx-1">
             {filteredCategories.length}
           </span>
@@ -193,11 +193,11 @@ const ManageCategories: React.FC = () => {
           <table className="min-w-full bg-white border border-gray-200">
             <thead className="bg-gray-100 text-gray-600 uppercase text-sm">
               <tr>
-                <th className="py-3 px-4 text-left">#</th>
-                <th className="py-3 px-4 text-left">Photo</th>
-                <th className="py-3 px-4 text-left">Name</th>
-                <th className="py-3 px-4 text-left">Products Count</th>
-                <th className="py-3 px-4 text-left">Created At</th>
+                <th className="py-3 px-4">#</th>
+                <th className="py-3 px-4">Photo</th>
+                <th className="py-3 px-4">Name</th>
+                <th className="py-3 px-4">Products Count</th>
+                <th className="py-3 px-4">Created At</th>
                 <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
@@ -208,8 +208,8 @@ const ManageCategories: React.FC = () => {
                     <td className="py-3 px-4">{i + 1}</td>
                     <td className="py-3 px-4">
                       <ProductImageCell
-                        src={c?.photos?.[0]?.base64 || "/Images/fallback.png"}
-                        alt={c.name ?? "Product Image"}
+                        src={c.photos?.[0]?.base64 || "/Images/fallback.png"}
+                        alt={c.name}
                       />
                     </td>
                     <td className="py-3 px-4">{c.name}</td>
@@ -237,17 +237,10 @@ const ManageCategories: React.FC = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan={5}
-                    className="py-10 px-4 text-center text-gray-600 bg-gray-50 border-t border-b"
+                    colSpan={6}
+                    className="py-10 text-center text-gray-600 bg-gray-50"
                   >
-                    <div className="flex flex-col items-center justify-center space-y-2">
-                      <p className="text-base font-medium">
-                        No categories found
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Try adjusting the search or sort options.
-                      </p>
-                    </div>
+                    No categories found
                   </td>
                 </tr>
               )}
@@ -256,12 +249,12 @@ const ManageCategories: React.FC = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Dialog */}
+      {/* Delete Dialog */}
       <DialogComponent
         open={openDialog}
         setOpen={setOpenDialog}
         heading="Delete Category"
-        messageDescription="Are you sure you want to delete this category? This action cannot be undone."
+        messageDescription="Are you sure you want to delete this category?"
         okText="Yes, Delete"
         cancelText="Cancel"
         loading={Delbtnloading}

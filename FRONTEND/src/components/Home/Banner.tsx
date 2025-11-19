@@ -42,7 +42,7 @@ const Banner: React.FC<BannerProps> = ({
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
           className="fixed z-100 bottom-4 left-4 right-4  flex justify-center pointer-events-none"
         >
-          <div className="pointer-events-auto max-w-4xl w-full bg-white/95 backdrop-blur-lg border border-secondary shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl overflow-hidden">
+          <div className="hidden sm:block pointer-events-auto max-w-5xl w-full bg-white/95 backdrop-blur-lg border border-secondary shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-2xl overflow-hidden">
             <div className="flex items-center p-3 sm:p-4 gap-3 sm:gap-6">
               {/* Icon & Text Content */}
               <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -53,10 +53,10 @@ const Banner: React.FC<BannerProps> = ({
 
                 {/* Text Block - Uses min-w-0 to allow truncation */}
                 <div className="min-w-0 space-y-0.5">
-                  <p className="text-sm font-bold text-dustyTaupe truncate">
+                  <p className="text-sm font-bold text-dustyTaupe ">
                     {mainText}
                   </p>
-                  <p className="text-xs sm:text-sm text-gradientsecondary leading-tight truncate">
+                  <p className="text-xs sm:text-sm text-gradientsecondary leading-tight ">
                     {text}
                   </p>
                 </div>

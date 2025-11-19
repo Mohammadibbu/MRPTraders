@@ -4,16 +4,23 @@ import { useState } from "react";
 import React from "react";
 import DialogComponent from "../UI/DialogModel";
 import { showtoast } from "../../utils/Toast";
+import { removeItem } from "../../utils/LocalDB";
 const AdminHeader: React.FC = () => {
   const navigate = useNavigate();
   const [logoutDialog, setLogoutDialog] = useState(false);
 
   // Custom color classes used: primary, accent, secondary, dustyTaupe, secondary/70
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("adminToken");
     sessionStorage.clear();
-
+    try {
+      await removeItem("admincategories");
+      await removeItem("adminproducts");
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    }
     navigate("/admin/login");
 
     showtoast(

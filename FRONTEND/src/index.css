@@ -67,9 +67,10 @@
   }
 }
 
-body {
-  font-family: "Epunda Slab", serif;
+* {
+  font-family: "Poppins", sans-serif;
 }
+
 /* Testimonials auto-scroll */
 @keyframes scroll {
   0% {

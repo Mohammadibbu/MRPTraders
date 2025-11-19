@@ -319,20 +319,35 @@ const DeleteProduct = async (req, res) => {
         .json({ message: "Product not found.", success: false });
     }
 
+    const productData = productDoc.data();
+    const categoryName = productData?.category?.toLowerCase().trim();
+
+    // Remove product ID from category
+    if (categoryName) {
+      const categoryRef = db.collection("categories").doc(categoryName);
+
+      await categoryRef.update({
+        productIds: admin.firestore.FieldValue.arrayRemove(productid),
+      });
+    }
+
+    // Delete the product document
     await productRef.delete();
 
-    res
-      .status(200)
-      .json({ message: "Product deleted successfully.", success: true });
+    return res.status(200).json({
+      message: "Product deleted successfully.",
+      success: true,
+    });
   } catch (error) {
-    // console.error("Error deleting product:", error);
-    res.status(500).json({
+    console.error("Error deleting product:", error);
+    return res.status(500).json({
       message: "Error deleting product.",
       error: error.message,
       success: false,
     });
   }
 };
+
 const ProductCounts = async (req, res) => {
   try {
     const productsRef = db.collection("products");

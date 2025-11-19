@@ -13,6 +13,7 @@ import axios, {
   categoriescount,
   getcategoriesApi,
 } from "../utils/AxiosInstance";
+import { setItem, getItem } from "../utils/LocalDB";
 
 interface AppContextType {
   products: Product[] | null;
@@ -25,12 +26,6 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-interface CachedData<T> {
-  data: T;
-  timestamp: number;
-  totalCount: number;
-}
-
 export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -39,18 +34,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+  /** Fetch categories */
   const fetchCategories = async () => {
     try {
       const countRes = await axios.get(categoriescount);
       const serverCount = countRes.data?.totalCount ?? 0;
-
-      const encryptedCache = localStorage.getItem("categories_encrypted");
       const cachedCount = Number(localStorage.getItem("categories_count"));
 
-      if (encryptedCache && cachedCount === serverCount) {
-        const cachedData = decryptData(encryptedCache) as Category[] | null;
-        if (cachedData) {
-          setCategories(cachedData);
+      if (cachedCount === serverCount) {
+        // Try to get from IndexedDB
+        const encryptedData = await getItem<string>("categories");
+        if (encryptedData) {
+          const decryptedData = decryptData(encryptedData) as Category[];
+          setCategories(decryptedData);
           return;
         }
       }
@@ -65,77 +61,64 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
       setCategories(fetched);
 
+      // Encrypt and store in IndexedDB, store count in localStorage
       try {
-        localStorage.setItem("categories_encrypted", encryptData(fetched));
+        const encrypted = encryptData(fetched);
+        await setItem("categories", encrypted);
         localStorage.setItem("categories_count", serverCount.toString());
       } catch (e) {
-        console.warn("Failed to save categories to localStorage:", e);
+        console.warn("Failed to save categories to IndexedDB:", e);
       }
     } catch (err) {
       console.error("Error fetching categories:", err);
     }
   };
 
+  /** Fetch products */
   const fetchProducts = async () => {
-    const cacheKey = "productsCache";
-    const now = Date.now();
-
     try {
       const countRes = await axios.get(productcount);
-      const currentCount = countRes?.data?.totalCount;
+      const serverCount = countRes?.data?.totalCount;
+      const cachedCount = Number(localStorage.getItem("products_count"));
 
-      if (!currentCount) {
+      if (!serverCount) {
         console.warn("Could not fetch product count");
         return;
       }
 
-      const cachedRaw = localStorage.getItem(cacheKey);
-      const cached: CachedData<Product[]> | null = cachedRaw
-        ? (decryptData(cachedRaw) as CachedData<Product[]>)
-        : null;
-
-      if (cached && cached.totalCount === currentCount) {
-        setProducts(cached.data);
-        // Refresh timestamp
-        try {
-          localStorage.setItem(
-            cacheKey,
-            encryptData({ ...cached, timestamp: now })
-          );
-        } catch {
-          // ignore quota errors here
+      if (cachedCount === serverCount) {
+        const encryptedData = await getItem<string>("products");
+        if (encryptedData) {
+          const decryptedData = decryptData(encryptedData) as Product[];
+          setProducts(decryptedData);
+          setLoading(false);
+          return;
         }
-        setLoading(false);
-      } else {
-        const res = await axios.get(getProductsApi);
-        const freshData: Product[] = res.data;
+      }
 
-        const newCache: CachedData<Product[]> = {
-          data: freshData,
-          timestamp: now,
-          totalCount: currentCount,
-        };
+      // Fetch fresh data from API
+      const res = await axios.get(getProductsApi);
+      const freshData: Product[] = Array.isArray(res?.data) ? res.data : [];
 
-        try {
-          localStorage.setItem(cacheKey, encryptData(newCache));
-        } catch (e) {
-          console.warn("Failed to save products to localStorage:", e);
-        }
+      setProducts(freshData);
+      setLoading(false);
 
-        setProducts(freshData);
-        setLoading(false);
+      // Encrypt and store in IndexedDB
+      try {
+        const encrypted = encryptData(freshData);
+        await setItem("products", encrypted);
+        localStorage.setItem("products_count", serverCount.toString());
+      } catch (e) {
+        console.warn("Failed to save products to IndexedDB:", e);
       }
     } catch (err) {
       console.error("Error fetching products:", err);
 
       // Fallback to cache
-      const fallbackRaw = localStorage.getItem(cacheKey);
-      const fallback: CachedData<Product[]> | null = fallbackRaw
-        ? (decryptData(fallbackRaw) as CachedData<Product[]>)
-        : null;
-
-      if (fallback?.data) {
-        setProducts(fallback.data);
+      const encryptedData = await getItem<string>("products");
+      if (encryptedData) {
+        const decryptedData = decryptData(encryptedData) as Product[];
+        setProducts(decryptedData);
         setLoading(false);
       }
     }

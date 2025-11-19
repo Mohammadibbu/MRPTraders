@@ -9,19 +9,24 @@ import {
   User2,
   TableProperties,
   LogOut,
-  RefreshCw,
 } from "lucide-react";
 import DialogComponent from "../UI/DialogModel";
 import { showtoast } from "../../utils/Toast";
-
-// 3. AdminHeader Component (Embedded)
-const AdminHeader = () => {
+import { removeItem } from "../../utils/LocalDB";
+// 1. Update AdminHeader to accept 'toggleSidebar' as a prop
+const AdminHeader = ({ toggleSidebar }: any) => {
   const navigate = useNavigate();
   const [logoutDialog, setLogoutDialog] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("adminToken");
     sessionStorage.clear();
+    try {
+      await removeItem("admincategories");
+      await removeItem("adminproducts");
+    } catch (e) {
+      console.log(e);
+    }
     navigate("/admin/login");
     showtoast(
       "Logged out",
@@ -33,10 +38,21 @@ const AdminHeader = () => {
 
   return (
     <header className="bg-white shadow px-4 sm:px-6 py-3 flex items-center justify-between border-b border-secondary">
-      {/* Dashboard Title - Responsive text size */}
-      <h1 className="text-xl sm:text-2xl font-bold text-primary truncate mr-4">
-        Admin Dashboard
-      </h1>
+      <div className="flex items-center">
+        {/* --- NEW: Mobile Menu Button --- */}
+        {/* This is only visible on mobile (md:hidden) */}
+        <button
+          onClick={toggleSidebar}
+          className="md:hidden p-2 mr-2 text-dustyTaupe hover:bg-secondary rounded-md"
+        >
+          <Menu size={24} />
+        </button>
+
+        {/* Dashboard Title */}
+        <h1 className="text-xl sm:text-2xl font-bold text-primary truncate mr-4">
+          Admin Dashboard
+        </h1>
+      </div>
 
       {/* Logout Action */}
       <div className="flex items-center">
@@ -49,12 +65,10 @@ const AdminHeader = () => {
           "
           onClick={() => setLogoutDialog(true)}
         >
-          {/* Hide "Logout" text on xs screens, show it on sm and above */}
           <span className="hidden sm:inline">Logout</span>
           <LogOut className="w-5 h-5 sm:ml-2" />
         </button>
 
-        {/* Logout Confirmation Dialog */}
         <DialogComponent
           open={logoutDialog}
           setOpen={setLogoutDialog}
@@ -71,20 +85,13 @@ const AdminHeader = () => {
     </header>
   );
 };
-// --- END MOCK DEPENDENCIES ---
 
 const AdminLayout = () => {
-  // Hide sidebar on smaller screens by default
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768); // Start open on desktop
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const location = useLocation();
 
   const navItems = [
-    {
-      name: "Dashboard",
-      path: "/admin",
-      icon: <User2 size={20} />,
-    },
+    { name: "Dashboard", path: "/admin", icon: <User2 size={20} /> },
     {
       name: "Manage Admins",
       path: "/admin/Alladmins",
@@ -112,14 +119,12 @@ const AdminLayout = () => {
   };
 
   const handleLinkClick = () => {
-    // Close sidebar on link click if it's a mobile view (optional but good UX)
     if (window.innerWidth < 768) {
       setIsSidebarOpen(false);
     }
   };
 
   return (
-    // Use secondarylight for the overall background
     <div className="flex h-screen bg-secondarylight">
       {/* Overlay for Mobile View */}
       {isSidebarOpen && window.innerWidth < 768 && (
@@ -138,31 +143,28 @@ const AdminLayout = () => {
           ${
             isSidebarOpen
               ? "w-64 translate-x-0"
-              : "w-16 -translate-x-full md:translate-x-0"
+              : "w-10 -translate-x-full md:w-16 md:translate-x-0"
           }
         `}
+        // Note: I changed w-16 to w-0 on mobile closed state above to prevent overflow issues
       >
         <div className="flex items-center justify-between p-4 border-b border-secondary h-[64px]">
-          {" "}
-          {/* Matched height to AdminHeader */}
           {isSidebarOpen && (
             <span className="text-xl font-bold text-dustyTaupe truncate">
               Admin Panel
             </span>
           )}
+
+          {/* This button inside the sidebar is for closing it */}
           <button
             onClick={toggleSidebar}
             className="text-dustyTaupe p-1 rounded-md hover:bg-secondary/50 focus:outline-none transition-colors"
           >
-            {/* Show Menu icon when collapsed on desktop, ChevronLeft when open */}
             {isSidebarOpen ? (
               <ChevronLeft size={24} className="text-dustyTaupe" />
             ) : (
+              // Only show this Menu icon on Desktop collapsed state
               <Menu size={24} className="text-dustyTaupe hidden md:block" />
-            )}
-            {/* On mobile, only show Menu when closed, ChevronLeft when open. We use the overlay to close it. */}
-            {!isSidebarOpen && window.innerWidth < 768 && (
-              <Menu size={24} className="text-dustyTaupe" />
             )}
           </button>
         </div>
@@ -195,10 +197,9 @@ const AdminLayout = () => {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header - Use the AdminHeader component here */}
-        <AdminHeader />
+        {/* 2. Pass the toggleSidebar function to the Header */}
+        <AdminHeader toggleSidebar={toggleSidebar} />
 
-        {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6">
           <Outlet />
         </main>

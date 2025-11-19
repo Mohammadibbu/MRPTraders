@@ -398,7 +398,10 @@ const Contact: React.FC = () => {
         </section> */}
 
         {/* --- FAQ Section --- */}
-        <Accordion count={5} className="bg-gray-50" />
+        <div className="relative">
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50 pointer-events-none"></div>
+          <Accordion count={5} className="bg-gray-50" />
+        </div>
       </AnimatePresence>
 
       <JoinUsSection />

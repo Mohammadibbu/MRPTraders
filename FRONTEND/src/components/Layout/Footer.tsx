@@ -95,7 +95,7 @@ const Footer: React.FC = () => {
 
           {/* --- Column 2: Quick Links --- */}
           <div>
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+            <h3 className="text-lg font-bold mb-6 flex  items-center gap-2">
               <Globe className="w-5 h-5 text-primary" />
               Quick Links
             </h3>
@@ -146,7 +146,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* --- Column 4: Contact Info --- */}
-          <div>
+          <div className="whitespace-nowrap leading-tight">
             <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-primary" />
               Get In Touch
@@ -187,7 +187,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* --- Footer Bottom: Certifications & Copyright --- */}
-        <div className="pt-8 border-t border-gray-800">
+        <div className="pt-5 border-t border-gray-800">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             {/* Certifications */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6">

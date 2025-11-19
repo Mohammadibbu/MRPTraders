@@ -150,7 +150,7 @@ const ProductDetails: React.FC = () => {
   const phoneNumber = contactDetails.phoneNumber;
 
   const handleContactUs = () => {
-    const message = `Hello, I am interested in purchasing ${product.name} (ID: ${product.id}). Could you please provide a quote?`;
+    const message = `Hello, I am interested in purchasing ${product.name} . Could you please provide a quote?`;
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
       message
     )}`;

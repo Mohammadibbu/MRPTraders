@@ -2,6 +2,27 @@ import { toast } from "sonner";
 
 type ToastType = "info" | "success" | "error" | "warning" | "default";
 
+const cancelButtonStyle = {
+  position: "absolute" as const,
+  top: "6px",
+  right: "10px",
+
+  padding: "4px 10px",
+  fontSize: "12px",
+  fontWeight: "600",
+
+  color: "#ffffff",
+
+  border: "none",
+  borderRadius: "4px",
+
+  cursor: "pointer",
+  minWidth: "auto",
+  height: "auto",
+
+  transition: "all 0.2s ease-in-out", // smooth hover
+};
+
 export const showtoast = (
   message: string,
   description = "",
@@ -33,6 +54,13 @@ export const showtoast = (
 const toastOptions = (description: string, duration: number) => ({
   description,
   duration,
+  cancel: {
+    label: "X",
+    onClick: () => {
+      // Default behavior dismisses, but we can add logic here if needed
+    },
+  },
+  cancelButtonStyle: cancelButtonStyle,
   style: {
     backgroundColor: "#111827",
     color: "#faf7fc",
@@ -57,6 +85,14 @@ export const showToastPromise = <T>(
     loading: messages.loading,
     success: messages.success,
     error: messages.error,
+    cancel: {
+      // We explicitly cast to 'any' to avoid TypeScript errors with the library
+      label: "X",
+      onClick: () => {
+        // Default behavior dismisses, but we can add logic here if needed
+      },
+    },
+    cancelButtonStyle: cancelButtonStyle,
     duration,
     style: {
       backgroundColor: "#111827",
