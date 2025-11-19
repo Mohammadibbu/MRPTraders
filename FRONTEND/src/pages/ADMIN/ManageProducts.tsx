@@ -37,7 +37,7 @@ const ManageProducts: React.FC = () => {
       const countRes = await axios.get(productcount);
       const serverCount = countRes.data?.totalCount ?? 0;
 
-      const cachedCount = Number(localStorage.getItem("products_count"));
+      const cachedCount = Number(sessionStorage.getItem("products_count"));
 
       // If count matches, load encrypted data from IndexedDB
       if (cachedCount === serverCount) {
@@ -67,8 +67,8 @@ const ManageProducts: React.FC = () => {
       await setItem("adminproducts", encrypted);
 
       // Save count
-      localStorage.setItem("products_count", serverCount.toString());
-
+      sessionStorage.setItem("products_count", serverCount.toString());
+      sessionStorage.setItem("categories_count", "0");
       showtoast("Success", "Products fetched successfully.", "success");
     } catch (err: any) {
       if (err?.response?.data?.message === "No products found.") {
@@ -134,8 +134,8 @@ const ManageProducts: React.FC = () => {
       await setItem("adminproducts", encryptData(updatedList));
 
       // Update count
-      localStorage.setItem("products_count", updatedList.length.toString());
-
+      sessionStorage.setItem("products_count", updatedList.length.toString());
+      sessionStorage.setItem("categories_count", "0");
       showtoast("Success", "Product deleted successfully.", "success");
     } catch (err) {
       showtoast("Error", "Could not delete product.", "error");

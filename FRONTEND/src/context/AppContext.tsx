@@ -14,6 +14,7 @@ import axios, {
   getcategoriesApi,
 } from "../utils/AxiosInstance";
 import { setItem, getItem } from "../utils/LocalDB";
+import { ArrowLeftSquare } from "lucide-react";
 
 interface AppContextType {
   products: Product[] | null;
@@ -37,12 +38,20 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   /** Fetch categories */
   const fetchCategories = async () => {
     try {
+      // 1. Fetch category count from server
       const countRes = await axios.get(categoriescount);
-      const serverCount = countRes.data?.totalCount ?? 0;
-      const cachedCount = Number(localStorage.getItem("categories_count"));
+      const serverCount = countRes?.data?.totalCount;
 
+      const cachedCount = Number(localStorage.getItem("categories_count_CLI"));
+
+      // 2. Validate serverCount
+      if (serverCount == null || isNaN(serverCount)) {
+        console.warn("Could not fetch category count");
+        return;
+      }
+
+      // 3. If count matches → try to load from cache
       if (cachedCount === serverCount) {
-        // Try to get from IndexedDB
         const encryptedData = await getItem<string>("categories");
         if (encryptedData) {
           const decryptedData = decryptData(encryptedData) as Category[];
@@ -51,8 +60,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         }
       }
 
-      // Fetch from server
+      // 4. Fetch fresh categories
       const res = await axios.get(getcategoriesApi);
+
       const fetched: Category[] = Array.isArray(res?.data?.categories)
         ? res.data.categories
         : Array.isArray(res?.data)
@@ -61,11 +71,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
       setCategories(fetched);
 
-      // Encrypt and store in IndexedDB, store count in localStorage
+      // 5. Cache categories + count
       try {
         const encrypted = encryptData(fetched);
         await setItem("categories", encrypted);
-        localStorage.setItem("categories_count", serverCount.toString());
+        localStorage.setItem("categories_count_CLI", serverCount.toString());
       } catch (e) {
         console.warn("Failed to save categories to IndexedDB:", e);
       }
@@ -77,16 +87,28 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   /** Fetch products */
   const fetchProducts = async () => {
     try {
+      // 1. Fetch server count
       const countRes = await axios.get(productcount);
       const serverCount = countRes?.data?.totalCount;
-      const cachedCount = Number(localStorage.getItem("products_count"));
+      const cachedCount = Number(localStorage.getItem("products_count_CLI"));
 
-      if (!serverCount) {
+      // 2. Validate count
+      if (serverCount == null || isNaN(serverCount)) {
         console.warn("Could not fetch product count");
         return;
       }
 
+      // No products on server → stop
+      if (serverCount === 0) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+
+      // 3. If cached count matches → use cache
       if (cachedCount === serverCount) {
+        console.log(cachedCount);
+
         const encryptedData = await getItem<string>("products");
         if (encryptedData) {
           const decryptedData = decryptData(encryptedData) as Product[];
@@ -96,25 +118,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         }
       }
 
-      // Fetch fresh data from API
+      // 4. Fetch fresh products
       const res = await axios.get(getProductsApi);
       const freshData: Product[] = Array.isArray(res?.data) ? res.data : [];
 
       setProducts(freshData);
       setLoading(false);
 
-      // Encrypt and store in IndexedDB
+      // 5. Cache fresh data
       try {
         const encrypted = encryptData(freshData);
         await setItem("products", encrypted);
-        localStorage.setItem("products_count", serverCount.toString());
+        localStorage.setItem("products_count_CLI", serverCount.toString());
       } catch (e) {
         console.warn("Failed to save products to IndexedDB:", e);
       }
     } catch (err) {
       console.error("Error fetching products:", err);
 
-      // Fallback to cache
+      // 6. Fallback to local cache
       const encryptedData = await getItem<string>("products");
       if (encryptedData) {
         const decryptedData = decryptData(encryptedData) as Product[];

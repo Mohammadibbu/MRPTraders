@@ -233,7 +233,7 @@ const ProductDetails: React.FC = () => {
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-[2rem] p-2 sm:p-8 shadow-xl shadow-gray-200/50 border border-white relative overflow-hidden group"
               >
-                <div className="aspect-[4/3] flex items-center justify-center bg-gray-50/50 rounded-3xl overflow-hidden cursor-zoom-in">
+                <div className="aspect-[4/3] flex items-center justify-center bg-gray-50/50 rounded-3xl overflow-hidden  cursor-zoom-in">
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={selectedImageIndex}
@@ -247,7 +247,7 @@ const ProductDetails: React.FC = () => {
                           : product.photos[selectedImageIndex]?.base64
                       }
                       alt={`${product.name} view`}
-                      className="w-full h-full object-contain hover:scale-110 transition-transform duration-700 ease-in-out mix-blend-multiply"
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-700 ease-in-out mix-blend-multiply "
                       onError={() => handleImageError(selectedImageIndex)}
                     />
                   </AnimatePresence>
@@ -269,7 +269,7 @@ const ProductDetails: React.FC = () => {
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.1 }}
-                      className="px-3 py-1.5 bg-indigo-600/90 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide rounded-full shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 w-fit"
+                      className="px-3 py-2 bg-secondaryDark backdrop-blur-md text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide rounded-full shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 w-fit"
                     >
                       <Award className="w-3 h-3" />
                       {product.quality}
@@ -427,7 +427,7 @@ const ProductDetails: React.FC = () => {
                     Storage
                   </span>
                 </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight line-clamp-2">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight ">
                   {product.storage_conditions || "Standard"}
                 </p>
               </div>
@@ -440,7 +440,7 @@ const ProductDetails: React.FC = () => {
                     Logistics
                   </span>
                 </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight line-clamp-2">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight ">
                   {product.best_shipment_modes || "Flexible"}
                 </p>
               </div>
