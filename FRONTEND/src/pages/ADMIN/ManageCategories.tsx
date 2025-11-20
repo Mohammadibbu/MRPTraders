@@ -6,7 +6,7 @@ import GradientButton from "../../components/UI/GradientButton";
 import axios, {
   getcategoriesApi,
   DeleteCategoryApi,
-  categoriescount,
+  versionCache,
 } from "../../utils/AxiosInstance";
 import { showtoast } from "../../utils/Toast";
 import { useNavigate } from "react-router-dom";
@@ -33,13 +33,15 @@ const ManageCategories: React.FC = () => {
 
     try {
       // Get count from backend
-      const countRes = await axios.get(categoriescount);
-      const serverCount = countRes.data?.totalCount ?? 0;
+      const countRes = await axios.get(versionCache);
+      const version = countRes.data?.version ?? null;
 
-      const cachedCount = Number(sessionStorage.getItem("categories_count"));
+      const cachedCount = sessionStorage.getItem("version_For_admin");
 
       // If count matches, load encrypted data from IndexedDB
-      if (cachedCount === serverCount) {
+      if (cachedCount === version) {
+        console.log("N--H--A");
+
         const encryptedDB = await getItem<string>("admincategories");
 
         if (encryptedDB) {
@@ -71,7 +73,7 @@ const ManageCategories: React.FC = () => {
       await setItem("admincategories", encrypted);
 
       // Save count in sessionStorage
-      sessionStorage.setItem("categories_count", serverCount.toString());
+      sessionStorage.setItem("version_For_admin", version.toString());
 
       showtoast("Success", "Categories fetched successfully.", "success");
     } catch (err) {
@@ -122,10 +124,24 @@ const ManageCategories: React.FC = () => {
       await setItem("admincategories", encryptData(updatedList));
 
       // Update count
-      sessionStorage.setItem("categories_count", updatedList.length.toString());
+      sessionStorage.setItem(
+        "version_For_admin",
+        updatedList.length.toString()
+      );
 
       showtoast("Success", "Category deleted successfully.", "success");
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosErr = err as any;
+        const productCount = axiosErr.response?.data?.productCount;
+        const message = axiosErr.response?.data?.message;
+
+        if (productCount > 0) {
+          showtoast(`Cannot delete This category`, message, "error");
+          return;
+        }
+      }
+
       showtoast("Error", "Could not delete category.", "error");
     }
 

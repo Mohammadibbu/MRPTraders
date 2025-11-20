@@ -18,7 +18,7 @@ interface FilterOptions {
 interface Product {
   category: string;
   origin: string[];
-  season: string;
+  season?: string;
 }
 
 const ProductFilter: React.FC<ProductFilterProps> = ({

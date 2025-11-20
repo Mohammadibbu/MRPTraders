@@ -17,6 +17,8 @@ const AdminAddcategory = `${Base_EndPoint}/admin/addcategories`;
 const AdminGetcategory = `${Base_EndPoint}/admin/allcategories`;
 const CategoriesCounts = `${Base_EndPoint}/admin/categoriescount`;
 const AdminDeletecategory = `${Base_EndPoint}/admin/delcategory/:categoryid`;
+//cacheVersion
+const CacheVersion = `${Base_EndPoint}/CacheVersion`;
 
 const AdminRoutes = {
   CreateAdminEndPOint,
@@ -35,6 +37,8 @@ const AdminRoutes = {
   AdminGetcategory,
   AdminDeletecategory,
   CategoriesCounts,
+  //cacheVersion
+  CacheVersion,
 };
 
 export { AdminRoutes };

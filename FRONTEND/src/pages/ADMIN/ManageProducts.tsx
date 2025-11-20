@@ -6,7 +6,7 @@ import GradientButton from "../../components/UI/GradientButton";
 import axios, {
   getProductsApi,
   DeleteProductApi,
-  productcount,
+  versionCache,
 } from "../../utils/AxiosInstance";
 import { Product } from "../../types";
 import { showtoast } from "../../utils/Toast";
@@ -34,13 +34,13 @@ const ManageProducts: React.FC = () => {
 
     try {
       // Get count from backend
-      const countRes = await axios.get(productcount);
-      const serverCount = countRes.data?.totalCount ?? 0;
+      const countRes = await axios.get(versionCache);
+      const version = countRes.data?.version ?? null;
 
-      const cachedCount = Number(sessionStorage.getItem("products_count"));
+      const cachedVersion = sessionStorage.getItem("version_For_adminProducts");
 
       // If count matches, load encrypted data from IndexedDB
-      if (cachedCount === serverCount) {
+      if (cachedVersion === version) {
         const encryptedDB = await getItem<string>("adminproducts");
 
         if (encryptedDB) {
@@ -67,8 +67,8 @@ const ManageProducts: React.FC = () => {
       await setItem("adminproducts", encrypted);
 
       // Save count
-      sessionStorage.setItem("products_count", serverCount.toString());
-      sessionStorage.setItem("categories_count", "0");
+      sessionStorage.setItem("version_For_adminProducts", version.toString());
+
       showtoast("Success", "Products fetched successfully.", "success");
     } catch (err: any) {
       if (err?.response?.data?.message === "No products found.") {
@@ -134,7 +134,10 @@ const ManageProducts: React.FC = () => {
       await setItem("adminproducts", encryptData(updatedList));
 
       // Update count
-      sessionStorage.setItem("products_count", updatedList.length.toString());
+      sessionStorage.setItem(
+        "version_For_adminProducts",
+        updatedList.length.toString()
+      );
       sessionStorage.setItem("categories_count", "0");
       showtoast("Success", "Product deleted successfully.", "success");
     } catch (err) {

@@ -113,7 +113,7 @@ const Header: React.FC = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <div className="h-6 w-px bg-white/20"></div>
             <div className="flex space-x-2">
-              {socialLinks.map(({ icon: Icon, href, label }) => (
+              {socialLinks.map(({ icon: Icon, href, label }: any) => (
                 <a
                   key={label}
                   href={href}
@@ -222,7 +222,7 @@ const Header: React.FC = () => {
           {/* Socials */}
           <div className="px-4 pt-2 pb-4">
             <div className="flex items-center justify-center space-x-6 pt-4 border-t border-gray-100">
-              {socialLinks.map(({ icon: Icon, href, label }) => (
+              {socialLinks.map(({ icon: Icon, href, label }: any) => (
                 <a
                   key={label}
                   href={href}

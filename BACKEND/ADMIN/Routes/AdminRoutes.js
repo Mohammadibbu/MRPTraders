@@ -19,6 +19,8 @@ import {
   getAllCategories,
   deleteCategory,
   CategoriesCounts,
+  //cacheVersion
+  CacheVersion,
 } from "../Controllers/HandleProducts.js";
 const router = Router();
 // GET /alladmins - get all admins
@@ -55,5 +57,8 @@ router.get(AdminRoutes.Productcounts, ProductCounts);
 router.get(AdminRoutes.AdminGetcategory, getAllCategories);
 // Count Categories
 router.get(AdminRoutes.CategoriesCounts, CategoriesCounts);
+
+//get Cache Version
+router.get(AdminRoutes.CacheVersion, CacheVersion);
 
 export default router;

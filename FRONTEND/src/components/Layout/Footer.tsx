@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
                   href: contactDetails.linkedin ?? "#",
                   label: "LinkedIn",
                 },
-              ].map(({ icon: Icon, href, label }) => (
+              ].map(({ icon: Icon, href, label }: any) => (
                 <a
                   key={label}
                   href={href}

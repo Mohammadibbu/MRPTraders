@@ -37,6 +37,10 @@ const getcategoriesApi = baseURL + "/admin/allcategories";
 const AddcategoriesApi = baseURL + "/admin/addcategories";
 const DeleteCategoryApi = baseURL + "/admin/delcategory";
 const categoriescount = baseURL + "/admin/categoriescount";
+
+//versionCache
+const versionCache = baseURL + "/CacheVersion";
+
 export {
   GoogleSheetApi,
   AdminLoginApi,
@@ -55,5 +59,7 @@ export {
   AddcategoriesApi,
   DeleteCategoryApi,
   categoriescount,
+  // versionCache
+  versionCache,
 };
 export default axiosInstance;
