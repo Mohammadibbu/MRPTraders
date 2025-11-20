@@ -5,7 +5,7 @@ import SkeletonLoader from "../components/UI/SkeletonLoader";
 import { motion } from "framer-motion";
 import JoinUsSection from "../components/Home/JoinUsSection";
 import { Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight, Search, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, Home, Tag } from "lucide-react";
 
 const CATEGORIES_PER_PAGE = 12; // Standard grid size (3 rows of 4)
 
@@ -45,6 +45,8 @@ const CategoryListings: React.FC = () => {
     return currentCategories.map((cat) => ({
       id: cat.id,
       name: cat.name,
+      // Added description here so it's available if CategoryCard needs it
+      description: cat.description || "Explore our premium collection.",
       // Use the first image or a fallback
       image: cat.photos?.[0]?.base64 || "/Images/fallback.png",
       // Link must use ID to match ProductListings logic
@@ -104,7 +106,7 @@ const CategoryListings: React.FC = () => {
       {/* --- Main Content --- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search & Count Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-2 gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
           <div className="relative w-full sm:w-96">
             <input
               type="text"
@@ -151,9 +153,23 @@ const CategoryListings: React.FC = () => {
             </div>
           ) : (
             <>
+              {/* --- NEW SECTION: Category Name & Description Header --- */}
+
+              <div className="mb-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <Tag className="w-5 h-5 text-primary" />
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {searchTerm ? "Search Results" : "Shop by Category"}
+                  </h2>
+                </div>
+                <p className="text-gray-600 max-w-3xl leading-relaxed">
+                  {searchTerm
+                    ? `Found ${filteredCategories.length} categories matching your search for "${searchTerm}".`
+                    : "Browse our extensive catalog below. Each category is curated to ensure the highest quality and satisfaction. Click on any card to view products."}
+                </p>
+              </div>
+
               {/* Category Cards Grid */}
-              {/* Note: CategoryCard has its own internal wrapper for max-w-7xl, but since we are already inside one, 
-                   it might nest slightly. The design will still look good as it's responsive. */}
               <div className="-mx-4 sm:-mx-6 lg:-mx-8">
                 <CategoryCard categoriesToDisplay={categoriesToDisplay} />
               </div>

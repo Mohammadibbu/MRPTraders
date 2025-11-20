@@ -139,7 +139,6 @@ const Footer: React.FC = () => {
                   { to: "/privacy-policy", label: "Privacy Policy" },
                   { to: "/terms", label: "Terms" }, // Shortened for mobile fit
                   { to: "/faq", label: "FAQ" },
-                  { to: "/support", label: "Support" },
                 ].map((link) => (
                   <li key={link.to}>
                     <Link

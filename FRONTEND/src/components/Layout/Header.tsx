@@ -59,7 +59,7 @@ const Header: React.FC = () => {
     },
     { icon: Linkedin, href: contactDetails.linkedin ?? "#", label: "LinkedIn" },
   ];
-
+  const isContactPage = location.pathname === "/contact";
   return (
     <header
       className={`fixed w-full top-0 z-50 transition-all duration-300 ease-in-out transform ${
@@ -126,12 +126,26 @@ const Header: React.FC = () => {
                 </a>
               ))}
             </div>
-            <Link
-              to="/contact"
-              className="px-5 py-2.5 rounded-full font-bold text-sm transition-all transform hover:scale-105 bg-white text-primary hover:bg-gray-100"
-            >
-              Get Quote
-            </Link>
+            <div className="hidden lg:flex items-center space-x-4">
+              {/* 3. Conditional Logic */}
+              {isContactPage ? (
+                <a
+                  href={`tel:${contactDetails.phoneNumber}`}
+                  className="px-5 py-2.5 rounded-full font-bold text-sm transition-all transform hover:scale-105 bg-secondaryDark text-gray-200 hover:bg-gray-800 flex items-center gap-2"
+                >
+                  <Phone className="w-4 h-4" />
+                  Call Now
+                </a>
+              ) : (
+                // If on any other page -> Show "Get Quote"
+                <Link
+                  to="/contact"
+                  className="px-5 py-2.5 rounded-full font-bold text-sm transition-all transform hover:scale-105 bg-secondaryDark text-gray-200 hover:bg-gray-800"
+                >
+                  Get Quote
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* --- Mobile Menu Toggle --- */}

@@ -18,6 +18,9 @@ import {
   SearchX,
   AlertCircle,
   Loader2,
+  X,
+  ChevronLeft,
+  ZoomIn, // Added for the hover effect
 } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -28,14 +31,146 @@ import Accordion from "../UI/Accordian";
 import JoinUsSection from "../Home/JoinUsSection";
 import { contactDetails } from "../../utils/ContactDetails";
 
+// --- INTERNAL COMPONENT: LIGHTBOX ---
+// Handles the full-screen image viewing experience
+interface LightboxProps {
+  isOpen: boolean;
+  onClose: () => void;
+  images: { base64: string }[];
+  currentIndex: number;
+  onIndexChange: (index: number) => void;
+}
+
+const ImageLightbox: React.FC<LightboxProps> = ({
+  isOpen,
+  onClose,
+  images,
+  currentIndex,
+  onIndexChange,
+}) => {
+  // 1. SCROLL LOCK LOGIC
+  useEffect(() => {
+    if (isOpen) {
+      // Prevent scrolling on body when lightbox is open
+      document.body.style.overflow = "hidden";
+    } else {
+      // Re-enable scrolling when closed
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup function to ensure scrolling is re-enabled if component unmounts
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  // 2. KEYBOARD NAVIGATION LOGIC
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") {
+        onIndexChange(
+          currentIndex === 0 ? images.length - 1 : currentIndex - 1
+        );
+      }
+      if (e.key === "ArrowRight") {
+        onIndexChange(
+          currentIndex === images.length - 1 ? 0 : currentIndex + 1
+        );
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, images.length, currentIndex, onIndexChange, onClose]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-secondaryDark/80 backdrop-blur-sm p-4"
+          onClick={onClose}
+        >
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-50 backdrop-blur-md"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Content Wrapper */}
+          <div
+            className="relative w-full max-w-7xl h-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Previous Button */}
+            {images.length > 1 && (
+              <button
+                onClick={() =>
+                  onIndexChange(
+                    currentIndex === 0 ? images.length - 1 : currentIndex - 1
+                  )
+                }
+                className="absolute left-0 sm:-left-4 p-2 sm:p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all z-20"
+              >
+                <ChevronLeft className="w-8 h-8 sm:w-12 sm:h-12" />
+              </button>
+            )}
+
+            {/* Main Image */}
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full h-full flex items-center justify-center p-4"
+            >
+              <img
+                src={images[currentIndex]?.base64 || "/Images/fallback.png"}
+                alt="Full screen view"
+                className="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-lg select-none"
+              />
+            </motion.div>
+
+            {/* Next Button */}
+            {images.length > 1 && (
+              <button
+                onClick={() =>
+                  onIndexChange(
+                    currentIndex === images.length - 1 ? 0 : currentIndex + 1
+                  )
+                }
+                className="absolute right-0 sm:-right-4 p-2 sm:p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all z-20"
+              >
+                <ChevronRight className="w-8 h-8 sm:w-12 sm:h-12" />
+              </button>
+            )}
+
+            {/* Counter Badge */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 backdrop-blur-md rounded-full text-white/90 text-sm font-medium border border-white/10">
+              {currentIndex + 1} / {images.length}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// --- MAIN COMPONENT ---
 const ProductDetails: React.FC = () => {
-  // Extract loading state from context to fix the refresh issue
   const { products, loading } = useApp();
   const { productid } = useParams();
   const navigate = useNavigate();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageErrorIndexes, setImageErrorIndexes] = useState<number[]>([]);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false); // State for Lightbox
 
   // Scroll to top on mount
   useEffect(() => {
@@ -80,7 +215,7 @@ const ProductDetails: React.FC = () => {
     );
   }
 
-  // --- 2. System Error State (Only if NOT loading and NO products) ---
+  // --- 2. System Error State ---
   if (!products || products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center bg-gray-50">
@@ -225,15 +360,43 @@ const ProductDetails: React.FC = () => {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           {/* --- LEFT COLUMN: Gallery & Features --- */}
           <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-4 block sm:hidden">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="text-primary font-bold text-[10px] sm:text-xs tracking-wider uppercase bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
+                  {product.category}
+                </span>
+                {product.certifications?.includes("FSSAI") && (
+                  <span className="text-gray-600 font-medium text-[10px] sm:text-xs flex items-center bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg shadow-sm">
+                    <Shield className="w-3 h-3 mr-1.5 text-green-600" /> FSSAI
+                    Certified
+                  </span>
+                )}
+              </div>
+
+              <h1 className="text-3xl  font-extrabold text-gray-900 tracking-tight leading-[1.1]">
+                {product.name}
+              </h1>
+            </div>
             {/* Main Gallery Component */}
-            <div className="space-y-4">
+            <div>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-[2rem] p-2 sm:p-8 shadow-xl shadow-gray-200/50 border border-white relative overflow-hidden group"
               >
-                <div className="aspect-[4/3] flex items-center justify-center bg-gray-50/50 rounded-3xl overflow-hidden  cursor-zoom-in">
+                {/* Main Image Container - Clickable */}
+                <div
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="aspect-[4/3] flex items-center justify-center bg-gray-50/50 rounded-3xl overflow-hidden cursor-zoom-in relative"
+                >
+                  {/* Hover Zoom Hint Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
+                    <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
+                      <ZoomIn className="w-6 h-6 text-gray-800" />
+                    </div>
+                  </div>
+
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={selectedImageIndex}
@@ -247,11 +410,12 @@ const ProductDetails: React.FC = () => {
                           : product.photos[selectedImageIndex]?.base64
                       }
                       alt={`${product.name} view`}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-700 ease-in-out mix-blend-multiply "
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-multiply"
                       onError={() => handleImageError(selectedImageIndex)}
                     />
                   </AnimatePresence>
                 </div>
+
                 {/* Floating Badges */}
                 <div className="absolute top-6 left-6 flex flex-col gap-2 z-10 pointer-events-none">
                   {product.availability && (
@@ -303,6 +467,15 @@ const ProductDetails: React.FC = () => {
                   </button>
                 ))}
               </div>
+
+              {/* Lightbox Render */}
+              <ImageLightbox
+                isOpen={isLightboxOpen}
+                onClose={() => setIsLightboxOpen(false)}
+                images={product.photos}
+                currentIndex={selectedImageIndex}
+                onIndexChange={setSelectedImageIndex}
+              />
             </div>
 
             {/* Detailed Info Cards */}
@@ -356,8 +529,6 @@ const ProductDetails: React.FC = () => {
                 </div>
               )}
             </div>
-
-            {/* "Why Choose Us" REMOVED FROM HERE */}
           </div>
 
           {/* --- RIGHT COLUMN: Info & Specs (Sticky on Desktop) --- */}
@@ -397,7 +568,6 @@ const ProductDetails: React.FC = () => {
                     Origin
                   </span>
                 </div>
-                {/* Removed truncate to show full list */}
                 <p
                   className="text-gray-900 font-semibold text-sm sm:text-base leading-relaxed"
                   title={getOriginString(product.origin)}
@@ -446,7 +616,7 @@ const ProductDetails: React.FC = () => {
               </div>
             </div>
 
-            {/* "Why Choose Us" MOVED HERE */}
+            {/* "Why Choose Us" */}
             <div className="bg-[#1A1C23] rounded-3xl p-6 text-white shadow-xl shadow-gray-200 relative overflow-hidden isolate">
               {/* Decorative Background Elements */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
@@ -517,11 +687,11 @@ const ProductDetails: React.FC = () => {
       </div>
 
       {/* --- MOBILE STICKY CTA BAR (Visible only on small screens) --- */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-4 lg:hidden z-50 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+      <div className="fixed bottom-0 left-0 z-90 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-4 lg:hidden  pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="grid grid-cols-[1fr_2fr] gap-3 max-w-md mx-auto">
           <button
             onClick={handleCallUs}
-            className="flex flex-col items-center justify-center py-3 rounded-xl text-gray-600 bg-gray-50 hover:bg-gray-100 active:scale-95 transition-transform border border-gray-200"
+            className="flex flex-col items-center justify-center py-1 rounded-xl text-gray-600 bg-gray-50 hover:bg-gray-100 active:scale-95 transition-transform border border-gray-200"
           >
             <Phone className="w-5 h-5 mb-1 text-gray-900" />
             <span className="text-[10px] font-bold uppercase tracking-wide text-gray-500">
@@ -530,7 +700,7 @@ const ProductDetails: React.FC = () => {
           </button>
           <button
             onClick={handleContactUs}
-            className="bg-primary text-white rounded-xl py-3 font-bold shadow-lg shadow-primary/20 flex items-center justify-center active:scale-95 transition-transform hover:bg-primary/90"
+            className="bg-primary text-white rounded-xl py-1 font-bold shadow-lg shadow-primary/20 flex items-center justify-center active:scale-95 transition-transform hover:bg-primary/90"
           >
             <Mail className="w-5 h-5 mr-2" />
             Get Quote
@@ -542,7 +712,12 @@ const ProductDetails: React.FC = () => {
       <div className="space-y-0">
         <ProductSection />
         <ImportExportSection />
-        <Accordion count={3} className="bg-secondarylight" />
+        <div className="relative">
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50 pointer-events-none"></div>
+
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent shadow-[0_1px_12px_0_rgba(0,0,0,0.1)]" />
+          <Accordion count={3} className="bg-secondarylight" />
+        </div>
         <JoinUsSection />
       </div>
     </div>

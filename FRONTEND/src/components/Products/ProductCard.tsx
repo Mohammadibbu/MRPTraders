@@ -56,7 +56,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
             {/* Quality Badge */}
             <span
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold shadow-sm backdrop-blur-md border border-white/10 ${
+              className={` truncate flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold shadow-sm backdrop-blur-md border border-white/10 ${
                 product.quality === "Grade A"
                   ? "bg-amber-400/90 text-white"
                   : "bg-blue-500/90 text-white"
