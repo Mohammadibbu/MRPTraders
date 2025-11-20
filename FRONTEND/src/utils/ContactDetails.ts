@@ -15,9 +15,9 @@ interface companyDetails {
 export const contactDetails: ContactDetails = {
   email: "mrpglobaltraders2004@gmail.com",
   phoneNumber: "+919356380766",
-  linkedin: "https://linkedin.com/company/mrpglobal",
-  instagram: "https://instagram.com/mrpglobal",
-  facebook: "https://facebook.com/mrpglobal",
+  linkedin: "#",
+  instagram: "#",
+  facebook: "#",
   location: "MRP Global Traders , chennai , India",
 };
 

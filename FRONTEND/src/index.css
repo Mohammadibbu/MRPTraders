@@ -115,9 +115,9 @@
 }
 
 /* Smooth scrolling */
-html {
+/* html {
   scroll-behavior: smooth;
-}
+} */
 
 /* Custom scrollbar */
 @media screen and (max-width: 768px) {

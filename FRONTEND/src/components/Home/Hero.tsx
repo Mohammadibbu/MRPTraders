@@ -122,9 +122,11 @@ const Hero: React.FC = () => {
       </div>
       {/* --- Scroll Indicator (Hidden on very small screens) --- */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden md:block opacity-70">
-        <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1">
-          <div className="w-1 h-2 bg-white rounded-full animate-scroll-down"></div>
-        </div>
+        <button onClick={scrollToContent}>
+          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1">
+            <div className="w-1 h-2 bg-white rounded-full animate-scroll-down"></div>
+          </div>
+        </button>
       </div>
     </div>
   );
