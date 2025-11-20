@@ -61,9 +61,13 @@ const Hero: React.FC = () => {
       {/* --- Main Content --- */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white h-full flex flex-col justify-center items-center pt-16">
         <Animation initialY={30}>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 drop-shadow-lg max-w-5xl leading-[1.1]">
-            Empowering Global Trade with <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-200">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1] text-white">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-100 via-cyan-400 to-teal-300">
+              Empowering{" "}
+            </span>{" "}
+            Global Trade with <br className="hidden md:block" />
+            {/* Added pb-2 to prevent cutting off descenders like 'g' or 'y' in gradients */}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-100 via-cyan-400 to-teal-300 drop-shadow-2xl pb-2">
               Quality Goods
             </span>
           </h1>
