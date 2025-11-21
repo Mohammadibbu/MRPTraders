@@ -34,7 +34,7 @@ const FAQPage: React.FC = () => {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/Images/HomePageImages/Hero.png"
+            src="/Images/Legal/FaQ.jpg"
             alt="FAQ Background"
             className="w-full h-full object-cover opacity-40"
           />
@@ -76,7 +76,10 @@ const FAQPage: React.FC = () => {
       </div>
 
       {/* --- Contact Prompt --- */}
-      <section className="py-16 sm:py-24">
+      <section className="py-16 relative sm:py-24">
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent shadow-[0_1px_12px_0_rgba(0,0,0,0.1)]" />
+        {/* 1. Subtle Grid Pattern */}
+        <div className="absolute inset-1 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="bg-blue-50 rounded-3xl p-8 sm:p-12 border border-blue-100">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm text-primary">

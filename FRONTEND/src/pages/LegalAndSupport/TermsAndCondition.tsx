@@ -157,7 +157,7 @@ const TermsAndConditions: React.FC = () => {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/Images/ContactPage/Hero.png"
+            src="/Images/Legal/terms&condition.jpg"
             alt="Terms Background"
             className="w-full h-full object-cover opacity-30"
           />
@@ -250,9 +250,10 @@ const TermsAndConditions: React.FC = () => {
                 If you have any questions or need clarification regarding these
                 Terms & Conditions, please feel free to reach out:
               </p>
+
               <a
                 href={`mailto:${contactDetails.email}`}
-                className="inline-flex items-center font-semibold text-primary hover:text-primary-dark hover:underline transition-all"
+                className="inline-flex text-xs sm:text-sm items-center font-semibold text-primary hover:text-primary-dark hover:underline transition-all"
               >
                 {contactDetails.email}
               </a>
