@@ -37,18 +37,6 @@ const Contact: React.FC = () => {
     defaultMessage
   )}`;
 
-  const formatDate = (date: Date): string => {
-    return date.toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    });
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -57,49 +45,52 @@ const Contact: React.FC = () => {
 
     if (!name || !email || !phone || !message) {
       setLoading(false);
-      showtoast(
-        "Missing Fields",
-        "Please complete all required fields before submitting.",
-        "error"
-      );
+      showtoast("Missing Fields", "Please complete all fields.", "error");
       return;
     }
 
-    const MessageData = {
-      Name: name,
-      Email: email,
-      PhoneNo: phone,
-      Message: message,
-      ReceivedAt: formatDate(new Date()),
-    };
+    const formBody = new FormData();
+    formBody.append("Name", name);
+    formBody.append("Email", email);
+    formBody.append("PhoneNo", phone);
+    formBody.append("Message", message);
+    formBody.append("ReceivedAt", new Date().toLocaleString());
 
-    const SheetapiPromise = axios
-      .post(GoogleSheetApi, MessageData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then(() => {
-        setFormData({ name: "", email: "", phone: "", message: "" });
-        return { message: "Your message was successfully sent" };
-      })
-      .catch((error) => {
-        console.error(error);
-        throw new Error("An error occurred while sending your message.");
-      })
-      .finally(() => setLoading(false));
+    // We use fetch because Axios triggers CORS errors with Google Sheets
+    const fetchPromise = fetch(GoogleSheetApi, {
+      method: "POST",
+      body: formBody,
+    }).then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      // Handle the response text/json manually
+      const text = await response.text();
+      try {
+        return JSON.parse(text);
+      } catch {
+        throw new Error("Invalid server response");
+      }
+    });
 
-    showToastPromise(
-      SheetapiPromise,
-      {
-        loading: "Sending your message...",
-        success: (d: { message: string }) =>
-          `${d.message}! We will get back to you shortly.`,
-        error: (err: { message: string }) =>
-          `${err?.message || "Something went wrong!"}`,
+    await showToastPromise(fetchPromise, {
+      loading: "Sending...",
+      success: (data) => {
+        if (data.result === "success") {
+          setFormData({ name: "", email: "", phone: "", message: "" });
+          return "Message sent successfully! We will get back to you shortly.";
+        } else {
+          throw new Error(data.message || "Submission failed");
+        }
       },
-      4000
-    );
-  };
+      error: (err) => {
+        console.error(err);
+        return "Failed to send message. Please try again.";
+      },
+    });
 
+    setLoading(false);
+  };
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

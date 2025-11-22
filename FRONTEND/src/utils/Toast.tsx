@@ -7,18 +7,13 @@ const cancelButtonStyle = {
   position: "absolute" as const,
   top: "6px",
   right: "10px",
-
   padding: "4px 10px",
-
   color: "#ffffff",
-
   border: "none",
   borderRadius: "4px",
-
   cursor: "pointer",
   minWidth: "auto",
   height: "auto",
-
   transition: "all 0.2s ease-in-out",
 };
 
