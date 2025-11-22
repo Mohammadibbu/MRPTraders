@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 
 const Layout = () => {
   const Location = useLocation();
-  console.log(Location.pathname);
+
   const isHomePage = Location.pathname === "/";
 
   return (

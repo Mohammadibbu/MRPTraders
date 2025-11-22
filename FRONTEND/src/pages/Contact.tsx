@@ -73,7 +73,7 @@ const Contact: React.FC = () => {
       }
     });
 
-    await showToastPromise(fetchPromise, {
+    showToastPromise(fetchPromise, {
       loading: "Sending...",
       success: (data) => {
         if (data.result === "success") {
@@ -287,7 +287,9 @@ const Contact: React.FC = () => {
                             required
                             value={formData.phone}
                             onChange={handleChange}
-                            placeholder="+91 98765 43210"
+                            placeholder={
+                              contactDetails?.phoneNumber ?? "Your Phone Number"
+                            }
                             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                           />
                         </div>
