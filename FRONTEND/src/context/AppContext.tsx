@@ -13,7 +13,7 @@ import axios, {
   getcategoriesApi,
 } from "../utils/AxiosInstance";
 import { setItem, getItem } from "../utils/LocalDB";
-import { ArrowLeftSquare } from "lucide-react";
+// import { ArrowLeftSquare } from "lucide-react";
 
 interface AppContextType {
   products: Product[] | null;
@@ -42,7 +42,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       const res = await axios.get(versionCache);
       cachedVersion = res?.data?.version?.toString() || null;
     } catch (e) {
-      console.warn("Could not fetch cache version:", e);
+      // console.warn("Could not fetch cache version:", e);
       cachedVersion = null;
     }
   };
@@ -77,7 +77,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       if (cachedVersion)
         localStorage.setItem("VersionCache_CLI", cachedVersion);
     } catch (err) {
-      console.error("Error fetching categories:", err);
+      // console.error("Error fetching categories:", err);
     }
   };
 
@@ -109,7 +109,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       if (cachedVersion)
         localStorage.setItem("VersionCache_CLI", cachedVersion);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      // console.error("Error fetching products:", err);
       setLoading(false);
     }
   };
