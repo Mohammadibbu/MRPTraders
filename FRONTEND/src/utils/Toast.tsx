@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { toast } from "sonner";
 
 type ToastType = "info" | "success" | "error" | "warning" | "default";
@@ -8,8 +9,6 @@ const cancelButtonStyle = {
   right: "10px",
 
   padding: "4px 10px",
-  fontSize: "12px",
-  fontWeight: "600",
 
   color: "#ffffff",
 
@@ -20,7 +19,7 @@ const cancelButtonStyle = {
   minWidth: "auto",
   height: "auto",
 
-  transition: "all 0.2s ease-in-out", // smooth hover
+  transition: "all 0.2s ease-in-out",
 };
 
 export const showtoast = (
@@ -29,25 +28,23 @@ export const showtoast = (
   type: ToastType = "default",
   duration = 3000
 ) => {
+  const opts = toastOptions(description, duration);
+
   switch (type) {
     case "info":
-      toast.info(message, toastOptions(description, duration));
+      toast.info(message, opts);
       break;
     case "success":
-      toast.success(message, toastOptions(description, duration));
+      toast.success(message, opts);
       break;
     case "error":
-      toast.error(message, toastOptions(description, duration));
+      toast.error(message, opts);
       break;
     case "warning":
-      toast.warning(message, toastOptions(description, duration));
-      break;
-    case "default":
-      toast(message, toastOptions(description, duration));
+      toast.warning(message, opts);
       break;
     default:
-      toast(message, toastOptions(description, duration));
-      break;
+      toast(message, opts);
   }
 };
 
@@ -55,24 +52,21 @@ const toastOptions = (description: string, duration: number) => ({
   description,
   duration,
   cancel: {
-    label: "X",
-    onClick: () => {
-      // Default behavior dismisses, but we can add logic here if needed
-    },
+    label: <X size={16} strokeWidth={3} />,
+    onClick: () => {},
   },
-  cancelButtonStyle: cancelButtonStyle,
+  cancelButtonStyle,
   style: {
     backgroundColor: "#111827",
     color: "#faf7fc",
     fontSize: "14px",
     border: "none",
-    // boxShadow: "rgb(95, 26, 53) 2px 2px 5px 0px",
-    userSelect: "none" as "none",
+    userSelect: "none" as const,
   },
 });
 
-// Toast promise function to handle async actions with showtoast
-export const showToastPromise = <T>(
+// ToastPromise with JSX label
+export const showToastPromise = <T,>(
   promise: Promise<T>,
   messages: {
     loading: string;
@@ -86,20 +80,16 @@ export const showToastPromise = <T>(
     success: messages.success,
     error: messages.error,
     cancel: {
-      // We explicitly cast to 'any' to avoid TypeScript errors with the library
-      label: "X",
-      onClick: () => {
-        // Default behavior dismisses, but we can add logic here if needed
-      },
+      label: <X size={16} strokeWidth={3} />,
+      onClick: () => {},
     },
-    cancelButtonStyle: cancelButtonStyle,
+    cancelButtonStyle,
     duration,
     style: {
       backgroundColor: "#111827",
       color: "#faf7fc",
       fontSize: "14px",
       border: "none",
-      // boxShadow: "rgb(95, 26, 53) 2px 2px 5px 0px",
     },
   });
 };

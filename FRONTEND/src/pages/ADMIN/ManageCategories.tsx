@@ -119,30 +119,25 @@ const ManageCategories: React.FC = () => {
 
       const updatedList = categories.filter((c) => c.id !== deleteId);
       setCategories(updatedList);
-
+      const countRes = await axios.get(versionCache);
+      const version = countRes.data?.version ?? null;
       // Update encrypted cache in IndexedDB
       await setItem("admincategories", encryptData(updatedList));
 
-      // Update count
-      sessionStorage.setItem(
-        "version_For_admin",
-        updatedList.length.toString()
-      );
+      // Update version
+      sessionStorage.setItem("version_For_admin", version);
 
       showtoast("Success", "Category deleted successfully.", "success");
     } catch (err: unknown) {
-      if (err && typeof err === "object" && "response" in err) {
-        const axiosErr = err as any;
-        const productCount = axiosErr.response?.data?.productCount;
-        const message = axiosErr.response?.data?.message;
+      const axiosErr = err as any;
+      const productCount = axiosErr.response?.data?.productCount;
+      const message = axiosErr.response?.data?.message;
 
-        if (productCount > 0) {
-          showtoast(`Cannot delete This category`, message, "error");
-          return;
-        }
+      if (productCount > 0) {
+        showtoast(`Cannot delete This category`, message, "error");
+      } else {
+        showtoast("Error", "Could not delete category.", "error");
       }
-
-      showtoast("Error", "Could not delete category.", "error");
     }
 
     setDelbtnloading(false);
