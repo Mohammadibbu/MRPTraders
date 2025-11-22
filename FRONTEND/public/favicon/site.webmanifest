@@ -1,6 +1,6 @@
 {
   "name": "MRP Global Traders",
-  "short_name": "MRP",
+  "short_name": "MRP Global",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#5F1A35",
-  "background_color": "#5F1A35",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone"
 }
