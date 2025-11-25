@@ -25,15 +25,15 @@ import { motion, AnimatePresence } from "framer-motion";
 // --- Types ---
 interface ProductForm {
   name: string;
-  origin: string[]; // Changed to array
-  health_benefits: string[]; // Changed to array
+  origin: string[];
+  health_benefits: string[];
   category: string;
   photos: { base64: string; size: number }[];
   quality: string;
-  certifications: string[]; // Changed to array
+  certifications: string[];
   description: string;
-  applications: string[]; // Changed to array
-  why_choose_us: string[]; // Changed to array
+  applications: string[];
+  why_choose_us: string[];
   contact_info: string;
   shelf_life: string;
   storage_conditions: string;
@@ -107,7 +107,6 @@ const AddProduct: React.FC = () => {
 
   // --- Handlers ---
 
-  // Handle standard text inputs
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -117,12 +116,10 @@ const AddProduct: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle Array/Tag inputs (Origin, Applications, etc.)
   const handleTagsChange = (name: keyof ProductForm, newTags: string[]) => {
     setFormData((prev) => ({ ...prev, [name]: newTags }));
   };
 
-  // Handle Image Remove
   const handleRemoveImage = (index: number) => {
     setFormData((prev) => ({
       ...prev,
@@ -130,7 +127,6 @@ const AddProduct: React.FC = () => {
     }));
   };
 
-  // Handle Image Upload
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -188,45 +184,96 @@ const AddProduct: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Basic Validations
-    if (!formData.name || !formData.category) {
-      showtoast("Missing Fields", "Please fill in required fields.", "error");
+    // --- 1. String Field Validation (Required) ---
+    // We check each field specifically to provide a custom toast
+    if (!formData.name.trim()) {
+      showtoast("Missing Input", "Product Name is required.", "error");
       return;
     }
-    if (formData.photos.length === 0) {
-      showtoast("Image Required", "Please upload at least one image.", "error");
+    if (!formData.category) {
+      showtoast("Missing Input", "Category is required.", "error");
+      return;
+    }
+    if (!formData.description.trim()) {
+      showtoast("Missing Input", "Description is required.", "error");
+      return;
+    }
+    if (!formData.quality.trim()) {
+      showtoast("Missing Input", "Quality Grade is required.", "error");
+      return;
+    }
+    if (!formData.shelf_life.trim()) {
+      showtoast("Missing Input", "Shelf Life is required.", "error");
+      return;
+    }
+    if (!formData.storage_conditions.trim()) {
+      showtoast("Missing Input", "Storage Conditions are required.", "error");
+      return;
+    }
+    if (!formData.best_shipment_modes.trim()) {
+      showtoast("Missing Input", "Best Shipment Mode is required.", "error");
       return;
     }
 
-    // 2. Specific Array Validations (Min 3 items)
-    const minItems = 3;
-    if (formData.applications.length < minItems) {
-      showtoast("Validation", `Please add at least 3 Applications.`, "error");
+    // --- 2. Array/Tag Validation ---
+
+    // Origin (Must have at least 1)
+    if (formData.origin.length === 0) {
+      showtoast("Missing Input", "Please add at least one Origin.", "error");
       return;
     }
+
+    // Certifications (Must have at least 1)
+    if (formData.certifications.length === 0) {
+      showtoast(
+        "Missing Input",
+        "Please add at least one Certification.",
+        "error"
+      );
+      return;
+    }
+
+    // Min 3 Items validation for detailed arrays
+    const minItems = 3;
+
     if (formData.health_benefits.length < minItems) {
       showtoast(
-        "Validation",
+        "Incomplete Data",
         `Please add at least 3 Health Benefits.`,
         "error"
       );
       return;
     }
+
+    if (formData.applications.length < minItems) {
+      showtoast(
+        "Incomplete Data",
+        `Please add at least 3 Applications.`,
+        "error"
+      );
+      return;
+    }
+
     if (formData.why_choose_us.length < minItems) {
       showtoast(
-        "Validation",
+        "Incomplete Data",
         `Please add at least 3 'Why Choose Us' points.`,
         "error"
       );
       return;
     }
 
+    // Image Validation
+    if (formData.photos.length === 0) {
+      showtoast("Image Required", "Please upload at least one image.", "error");
+      return;
+    }
+
+    // --- 3. Proceed to Submit ---
     setSubmitting(true);
 
-    // 3. Prepare Payload (Arrays are already arrays, no need to split)
     const newProduct = {
       ...formData,
-      // Filter out any empty strings just in case
       origin: formData.origin.filter(Boolean),
       health_benefits: formData.health_benefits.filter(Boolean),
       certifications: formData.certifications.filter(Boolean),
@@ -383,6 +430,8 @@ const AddProduct: React.FC = () => {
                     value={formData.quality}
                     onChange={handleChange}
                     placeholder="e.g. Grade A, Premium"
+                    required
+                    maxLength={30} // 30 Char limit applied here
                   />
                   <Input
                     label="Shelf Life"
@@ -390,6 +439,7 @@ const AddProduct: React.FC = () => {
                     value={formData.shelf_life}
                     onChange={handleChange}
                     placeholder="e.g. 12 Months"
+                    required
                   />
                   <Input
                     label="Storage Conditions"
@@ -397,6 +447,7 @@ const AddProduct: React.FC = () => {
                     value={formData.storage_conditions}
                     onChange={handleChange}
                     placeholder="e.g. Cool, dry place"
+                    required
                   />
                   <Input
                     label="Best Shipment Mode"
@@ -404,6 +455,7 @@ const AddProduct: React.FC = () => {
                     value={formData.best_shipment_modes}
                     onChange={handleChange}
                     placeholder="e.g. Air Freight, Reefer Container"
+                    required
                   />
                 </div>
               </div>
@@ -414,12 +466,14 @@ const AddProduct: React.FC = () => {
                   Detailed Attributes
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Origin (No Min Limit, just tags) */}
+                  {/* Origin */}
                   <TagInput
                     label="Origin"
                     placeholder="Type and press enter (e.g. India)"
                     tags={formData.origin}
                     setTags={(tags) => handleTagsChange("origin", tags)}
+                    helperText="At least 1 required"
+                    minItems={1}
                   />
 
                   {/* Certifications */}
@@ -428,6 +482,8 @@ const AddProduct: React.FC = () => {
                     placeholder="e.g. ISO 22000, FSSAI"
                     tags={formData.certifications}
                     setTags={(tags) => handleTagsChange("certifications", tags)}
+                    helperText="At least 1 required"
+                    minItems={1}
                   />
 
                   {/* Health Benefits (Min 3, Max 7) */}
@@ -480,12 +536,14 @@ const AddProduct: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
                   Contact & Support
                 </h3>
+                {/* NOT REQUIRED */}
                 <Input
                   label="Contact Info"
                   name="contact_info"
                   value={formData.contact_info}
                   onChange={handleChange}
                   placeholder="e.g. sales@mrpglobal.com"
+                  required={false}
                 />
               </div>
 
@@ -493,7 +551,7 @@ const AddProduct: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex justify-between items-center border-b border-gray-100 pb-2">
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Product Images
+                    Product Images <span className="text-red-500">*</span>
                   </h3>
                   <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
                     {formData.photos.length} / 4
@@ -577,7 +635,7 @@ const AddProduct: React.FC = () => {
 
 /* --- Reusable Components --- */
 
-// 1. Basic Input
+// 1. Basic Input (UPDATED: Added maxLength)
 const Input = ({
   label,
   name,
@@ -585,17 +643,26 @@ const Input = ({
   onChange,
   placeholder,
   required = false,
+  maxLength,
 }: any) => (
   <div className="flex flex-col w-full">
-    <label className="block text-sm font-semibold text-gray-700 mb-2">
-      {label} {required && <span className="text-red-500">*</span>}
-    </label>
+    <div className="flex justify-between">
+      <label className="block text-sm font-semibold text-gray-700 mb-2">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      {maxLength && (
+        <span className="text-xs text-gray-400 mt-1">
+          {value.length}/{maxLength}
+        </span>
+      )}
+    </div>
     <input
       type="text"
       name={name}
       value={value}
       onChange={onChange}
       placeholder={placeholder}
+      maxLength={maxLength}
       className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-gray-400"
       required={required}
     />
@@ -641,7 +708,7 @@ const CharCountTextarea = ({
   </div>
 );
 
-// 3. Tag Input (The Mini Button Add System)
+// 3. Tag Input
 interface TagInputProps {
   label: string;
   placeholder: string;
@@ -691,7 +758,8 @@ const TagInput: React.FC<TagInputProps> = ({
     <div className="flex flex-col w-full">
       <div className="flex justify-between items-center mb-2">
         <label className="block text-sm font-semibold text-gray-700">
-          {label}
+          {label}{" "}
+          {minItems && minItems > 0 && <span className="text-red-500">*</span>}
         </label>
         {maxItems && (
           <span

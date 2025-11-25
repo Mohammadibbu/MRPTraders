@@ -342,6 +342,17 @@ const ProductDetails: React.FC = () => {
               Products
             </button>
             <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
+            <button
+              onClick={() =>
+                navigate(
+                  `/products/c/${product?.category.toLowerCase().trim()}`
+                )
+              }
+              className="hover:text-primary transition-colors"
+            >
+              {product?.category?.trim()}
+            </button>
+            <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
             <span className="text-gray-900 truncate max-w-[120px] sm:max-w-xs">
               {product.name}
             </span>

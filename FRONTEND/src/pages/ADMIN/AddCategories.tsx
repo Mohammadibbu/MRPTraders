@@ -186,12 +186,12 @@ const AddCategory: React.FC = () => {
               {/* Name Input */}
               <div className="space-y-1">
                 <label className="block text-sm font-semibold text-gray-700">
-                  Category Name(s) <span className="text-red-500">*</span>
+                  Category Name <span className="text-red-500">*</span>
                 </label>
-                <p className="text-xs text-gray-500 mb-2">
+                {/* <p className="text-xs text-gray-500 mb-2">
                   Separate multiple categories with a comma (e.g., "Fruits,
                   Vegetables")
-                </p>
+                </p> */}
                 <input
                   type="text"
                   name="name"
