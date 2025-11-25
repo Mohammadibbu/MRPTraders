@@ -287,7 +287,6 @@ const AddProduct: React.FC = () => {
       if (response?.data?.success) {
         showtoast("Success!", "Product added successfully.", "success");
         setFormData(initialFormData);
-        // navigate("/admin/products");
       } else {
         showtoast(
           "Error",
@@ -296,11 +295,28 @@ const AddProduct: React.FC = () => {
         );
       }
     } catch (err: any) {
-      showtoast(
-        "Error",
-        err?.response?.data?.message || "Try again later.",
-        "error"
-      );
+      const errorMessage =
+        typeof err === "object" && err && "response" in err
+          ? (err as any)?.response?.data?.message
+          : null;
+
+      const authTokenMissing =
+        errorMessage === "Authorization token is required";
+
+      if (authTokenMissing) {
+        showtoast(
+          "Session Expired",
+          "Your session has expired. Please log in again.",
+          "error"
+        );
+        setTimeout(() => navigate("/admin/login"), 5000);
+      } else {
+        showtoast(
+          "Error",
+          err?.response?.data?.message || "Try again later.",
+          "error"
+        );
+      }
     } finally {
       setSubmitting(false);
     }

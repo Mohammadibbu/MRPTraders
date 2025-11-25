@@ -141,7 +141,24 @@ const ManageProducts: React.FC = () => {
       sessionStorage.setItem("categories_count", "0");
       showtoast("Success", "Product deleted successfully.", "success");
     } catch (err) {
-      showtoast("Error", "Could not delete product.", "error");
+      const errorMessage =
+        typeof err === "object" && err && "response" in err
+          ? (err as any)?.response?.data?.message
+          : null;
+
+      const authTokenMissing =
+        errorMessage === "Authorization token is required";
+
+      if (authTokenMissing) {
+        showtoast(
+          "Session Expired",
+          "Your session has expired. Please log in again.",
+          "error"
+        );
+        setTimeout(() => navigate("/admin/login"), 5000);
+      } else {
+        showtoast("Error", "Could not delete product.", "error");
+      }
     }
 
     setDelbtnloading(false);

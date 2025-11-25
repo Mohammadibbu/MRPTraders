@@ -141,13 +141,29 @@ const AddCategory: React.FC = () => {
       );
 
       setFormData(initialFormData);
-      // navigate("/admin/categories"); // Optional: redirect after success
-    } catch (e: any) {
-      showtoast(
-        "Error",
-        e?.response?.data?.message || "Failed to add categories.",
-        "error"
-      );
+    } catch (err: any) {
+      const errorMessage =
+        typeof err === "object" && err && "response" in err
+          ? (err as any)?.response?.data?.message
+          : null;
+
+      const authTokenMissing =
+        errorMessage === "Authorization token is required";
+
+      if (authTokenMissing) {
+        showtoast(
+          "Session Expired",
+          "Your session has expired. Please log in again.",
+          "error"
+        );
+        setTimeout(() => navigate("/admin/login"), 5000);
+      } else {
+        showtoast(
+          "Error",
+          err?.response?.data?.message || "Failed to add categories.",
+          "error"
+        );
+      }
     } finally {
       setSubmitting(false);
     }

@@ -132,9 +132,23 @@ const ManageCategories: React.FC = () => {
       const axiosErr = err as any;
       const productCount = axiosErr.response?.data?.productCount;
       const message = axiosErr.response?.data?.message;
+      const errorMessage =
+        typeof err === "object" && err && "response" in err
+          ? (err as any)?.response?.data?.message
+          : null;
+
+      const authTokenMissing =
+        errorMessage === "Authorization token is required";
 
       if (productCount > 0) {
         showtoast(`Cannot delete This category`, message, "error");
+      } else if (authTokenMissing) {
+        showtoast(
+          "Session Expired",
+          "Your session has expired. Please log in again.",
+          "error"
+        );
+        setTimeout(() => navigate("/admin/login"), 5000);
       } else {
         showtoast("Error", "Could not delete category.", "error");
       }
