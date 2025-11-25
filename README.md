@@ -68,8 +68,8 @@ The goal was to build a **clean, trustworthy, and mobile-friendly platform** tai
 |---------|-------|
 | **Frontend** | React, Tailwind CSS |
 | **Backend**  | Node.js, Express |
-| **Database** | Cloud database (Firebase/MongoDB) |
-| **Deployment** | Cloud hosting (Vercel / Render) |
+| **Database** | Cloud database (Firebase) |
+| **Deployment** | Cloud hosting ( Render) |
 
 ---
 
