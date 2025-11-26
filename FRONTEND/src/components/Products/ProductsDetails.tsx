@@ -20,7 +20,8 @@ import {
   Loader2,
   X,
   ChevronLeft,
-  ZoomIn, // Added for the hover effect
+  ZoomIn,
+  Check,
 } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -32,7 +33,6 @@ import JoinUsSection from "../Home/JoinUsSection";
 import { contactDetails } from "../../utils/ContactDetails";
 
 // --- INTERNAL COMPONENT: LIGHTBOX ---
-// Handles the full-screen image viewing experience
 interface LightboxProps {
   isOpen: boolean;
   onClose: () => void;
@@ -48,23 +48,17 @@ const ImageLightbox: React.FC<LightboxProps> = ({
   currentIndex,
   onIndexChange,
 }) => {
-  // 1. SCROLL LOCK LOGIC
   useEffect(() => {
     if (isOpen) {
-      // Prevent scrolling on body when lightbox is open
       document.body.style.overflow = "hidden";
     } else {
-      // Re-enable scrolling when closed
       document.body.style.overflow = "unset";
     }
-
-    // Cleanup function to ensure scrolling is re-enabled if component unmounts
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
-  // 2. KEYBOARD NAVIGATION LOGIC
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -91,10 +85,9 @@ const ImageLightbox: React.FC<LightboxProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-secondaryDark/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-secondaryDark/90 backdrop-blur-md p-4"
           onClick={onClose}
         >
-          {/* Close Button */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-50 backdrop-blur-md"
@@ -102,26 +95,24 @@ const ImageLightbox: React.FC<LightboxProps> = ({
             <X className="w-6 h-6" />
           </button>
 
-          {/* Content Wrapper */}
           <div
             className="relative w-full max-w-7xl h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Previous Button */}
             {images.length > 1 && (
               <button
-                onClick={() =>
+                onClick={(e) => {
+                  e.stopPropagation();
                   onIndexChange(
                     currentIndex === 0 ? images.length - 1 : currentIndex - 1
-                  )
-                }
+                  );
+                }}
                 className="absolute left-0 sm:-left-4 p-2 sm:p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all z-20"
               >
                 <ChevronLeft className="w-8 h-8 sm:w-12 sm:h-12" />
               </button>
             )}
 
-            {/* Main Image */}
             <motion.div
               key={currentIndex}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -137,21 +128,20 @@ const ImageLightbox: React.FC<LightboxProps> = ({
               />
             </motion.div>
 
-            {/* Next Button */}
             {images.length > 1 && (
               <button
-                onClick={() =>
+                onClick={(e) => {
+                  e.stopPropagation();
                   onIndexChange(
                     currentIndex === images.length - 1 ? 0 : currentIndex + 1
-                  )
-                }
+                  );
+                }}
                 className="absolute right-0 sm:-right-4 p-2 sm:p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all z-20"
               >
                 <ChevronRight className="w-8 h-8 sm:w-12 sm:h-12" />
               </button>
             )}
 
-            {/* Counter Badge */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 backdrop-blur-md rounded-full text-white/90 text-sm font-medium border border-white/10">
               {currentIndex + 1} / {images.length}
             </div>
@@ -170,19 +160,19 @@ const ProductDetails: React.FC = () => {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageErrorIndexes, setImageErrorIndexes] = useState<number[]>([]);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false); // State for Lightbox
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [productid]);
 
-  // --- 1. Loading State (Skeleton UI) ---
+  // --- 1. Loading State ---
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F9FAFB] pt-20 px-4 sm:px-6 lg:px-8 animate-pulse">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8">
-          {/* Left Column Skeleton */}
           <div className="lg:col-span-7 space-y-4">
             <div className="bg-gray-200 rounded-3xl aspect-[4/3] w-full"></div>
             <div className="flex gap-3 overflow-hidden">
@@ -193,22 +183,10 @@ const ProductDetails: React.FC = () => {
                 ></div>
               ))}
             </div>
-            <div className="h-40 bg-gray-200 rounded-3xl mt-8"></div>
           </div>
-          {/* Right Column Skeleton */}
           <div className="lg:col-span-5 space-y-6">
             <div className="h-8 bg-gray-200 rounded-full w-1/3"></div>
             <div className="h-12 bg-gray-200 rounded-lg w-3/4"></div>
-            <div className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-full"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-              <div className="h-4 bg-gray-200 rounded w-4/6"></div>
-            </div>
-            <div className="grid grid-cols-2 gap-3 pt-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-24 bg-gray-200 rounded-2xl"></div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -226,15 +204,11 @@ const ProductDetails: React.FC = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
             Catalog Unavailable
           </h2>
-          <p className="text-gray-500 mb-8 text-lg">
-            We couldn't load the product data. Please check your connection.
-          </p>
           <button
             onClick={() => window.location.reload()}
             className="w-full bg-gray-900 hover:bg-black text-white px-6 py-4 rounded-xl transition-all font-semibold flex items-center justify-center"
           >
-            <Loader2 className="mr-2 w-5 h-5" />
-            Reload Page
+            <Loader2 className="mr-2 w-5 h-5" /> Reload Page
           </button>
         </div>
       </div>
@@ -256,26 +230,15 @@ const ProductDetails: React.FC = () => {
               <SearchX className="w-10 h-10 text-gray-400" />
             </div>
           </div>
-
-          <div className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
-              Product Not Found
-            </h1>
-            <p className="text-lg text-gray-600 max-w-md mx-auto leading-relaxed">
-              The product you are looking for might have been removed or is
-              temporarily unavailable.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <button
-              onClick={() => navigate("/products")}
-              className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 hover:-translate-y-1"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Browse Catalog
-            </button>
-          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+            Product Not Found
+          </h1>
+          <button
+            onClick={() => navigate("/products")}
+            className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all shadow-lg"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" /> Browse Catalog
+          </button>
         </div>
       </div>
     );
@@ -309,7 +272,8 @@ const ProductDetails: React.FC = () => {
       }
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -317,15 +281,18 @@ const ProductDetails: React.FC = () => {
     setImageErrorIndexes((prev) => [...prev, index]);
   };
 
-  const getOriginString = (origin: string | string[]) => {
-    if (Array.isArray(origin)) return origin.join(", ");
-    return origin;
+  // Helper to parse origin safely (string or array)
+  const getOrigins = () => {
+    if (Array.isArray(product.origin)) return product.origin;
+    if (typeof product.origin === "string") return product.origin.split(",");
+    return ["Unknown"];
   };
+  const originList = getOrigins();
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
       {/* --- Breadcrumb Navigation --- */}
-      <div className="bg-white/80 border-b sticky top-0 z-40 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 transition-all">
+      <div className="bg-white/80 border-b sticky top-0 z-40 backdrop-blur-md transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <nav className="flex items-center text-sm text-gray-500 font-medium">
             <button
@@ -334,6 +301,7 @@ const ProductDetails: React.FC = () => {
             >
               <Home className="w-4 h-4" />
             </button>
+
             <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
             <button
               onClick={() => navigate("/products")}
@@ -350,44 +318,68 @@ const ProductDetails: React.FC = () => {
               }
               className="hover:text-primary transition-colors"
             >
-              {product?.category?.trim()}
+              {product?.category || "category"}
             </button>
             <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
-            <span className="text-gray-900 truncate max-w-[120px] sm:max-w-xs">
+            <span className="text-gray-900 truncate max-w-[120px] sm:max-w-xs font-semibold">
               {product.name}
             </span>
           </nav>
-          <button
-            onClick={handleShare}
-            className="p-2.5 text-gray-500 hover:text-primary hover:bg-primary/5 rounded-full transition-all active:scale-95"
-            title="Share Product"
-          >
-            <Share2 className="w-5 h-5" />
-          </button>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-10 pb-10 ">
+      {/* --- Hero Section --- */}
+      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden h-56 sm:h-80 flex items-center justify-center">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={product.photos[selectedImageIndex]?.base64}
+            alt={product?.name ?? "Product"}
+            className="w-full h-full object-cover opacity-50"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-gray-900/30" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 drop-shadow-lg px-2">
+              Premium{" "}
+              <span className="text-primary block sm:inline">
+                {product?.name}
+              </span>
+            </h1>
+
+            <p className="text-sm sm:text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium px-4">
+              Explore our finest quality {product.name}. A premium{" "}
+              {product.category?.toLowerCase()} sourced directly from{" "}
+              {Array.isArray(product.origin)
+                ? product.origin[0]
+                : product.origin}
+              , known for its purity and taste.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-10 pb-10">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           {/* --- LEFT COLUMN: Gallery & Features --- */}
           <div className="lg:col-span-7 space-y-8">
+            {/* Mobile Header */}
             <div className="space-y-4 block sm:hidden">
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="text-primary font-bold text-[10px] sm:text-xs tracking-wider uppercase bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
                   {product.category}
                 </span>
-                {product.certifications?.includes("FSSAI") && (
-                  <span className="text-gray-600 font-medium text-[10px] sm:text-xs flex items-center bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg shadow-sm">
-                    <Shield className="w-3 h-3 mr-1.5 text-green-600" /> FSSAI
-                    Certified
-                  </span>
-                )}
               </div>
-
-              <h1 className="text-3xl  font-extrabold text-gray-900 tracking-tight leading-[1.1]">
+              <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none">
                 {product.name}
               </h1>
             </div>
+
             {/* Main Gallery Component */}
             <div>
               <motion.div
@@ -396,12 +388,10 @@ const ProductDetails: React.FC = () => {
                 transition={{ duration: 0.5 }}
                 className="bg-white rounded-[2rem] p-2 sm:p-8 shadow-xl shadow-gray-200/50 border border-white relative overflow-hidden group"
               >
-                {/* Main Image Container - Clickable */}
                 <div
                   onClick={() => setIsLightboxOpen(true)}
                   className="aspect-[4/3] flex items-center justify-center bg-gray-50/50 rounded-3xl overflow-hidden cursor-zoom-in relative"
                 >
-                  {/* Hover Zoom Hint Overlay */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
                     <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
                       <ZoomIn className="w-6 h-6 text-gray-800" />
@@ -427,27 +417,15 @@ const ProductDetails: React.FC = () => {
                   </AnimatePresence>
                 </div>
 
-                {/* Floating Badges */}
                 <div className="absolute top-6 left-6 flex flex-col gap-2 z-10 pointer-events-none">
                   {product.availability && (
                     <motion.span
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      className="px-3 py-1.5 bg-emerald-500/90 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide rounded-full shadow-lg shadow-emerald-500/20 flex items-center gap-1.5 w-fit"
+                      className="px-3 py-1.5 bg-emerald-500/90 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide rounded-full shadow-lg flex items-center gap-1.5 w-fit"
                     >
                       <CheckCircle2 className="w-3 h-3" />
                       {product.availability}
-                    </motion.span>
-                  )}
-                  {product.quality && (
-                    <motion.span
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                      className="px-3 py-2 bg-secondaryDark backdrop-blur-md text-white text-[10px] sm:text-xs font-bold uppercase tracking-wide rounded-full shadow-lg shadow-indigo-500/20 flex items-center gap-1.5 w-fit"
-                    >
-                      <Award className="w-3 h-3" />
-                      {product.quality}
                     </motion.span>
                   )}
                 </div>
@@ -469,7 +447,7 @@ const ProductDetails: React.FC = () => {
                       src={
                         imageErrorIndexes.includes(i)
                           ? "/Images/fallback.png"
-                          : photo.base64
+                          : photo?.base64
                       }
                       alt={`Thumbnail ${i + 1}`}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -491,7 +469,6 @@ const ProductDetails: React.FC = () => {
 
             {/* Detailed Info Cards */}
             <div className="grid md:grid-cols-2 gap-5">
-              {/* Applications */}
               {product.applications && product.applications.length > 0 && (
                 <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100 h-full">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
@@ -504,7 +481,7 @@ const ProductDetails: React.FC = () => {
                     {product.applications.map((app, i) => (
                       <li
                         key={i}
-                        className="flex items-start text-gray-600 text-sm sm:text-base leading-relaxed group"
+                        className="flex items-start text-gray-600 text-sm sm:text-base leading-relaxed group hyphens-none"
                       >
                         <span className="w-1.5 h-1.5 bg-blue-300 rounded-full mt-2 mr-3 shrink-0 group-hover:bg-blue-500 transition-colors"></span>
                         {app}
@@ -514,7 +491,6 @@ const ProductDetails: React.FC = () => {
                 </div>
               )}
 
-              {/* Health Benefits */}
               {product.health_benefits && (
                 <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100 h-full">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
@@ -530,7 +506,7 @@ const ProductDetails: React.FC = () => {
                     ).map((benefit, i) => (
                       <li
                         key={i}
-                        className="flex items-start text-gray-600 text-sm sm:text-base leading-relaxed"
+                        className="flex items-start text-gray-600 text-sm sm:text-base leading-relaxed hyphens-none"
                       >
                         <CheckCircle2 className="w-4 h-4 text-green-500 mr-3 mt-1 shrink-0" />
                         {benefit}
@@ -543,7 +519,7 @@ const ProductDetails: React.FC = () => {
           </div>
 
           {/* --- RIGHT COLUMN: Info & Specs (Sticky on Desktop) --- */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28 space-y-8">
+          <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-6">
             {/* Product Header */}
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-2.5">
@@ -558,78 +534,80 @@ const ProductDetails: React.FC = () => {
                 )}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1]">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none hidden sm:block">
                 {product.name}
               </h1>
 
               <div className="prose prose-gray">
-                <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line break-words hyphens-none">
                   {product.description}
                 </p>
               </div>
             </div>
 
-            {/* Specs Grid - Modern Card Style */}
+            {/* Specs Grid */}
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {/* Origin */}
-              <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <MapPin className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
+              {/* Origin - FIXED: Uses col-span-2 to handle many origins & Theme Color */}
+              <div className="col-span-2 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                <div className="flex items-center gap-2 mb-3">
+                  <MapPin className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Origin
                   </span>
                 </div>
-                <p
-                  className="text-gray-900 font-semibold text-sm sm:text-base leading-relaxed"
-                  title={getOriginString(product.origin)}
-                >
-                  {getOriginString(product.origin)}
-                </p>
+                <div className="flex flex-wrap gap-2">
+                  {originList.map((origin: any, idx: any) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center px-3 py-1 rounded-lg bg-primary/5 text-primary text-sm font-medium border border-primary/10 break-normal whitespace-nowrap"
+                    >
+                      {origin.trim()}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               {/* Shelf Life */}
-              <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
+              <div className="h-full bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col justify-center">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Shelf Life
                   </span>
                 </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base hyphens-none">
                   {product.shelf_life || "N/A"}
                 </p>
               </div>
 
               {/* Storage */}
-              <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
+              <div className="h-full bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col justify-center">
                 <div className="flex items-center gap-2 mb-2">
                   <Thermometer className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Storage
                   </span>
                 </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight ">
+                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight hyphens-none">
                   {product.storage_conditions || "Standard"}
                 </p>
               </div>
 
-              {/* Shipment */}
-              <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
+              {/* Logistics */}
+              <div className="col-span-2 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
                 <div className="flex items-center gap-2 mb-2">
                   <Ship className="w-4 h-4 text-teal-500 group-hover:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Logistics
+                    Logistics & Shipment
                   </span>
                 </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight ">
-                  {product.best_shipment_modes || "Flexible"}
+                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight hyphens-none">
+                  {product.best_shipment_modes || "Flexible Shipment Available"}
                 </p>
               </div>
             </div>
 
-            {/* "Why Choose Us" */}
-            <div className="bg-[#1A1C23] rounded-3xl p-6 text-white shadow-xl shadow-gray-200 relative overflow-hidden isolate">
-              {/* Decorative Background Elements */}
+            <div className="bg-[#1A1C23] rounded-3xl p-6 text-white shadow-xl shadow-gray-200 relative overflow-hidden isolate mt-4">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary/20 rounded-full -ml-10 -mb-10 blur-3xl"></div>
 
@@ -649,7 +627,7 @@ const ProductDetails: React.FC = () => {
                     <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center mr-3 shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-300 border border-white/10 shadow-lg">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-gray-300 text-sm leading-relaxed pt-0.5 group-hover:text-white transition-colors">
+                    <span className="text-gray-300 text-sm leading-relaxed pt-0.5 group-hover:text-white transition-colors hyphens-none">
                       {feature}
                     </span>
                   </div>
@@ -657,63 +635,67 @@ const ProductDetails: React.FC = () => {
               </div>
             </div>
 
-            {/* Certifications List */}
-            {product.certifications && product.certifications.length > 0 && (
-              <div className="pt-6 border-t border-gray-200">
-                <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-3">
-                  Certified By
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {product.certifications.map((cert, i) => (
-                    <span
-                      key={i}
-                      className="inline-flex items-center px-3.5 py-2 rounded-xl bg-white text-gray-700 font-medium text-xs border border-gray-200 shadow-sm hover:border-primary/30 hover:text-primary transition-colors cursor-default"
-                    >
-                      {cert}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Desktop Action Buttons (Hidden on Mobile) */}
-            <div className="hidden lg:grid grid-cols-2 gap-4 pt-4">
+            {/* Desktop Action Buttons */}
+            <div className="hidden lg:grid grid-cols-[1fr_1fr_auto] gap-3 pt-4">
               <button
                 onClick={handleCallUs}
-                className="group border-2 border-gray-200 bg-white text-gray-700 px-6 py-4 rounded-2xl font-bold hover:border-gray-300 hover:bg-gray-50 transition-all flex items-center justify-center shadow-sm"
+                className="group border-2 border-gray-200 bg-white text-gray-700 px-4 py-4 rounded-2xl font-bold hover:border-gray-300 hover:bg-gray-50 transition-all flex items-center justify-center shadow-sm"
               >
-                <Phone className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform text-gray-500 group-hover:text-gray-900" />
-                Call Us
+                <Phone className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform text-gray-500 group-hover:text-gray-900" />
+                Call
               </button>
+
               <button
                 onClick={handleContactUs}
-                className="group bg-primary text-white px-6 py-4 rounded-2xl font-bold hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 hover:shadow-primary/30 flex items-center justify-center hover:-translate-y-0.5"
+                className="group bg-primary text-white px-4 py-4 rounded-2xl font-bold hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 hover:shadow-primary/30 flex items-center justify-center hover:-translate-y-0.5 whitespace-nowrap"
               >
-                <Mail className="w-5 h-5 mr-3 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-                Request Quote
+                <Mail className="w-5 h-5 mr-2 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
+                Get Quote
+              </button>
+
+              <button
+                onClick={handleShare}
+                className="group bg-gray-100 text-gray-600 px-4 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center"
+                title="Share this product"
+              >
+                {copied ? (
+                  <Check className="w-6 h-6 text-green-600" />
+                ) : (
+                  <Share2 className="w-6 h-6" />
+                )}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* --- MOBILE STICKY CTA BAR (Visible only on small screens) --- */}
-      <div className="fixed bottom-0 left-0 z-90 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-4 lg:hidden  pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
-        <div className="grid grid-cols-[1fr_2fr] gap-3 max-w-md mx-auto">
+      {/* --- MOBILE STICKY CTA BAR --- */}
+      <div className="fixed bottom-0 left-0 z-50 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-3 lg:hidden pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div className="grid grid-cols-[auto_1fr_1.5fr] gap-2 max-w-md mx-auto">
+          <button
+            onClick={handleShare}
+            className="flex flex-col items-center justify-center px-4 rounded-xl text-gray-600 bg-gray-50 hover:bg-gray-100 active:scale-95 transition-transform border border-gray-200"
+          >
+            {copied ? (
+              <Check className="w-5 h-5 text-green-600" />
+            ) : (
+              <Share2 className="w-5 h-5 text-gray-900" />
+            )}
+          </button>
+
           <button
             onClick={handleCallUs}
-            className="flex flex-col items-center justify-center py-1 rounded-xl text-gray-600 bg-gray-50 hover:bg-gray-100 active:scale-95 transition-transform border border-gray-200"
+            className="flex items-center justify-center py-3 rounded-xl text-gray-700 bg-gray-50 hover:bg-gray-100 active:scale-95 transition-transform border border-gray-200 font-bold text-sm"
           >
-            <Phone className="w-5 h-5 mb-1 text-gray-900" />
-            <span className="text-[10px] font-bold uppercase tracking-wide text-gray-500">
-              Call
-            </span>
+            <Phone className="w-4 h-4 mr-2" />
+            Call
           </button>
+
           <button
             onClick={handleContactUs}
-            className="bg-primary text-white rounded-xl py-1 font-bold shadow-lg shadow-primary/20 flex items-center justify-center active:scale-95 transition-transform hover:bg-primary/90"
+            className="bg-primary text-white rounded-xl py-3 font-bold shadow-lg shadow-primary/20 flex items-center justify-center active:scale-95 transition-transform hover:bg-primary/90 text-sm"
           >
-            <Mail className="w-5 h-5 mr-2" />
+            <Mail className="w-4 h-4 mr-2" />
             Get Quote
           </button>
         </div>
@@ -725,7 +707,6 @@ const ProductDetails: React.FC = () => {
         <ImportExportSection />
         <div className="relative">
           <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50 pointer-events-none"></div>
-
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent shadow-[0_1px_12px_0_rgba(0,0,0,0.1)]" />
           <Accordion count={3} className="bg-secondarylight" />
         </div>
