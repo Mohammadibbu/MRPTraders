@@ -169,24 +169,71 @@ const ProductDetails: React.FC = () => {
   }, [productid]);
 
   // --- 1. Loading State ---
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F9FAFB] pt-20 px-4 sm:px-6 lg:px-8 animate-pulse">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-7 space-y-4">
-            <div className="bg-gray-200 rounded-3xl aspect-[4/3] w-full"></div>
-            <div className="flex gap-3 overflow-hidden">
+      <div className="min-h-screen bg-[#F9FAFB] pt-24 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 lg:gap-16">
+          {/* --- Left Column Skeleton (Gallery) --- */}
+          <div className="lg:col-span-7 space-y-6 animate-pulse">
+            {/* Main Image Placeholder */}
+            <div className="bg-gray-200 rounded-[2rem] aspect-[4/3] w-full shadow-sm"></div>
+
+            {/* Thumbnails Row */}
+            <div className="flex gap-4 overflow-hidden">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="w-20 h-20 bg-gray-200 rounded-2xl shrink-0"
+                  className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-200 rounded-2xl shrink-0 border border-gray-100"
                 ></div>
               ))}
             </div>
+
+            {/* Info Cards (Health/Applications) Placeholder */}
+            <div className="grid md:grid-cols-2 gap-5 pt-4">
+              <div className="h-48 bg-gray-200 rounded-3xl"></div>
+              <div className="h-48 bg-gray-200 rounded-3xl"></div>
+            </div>
           </div>
-          <div className="lg:col-span-5 space-y-6">
-            <div className="h-8 bg-gray-200 rounded-full w-1/3"></div>
-            <div className="h-12 bg-gray-200 rounded-lg w-3/4"></div>
+
+          {/* --- Right Column Skeleton (Details) --- */}
+          <div className="lg:col-span-5 space-y-8 animate-pulse">
+            {/* Header Section */}
+            <div className="space-y-4">
+              {/* Category Pill */}
+              <div className="h-6 w-24 bg-gray-200 rounded-full"></div>
+
+              {/* Title */}
+              <div className="h-10 w-3/4 bg-gray-200 rounded-xl"></div>
+
+              {/* Description Lines */}
+              <div className="space-y-3 pt-2">
+                <div className="h-4 bg-gray-200 rounded-full w-full"></div>
+                <div className="h-4 bg-gray-200 rounded-full w-[90%]"></div>
+                <div className="h-4 bg-gray-200 rounded-full w-[95%]"></div>
+              </div>
+            </div>
+
+            {/* Specs Grid Skeleton */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className={`h-24 bg-gray-200 rounded-2xl ${
+                    i === 1 || i === 4 ? "col-span-2" : ""
+                  }`}
+                ></div>
+              ))}
+            </div>
+
+            {/* Why Choose Us Skeleton */}
+            <div className="h-40 bg-gray-800/10 rounded-3xl"></div>
+
+            {/* Buttons Skeleton */}
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="h-14 bg-gray-200 rounded-2xl"></div>
+              <div className="h-14 bg-gray-300 rounded-2xl"></div>
+            </div>
           </div>
         </div>
       </div>
