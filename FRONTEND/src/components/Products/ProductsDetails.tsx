@@ -48,6 +48,7 @@ const ImageLightbox: React.FC<LightboxProps> = ({
   currentIndex,
   onIndexChange,
 }) => {
+  // Lock body scroll
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -59,6 +60,7 @@ const ImageLightbox: React.FC<LightboxProps> = ({
     };
   }, [isOpen]);
 
+  // Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -78,6 +80,21 @@ const ImageLightbox: React.FC<LightboxProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, images.length, currentIndex, onIndexChange, onClose]);
 
+  // Handle Swipe Gesture
+  const onDragEnd = (
+    event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
+    const threshold = 50; // Minimum distance to swipe
+    if (info.offset.x > threshold) {
+      // Swiped Right -> Go to Previous
+      onIndexChange(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
+    } else if (info.offset.x < -threshold) {
+      // Swiped Left -> Go to Next
+      onIndexChange(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -85,20 +102,23 @@ const ImageLightbox: React.FC<LightboxProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-secondaryDark/90 backdrop-blur-md p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md"
           onClick={onClose}
         >
+          {/* Close Button - Top Right */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-50 backdrop-blur-md"
+            className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-[110] backdrop-blur-sm"
           >
-            <X className="w-6 h-6" />
+            <X className="w-6 h-6 md:w-8 md:h-8" />
           </button>
 
+          {/* Container */}
           <div
-            className="relative w-full max-w-7xl h-full flex items-center justify-center"
+            className="relative w-full h-full flex items-center justify-center overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Left Arrow - Hidden on small mobile if you prefer swipe only, but kept here for accessibility */}
             {images.length > 1 && (
               <button
                 onClick={(e) => {
@@ -107,27 +127,35 @@ const ImageLightbox: React.FC<LightboxProps> = ({
                     currentIndex === 0 ? images.length - 1 : currentIndex - 1
                   );
                 }}
-                className="absolute left-0 sm:-left-4 p-2 sm:p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all z-20"
+                className="absolute left-2 md:left-8 p-3 text-white bg-black/40 hover:bg-black/60 rounded-full transition-all z-[110] backdrop-blur-sm border border-white/10 group"
+                aria-label="Previous image"
               >
-                <ChevronLeft className="w-8 h-8 sm:w-12 sm:h-12" />
+                <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform" />
               </button>
             )}
 
+            {/* Image Wrapper with Swipe Support */}
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, x: 0, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full h-full flex items-center justify-center p-4"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={onDragEnd}
+              className="relative flex items-center justify-center w-full h-full px-2 md:px-20"
+              style={{ touchAction: "none" }}
             >
               <img
                 src={images[currentIndex]?.base64 || "/Images/fallback.png"}
-                alt="Full screen view"
-                className="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-lg select-none"
+                alt={`View ${currentIndex + 1}`}
+                className="max-w-full max-h-[80vh] md:max-h-[90vh] object-contain shadow-2xl rounded-sm select-none pointer-events-none"
               />
             </motion.div>
 
+            {/* Right Arrow */}
             {images.length > 1 && (
               <button
                 onClick={(e) => {
@@ -136,13 +164,15 @@ const ImageLightbox: React.FC<LightboxProps> = ({
                     currentIndex === images.length - 1 ? 0 : currentIndex + 1
                   );
                 }}
-                className="absolute right-0 sm:-right-4 p-2 sm:p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all z-20"
+                className="absolute right-2 md:right-8 p-3 text-white bg-black/40 hover:bg-black/60 rounded-full transition-all z-[110] backdrop-blur-sm border border-white/10 group"
+                aria-label="Next image"
               >
-                <ChevronRight className="w-8 h-8 sm:w-12 sm:h-12" />
+                <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:scale-110 transition-transform" />
               </button>
             )}
 
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 backdrop-blur-md rounded-full text-white/90 text-sm font-medium border border-white/10">
+            {/* Counter Badge */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-black/60 backdrop-blur-md rounded-full text-white/90 text-xs md:text-sm font-medium border border-white/10 z-[110]">
               {currentIndex + 1} / {images.length}
             </div>
           </div>
@@ -376,7 +406,7 @@ const ProductDetails: React.FC = () => {
       </div>
 
       {/* --- Hero Section --- */}
-      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden h-56 sm:h-80 flex items-center justify-center">
+      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden h-72 sm:h-80 flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <img
             src={product.photos[selectedImageIndex]?.base64}
