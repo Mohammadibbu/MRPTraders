@@ -747,7 +747,7 @@ const ProductDetails: React.FC = () => {
       </div>
 
       {/* --- MOBILE STICKY CTA BAR --- */}
-      <div className="fixed bottom-0 left-0 z-50 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-3 lg:hidden pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+      <div className="fixed bottom-0 left-0 z-60 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 px-3 py-5 lg:hidden pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="grid grid-cols-[auto_1fr_1.5fr] gap-2 max-w-md mx-auto">
           <button
             onClick={handleShare}

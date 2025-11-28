@@ -7,7 +7,7 @@ export const CacheVersionUpdate = async () => {
     const randomPart = Math.random().toString(36).substring(2, 8);
     const uniqueHash = `${timestampHash}ibbu${randomPart}`;
 
-    console.log("Generated New Hash:", uniqueHash);
+    // console.log("Generated New Hash:", uniqueHash);
 
     // Firestore Admin reference
     const trackerRef = db.collection("metadata").doc("cacheVersion");
@@ -20,10 +20,10 @@ export const CacheVersionUpdate = async () => {
       { merge: true }
     );
 
-    console.log("✅ Version updated successfully in Firestore.");
+    // console.log("✅ Version updated successfully in Firestore.");
     return uniqueHash;
   } catch (error) {
-    console.error("❌ Error updating version:", error);
+    // console.error("❌ Error updating version:", error);
     throw error;
   }
 };
