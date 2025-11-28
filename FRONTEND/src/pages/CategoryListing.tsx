@@ -45,6 +45,7 @@ const CategoryListings: React.FC = () => {
     return currentCategories.map((cat) => ({
       id: cat.id,
       name: cat.name,
+      itemCount: cat.productIds?.length || 0,
       // Added description here so it's available if CategoryCard needs it
       description: cat.description || "Explore our premium collection.",
       // Use the first image or a fallback

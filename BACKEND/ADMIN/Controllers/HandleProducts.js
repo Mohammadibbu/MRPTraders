@@ -96,74 +96,50 @@ const addProductCategory = async (req, res) => {
   try {
     const { name, description, photos } = req.body;
 
-    // Validate name
+    // Validate single category name
     if (!name || !name.trim()) {
       return res.status(400).json({
-        message: "Category name required",
+        message: "Category name is required",
         success: false,
       });
     }
 
-    // Convert comma-separated category names → array
-    const categoriesToAdd = name
-      .split(",")
-      .map((cat) => cat.trim())
-      .filter(Boolean);
+    const catName = name.trim();
+    const docId = catName.toLowerCase(); // Unique ID based on category
+    const categoryRef = db.collection("categories").doc(docId);
 
-    if (categoriesToAdd.length === 0) {
+    // Check if category already exists
+    const snapshot = await categoryRef.get();
+    if (snapshot.exists) {
       return res.status(400).json({
-        message: "No valid categories provided",
+        message: "Category already exists",
+        category: snapshot.data(),
         success: false,
       });
     }
 
-    const addedCategories = [];
-    const skipped = [];
+    // Create new category
+    const newCategory = {
+      id: docId,
+      name: catName,
+      description: description || "",
+      photos: photos || [],
+      productIds: [],
+      createdAt: new Date(),
+    };
 
-    for (const catName of categoriesToAdd) {
-      const docId = catName.toLowerCase().trim();
-      const categoryRef = db.collection("categories").doc(docId);
+    await categoryRef.set(newCategory);
 
-      const snapshot = await categoryRef.get();
-
-      if (snapshot.exists) {
-        skipped.push(catName);
-        continue; // Skip existing categories
-      }
-
-      const newCategory = {
-        id: docId,
-        name: catName,
-        description: description || "",
-        photos: photos || [],
-        productIds: [],
-        createdAt: new Date(),
-      };
-
-      await categoryRef.set(newCategory);
-      addedCategories.push(newCategory);
-    }
-
-    // If no category was added
-    if (addedCategories.length === 0) {
-      return res.status(400).json({
-        message: "All categories already exist",
-        skipped,
-        success: false,
-      });
-    }
-
-    // Update cache version after successful additions
+    // Update cache version after successful addition
     await CacheVersionUpdate();
 
     return res.status(201).json({
-      message: "Categories added successfully",
-      added: addedCategories,
-      skipped,
+      message: "Category added successfully",
+      category: newCategory,
       success: true,
     });
   } catch (error) {
-    console.error("Error adding categories:", error);
+    console.error("Error adding category:", error);
     return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
