@@ -19,7 +19,6 @@ const CategoryListings: React.FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
-  // Filter categories based on search term
   const filteredCategories = useMemo(() => {
     if (!categories) return [];
     if (!searchTerm) return categories;
@@ -28,7 +27,6 @@ const CategoryListings: React.FC = () => {
     );
   }, [categories, searchTerm]);
 
-  // Reset pagination when search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
@@ -40,17 +38,16 @@ const CategoryListings: React.FC = () => {
     return filteredCategories.slice(start, start + CATEGORIES_PER_PAGE);
   }, [filteredCategories, currentPage]);
 
-  // Map data to the format expected by CategoryCard
   const categoriesToDisplay = useMemo(() => {
     return currentCategories.map((cat) => ({
       id: cat.id,
       name: cat.name,
       itemCount: cat.productIds?.length || 0,
-      // Added description here so it's available if CategoryCard needs it
+
       description: cat.description || "Explore our premium collection.",
-      // Use the first image or a fallback
+
       image: cat.photos?.[0]?.base64 || "/Images/fallback.png",
-      // Link must use ID to match ProductListings logic
+
       link: `/products/c/${cat.id}`,
     }));
   }, [currentCategories]);
@@ -154,7 +151,7 @@ const CategoryListings: React.FC = () => {
             </div>
           ) : (
             <>
-              {/* --- NEW SECTION: Category Name & Description Header --- */}
+              {/* ---  Category Name & Description Header --- */}
 
               <div className="mb-5">
                 <div className="flex items-center gap-2 mb-2">

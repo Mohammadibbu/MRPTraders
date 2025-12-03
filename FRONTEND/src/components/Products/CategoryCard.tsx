@@ -112,12 +112,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                       <div
                         className={`sm:-translate-y-10 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 
       transition-all duration-300 absolute top-3 left-3 backdrop-blur-sm 
-      px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm border border-white/20
-      ${
-        category.itemCount === 0
-          ? "text-gray-300 bg-gray-500"
-          : "text-secondarylight bg-secondaryDark"
-      }`}
+      px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm border border-white/20 bg-secondaryDark/40
+      ${category.itemCount === 0 ? "text-gray-300 " : "text-secondarylight  "}`}
                       >
                         {category.itemCount === 0
                           ? "No products – coming soon"

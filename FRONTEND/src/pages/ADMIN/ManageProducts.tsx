@@ -16,6 +16,58 @@ import ProductImageCell from "../../components/AdminComp/ProductImageCell";
 import { encryptData, decryptData } from "../../utils/crypto";
 import { setItem, getItem } from "../../utils/LocalDB";
 
+interface ExpandableTagsProps {
+  items?: string[] | null;
+  limit?: number;
+}
+
+const ExpandableTags: React.FC<ExpandableTagsProps> = ({
+  items,
+  limit = 2,
+}) => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+  if (!Array.isArray(items) || items.length === 0) {
+    return <span className="text-gray-400 text-sm italic">Unknown</span>;
+  }
+
+  const visibleItems = isExpanded ? items : items.slice(0, limit);
+  const hiddenCount = items.length - limit;
+
+  return (
+    <div className="flex flex-wrap items-center gap-1.5">
+      {visibleItems.map((loc, i) => (
+        <span
+          key={i}
+          className="inline-flex px-2 py-0.5 rounded text-xs font-medium bg-gray-50 border border-gray-200 text-gray-700 whitespace-nowrap"
+        >
+          {loc}
+        </span>
+      ))}
+
+      {!isExpanded && hiddenCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setIsExpanded(true)}
+          className="inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold bg-secondary/10 text-primary border border-primary/20 hover:bg-primary/10 transition-colors cursor-pointer"
+        >
+          +{hiddenCount} more
+        </button>
+      )}
+
+      {isExpanded && items.length > limit && (
+        <button
+          type="button"
+          onClick={() => setIsExpanded(false)}
+          className="inline-flex px-1.5 py-0.5 rounded text-[10px] font-semibold text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors cursor-pointer underline decoration-dotted underline-offset-2"
+        >
+          Show less
+        </button>
+      )}
+    </div>
+  );
+};
+
 const ManageProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -252,10 +304,8 @@ const ManageProducts: React.FC = () => {
                     </td>
 
                     <td className="py-3 px-4">{p.name}</td>
-                    <td className="py-3 px-4">
-                      {Array.isArray(p.origin)
-                        ? p.origin.join(", ").slice(0, 40)
-                        : "Unknown"}
+                    <td className="py-3 px-4 align-middle">
+                      <ExpandableTags items={p.origin} limit={2} />
                     </td>
                     <td className="py-3 px-4">{p.category}</td>
 

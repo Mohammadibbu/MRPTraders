@@ -22,6 +22,7 @@ import {
   ChevronLeft,
   ZoomIn,
   Check,
+  Sprout,
 } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -361,11 +362,16 @@ const ProductDetails: React.FC = () => {
   // Helper to parse origin safely (string or array)
   const getOrigins = () => {
     if (Array.isArray(product.origin)) return product.origin;
-    if (typeof product.origin === "string") return product.origin.split(",");
+    if (typeof product.origin === "string") return product?.origin?.split(",");
     return ["Unknown"];
   };
   const originList = getOrigins();
-
+  const hasApps = product.applications && product.applications.length > 0;
+  const hasHealth =
+    product.health_benefits &&
+    (Array.isArray(product.health_benefits)
+      ? product.health_benefits.length > 0
+      : !!product.health_benefits);
   return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
       {/* --- Breadcrumb Navigation --- */}
@@ -545,51 +551,82 @@ const ProductDetails: React.FC = () => {
             </div>
 
             {/* Detailed Info Cards */}
-            <div className="grid md:grid-cols-2 gap-5">
-              {product.applications && product.applications.length > 0 && (
-                <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100 h-full">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
-                    <div className="bg-blue-50 p-2.5 rounded-xl text-blue-600">
-                      <Package className="w-5 h-5" />
-                    </div>
-                    Applications
-                  </h3>
-                  <ul className="space-y-3">
-                    {product.applications.map((app, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start text-gray-600 text-sm sm:text-base leading-relaxed group hyphens-none"
-                      >
-                        <span className="w-1.5 h-1.5 bg-blue-300 rounded-full mt-2 mr-3 shrink-0 group-hover:bg-blue-500 transition-colors"></span>
-                        {app}
-                      </li>
-                    ))}
-                  </ul>
+
+            <div className="grid grid-cols-1 gap-5 h-full">
+              {hasApps && (
+                <div
+                  className={`bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 relative overflow-hidden group h-full ${
+                    !hasHealth ? "md:col-span-2" : ""
+                  }`}
+                >
+                  {/* Watermark */}
+                  <div className="absolute -bottom-6 -right-6 z-0 pointer-events-none">
+                    <Package
+                      strokeWidth={1}
+                      className="w-48 h-48 text-blue-50 opacity-60 -rotate-12 group-hover:scale-110 group-hover:rotate-0 transition-transform duration-700 ease-in-out"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-3 border-b border-gray-100 pb-4">
+                      <div className="bg-blue-50 p-2.5 rounded-xl text-blue-600 shadow-sm">
+                        <Package className="w-5 h-5" />
+                      </div>
+                      Applications
+                    </h3>
+                    <ul className="space-y-4">
+                      {product?.applications?.map((app, i) => (
+                        <li key={i} className="flex items-start group/item">
+                          <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-4 shrink-0 shadow-sm shadow-blue-200 group-hover/item:scale-125 transition-transform"></span>
+                          <span className="text-gray-600 text-sm sm:text-base leading-relaxed group-hover/item:text-gray-900 transition-colors hyphens-auto">
+                            {app}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )}
 
-              {product.health_benefits && (
-                <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100 h-full">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3">
-                    <div className="bg-green-50 p-2.5 rounded-xl text-green-600">
-                      <Leaf className="w-5 h-5" />
-                    </div>
-                    Health Benefits
-                  </h3>
-                  <ul className="space-y-3">
-                    {(Array.isArray(product.health_benefits)
-                      ? product.health_benefits
-                      : [product.health_benefits]
-                    ).map((benefit, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start text-gray-600 text-sm sm:text-base leading-relaxed hyphens-none"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-green-500 mr-3 mt-1 shrink-0" />
-                        {benefit}
-                      </li>
-                    ))}
-                  </ul>
+              {hasHealth && (
+                <div
+                  className={`bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 relative overflow-hidden group h-full ${
+                    !hasApps ? "md:col-span-2" : ""
+                  }`}
+                >
+                  {/* Watermark */}
+                  <div className="absolute -bottom-6 -right-6 z-0 pointer-events-none">
+                    <Leaf
+                      strokeWidth={1}
+                      className="w-48 h-48 text-green-50 opacity-60 -rotate-12 group-hover:scale-110 group-hover:rotate-0 transition-transform duration-700 ease-in-out"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-3 border-b border-gray-100 pb-4">
+                      <div className="bg-green-50 p-2.5 rounded-xl text-green-600 shadow-sm">
+                        <Leaf className="w-5 h-5" />
+                      </div>
+                      Health Benefits
+                    </h3>
+                    <ul className="space-y-4">
+                      {(Array.isArray(product.health_benefits)
+                        ? product.health_benefits
+                        : [product.health_benefits]
+                      ).map((benefit, i) => (
+                        <li key={i} className="flex items-start group/item">
+                          <div className="shrink-0 mt-0.5 mr-4 text-green-500 bg-green-50 rounded-full p-0.5 group-hover/item:bg-green-100 transition-colors">
+                            <CheckCircle2 className="w-4 h-4" />
+                          </div>
+                          <span className="text-gray-600 text-sm sm:text-base leading-relaxed group-hover/item:text-gray-900 transition-colors hyphens-auto">
+                            {benefit}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>
@@ -623,67 +660,88 @@ const ProductDetails: React.FC = () => {
             </div>
 
             {/* Specs Grid */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {/* Origin - FIXED: Uses col-span-2 to handle many origins & Theme Color */}
-              <div className="col-span-2 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Origin
-                  </span>
+            <div className=" relative bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:border-gray-300">
+              <div className="absolute -bottom-12 -right-12 z-0 pointer-events-none opacity-[0.04] transition-opacity duration-500">
+                <Sprout
+                  strokeWidth={0.8}
+                  className="w-64 h-64  -rotate-12 text-green-500"
+                />
+              </div>
+
+              <div className="relative z-10 flex items-center gap-2.5 px-6 py-4 bg-gray-50/60 border-b border-gray-100 backdrop-blur-sm">
+                <div className="bg-white p-1.5 rounded-md shadow-sm border border-gray-100">
+                  <Shield className="w-3.5 h-3.5 text-primary" />
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {originList.map((origin: any, idx: any) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center px-3 py-1 rounded-lg bg-primary/5 text-primary text-sm font-medium border border-primary/10 break-normal whitespace-nowrap"
-                    >
-                      {origin.trim()}
+                <span className="text-xs font-bold text-gray-600 uppercase tracking-widest">
+                  Product Specifications
+                </span>
+              </div>
+
+              <div className="relative z-10 p-6 space-y-5">
+                <div className="group/item">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <MapPin className="w-4 h-4 text-primary group-hover/item:scale-110 transition-transform" />
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      Origin
                     </span>
-                  ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {originList.map((origin: any, idx: any) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center px-2.5 py-1 rounded-md bg-primary/5 text-primary text-xs sm:text-sm font-semibold border border-primary/10 transition-colors hover:bg-primary/10"
+                      >
+                        {origin.trim()}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Shelf Life */}
-              <div className="h-full bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col justify-center">
-                <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Shelf Life
-                  </span>
-                </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base hyphens-none">
-                  {product.shelf_life || "N/A"}
-                </p>
-              </div>
+                <div className="h-px bg-gray-100 w-full" />
 
-              {/* Storage */}
-              <div className="h-full bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col justify-center">
-                <div className="flex items-center gap-2 mb-2">
-                  <Thermometer className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Storage
-                  </span>
-                </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight hyphens-none">
-                  {product.storage_conditions || "Standard"}
-                </p>
-              </div>
+                <div className="group/item">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <Calendar className="w-4 h-4 text-amber-500 group-hover/item:scale-110 transition-transform" />
+                    <span className="text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-wider">
+                      Shelf Life
+                    </span>
+                  </div>
 
-              {/* Logistics */}
-              <div className="col-span-2 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
-                <div className="flex items-center gap-2 mb-2">
-                  <Ship className="w-4 h-4 text-teal-500 group-hover:scale-110 transition-transform" />
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Logistics & Shipment
-                  </span>
+                  <p className="text-gray-900 font-medium text-sm sm:text-base leading-relaxed pl-6.5">
+                    {product.shelf_life || "N/A"}
+                  </p>
                 </div>
-                <p className="text-gray-900 font-semibold text-sm sm:text-base leading-tight hyphens-none">
-                  {product.best_shipment_modes || "Flexible Shipment Available"}
-                </p>
+
+                <div className="h-px bg-gray-100 w-full" />
+
+                <div className="group/item">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <Thermometer className="w-4 h-4 text-purple-500 group-hover/item:scale-110 transition-transform" />
+                    <span className="text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-wider">
+                      Storage
+                    </span>
+                  </div>
+                  <p className="text-gray-900 font-medium text-sm sm:text-base  leading-relaxed pl-6.5">
+                    {product.storage_conditions || "Standard"}
+                  </p>
+                </div>
+
+                <div className="h-px bg-gray-100 w-full" />
+
+                <div className="group/item">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <Ship className="w-4 h-4 text-teal-600 group-hover/item:scale-110 transition-transform" />
+                    <span className="text-xs sm:text-sm font-bold text-gray-500 uppercase tracking-wider">
+                      Logistics & Shipment
+                    </span>
+                  </div>
+                  <p className="text-gray-900 font-medium text-sm sm:text-base leading-relaxed max-w-prose pl-6.5">
+                    {product.best_shipment_modes ||
+                      "Flexible Shipment Available"}
+                  </p>
+                </div>
               </div>
             </div>
-
             <div className="bg-[#1A1C23] rounded-3xl p-6 text-white shadow-xl shadow-gray-200 relative overflow-hidden isolate mt-4">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary/20 rounded-full -ml-10 -mb-10 blur-3xl"></div>
