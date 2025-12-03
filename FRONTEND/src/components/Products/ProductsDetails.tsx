@@ -457,6 +457,12 @@ const ProductDetails: React.FC = () => {
                 <span className="text-primary font-bold text-[10px] sm:text-xs tracking-wider uppercase bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
                   {product.category}
                 </span>
+                {product.certifications?.includes("FSSAI") && (
+                  <span className="text-gray-600 font-medium text-[10px] sm:text-xs flex items-center bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg shadow-sm">
+                    <Shield className="w-3 h-3 mr-1.5 text-green-600" /> FSSAI
+                    Certified
+                  </span>
+                )}
               </div>
               <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none">
                 {product.name}
@@ -635,7 +641,7 @@ const ProductDetails: React.FC = () => {
           {/* --- RIGHT COLUMN: Info & Specs (Sticky on Desktop) --- */}
           <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-6">
             {/* Product Header */}
-            <div className="space-y-4">
+            <div className="space-y-4 px-4 sm:px-0">
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="text-primary font-bold text-[10px] sm:text-xs tracking-wider uppercase bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
                   {product.category}
@@ -648,11 +654,11 @@ const ProductDetails: React.FC = () => {
                 )}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none hidden sm:block">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none  ">
                 {product.name}
               </h1>
 
-              <div className="prose prose-gray">
+              <div className="prose prose-gray text-justify ">
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line break-words hyphens-none">
                   {product.description}
                 </p>
