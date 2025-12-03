@@ -372,6 +372,17 @@ const ProductDetails: React.FC = () => {
     (Array.isArray(product.health_benefits)
       ? product.health_benefits.length > 0
       : !!product.health_benefits);
+
+  // product name and short description
+
+  const [productname, ShortDescription] = product?.name
+    ? product.name
+        .split("(")
+        .map((part, index) =>
+          index === 1 ? part.replace(")", "").trim() : part.trim()
+        )
+    : ["", ""];
+
   return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
       {/* --- Breadcrumb Navigation --- */}
@@ -405,43 +416,57 @@ const ProductDetails: React.FC = () => {
             </button>
             <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
             <span className="text-gray-900 truncate max-w-[120px] sm:max-w-xs font-semibold">
-              {product.name}
+              {productname || product.name}
             </span>
           </nav>
         </div>
       </div>
 
       {/* --- Hero Section --- */}
-      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden h-72 sm:h-80 flex items-center justify-center">
+      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden min-h-[20rem] flex items-center justify-center py-10 sm:py-0">
         <div className="absolute inset-0 z-0">
           <img
-            src={product.photos[selectedImageIndex]?.base64}
+            src={
+              product?.photos?.[selectedImageIndex]?.base64 ||
+              "/path/to/placeholder.png"
+            }
             alt={product?.name ?? "Product"}
             className="w-full h-full object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-gray-900/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-gray-900/40" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="flex flex-col items-center"
           >
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 drop-shadow-lg px-2">
-              Premium{" "}
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 drop-shadow-lg px-2">
+              Finest{" "}
               <span className="text-primary block sm:inline">
-                {product?.name}
+                {productname || "Our Product"}
               </span>
             </h1>
 
-            <p className="text-sm sm:text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium px-4">
-              Explore our finest quality {product.name}. A premium{" "}
-              {product.category?.toLowerCase()} sourced directly from{" "}
-              {Array.isArray(product.origin)
-                ? product.origin[0]
-                : product.origin}
-              , known for its purity and taste.
+            {ShortDescription && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="text-base sm:text-lg text-white/90 font-medium mb-4 max-w-lg mx-auto drop-shadow-md"
+              >
+                {ShortDescription}
+              </motion.p>
+            )}
+            <div className="w-12 h-1 bg-primary rounded-full mb-4 opacity-80 shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
+            <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto leading-relaxed font-light drop-shadow-md">
+              Discover the premium quality of{" "}
+              <span className="text-white font-semibold">
+                {productname || "our product"}
+              </span>
+              , crafted to deliver exceptional taste and purity.
             </p>
           </motion.div>
         </div>
@@ -464,9 +489,17 @@ const ProductDetails: React.FC = () => {
                   </span>
                 )}
               </div>
-              <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none">
-                {product.name}
-              </h1>
+              <div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none">
+                  {productname || product?.name || "Our Product"}
+                </h1>
+
+                {ShortDescription && (
+                  <h3 className="text-lg sm:text-xl text-gray-700 mt-2 font-medium">
+                    {ShortDescription}
+                  </h3>
+                )}
+              </div>
             </div>
 
             {/* Main Gallery Component */}
@@ -575,13 +608,15 @@ const ProductDetails: React.FC = () => {
 
                   {/* Content */}
                   <div className="relative z-10">
-                    <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-3 border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3 ">
                       <div className="bg-blue-50 p-2.5 rounded-xl text-blue-600 shadow-sm">
                         <Package className="w-5 h-5" />
                       </div>
                       Applications
                     </h3>
-                    <ul className="space-y-4">
+                    <div className="w-full h-[0.5px] bg-gradient-to-r from-transparent via-secondaryDark/50 to-transparent " />
+
+                    <ul className="mt-5 space-y-4">
                       {product?.applications?.map((app, i) => (
                         <li key={i} className="flex items-start group/item">
                           <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-4 shrink-0 shadow-sm shadow-blue-200 group-hover/item:scale-125 transition-transform"></span>
@@ -611,13 +646,15 @@ const ProductDetails: React.FC = () => {
 
                   {/* Content */}
                   <div className="relative z-10">
-                    <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-3 border-b border-gray-100 pb-4">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-3 ">
                       <div className="bg-green-50 p-2.5 rounded-xl text-green-600 shadow-sm">
                         <Leaf className="w-5 h-5" />
                       </div>
                       Health Benefits
                     </h3>
-                    <ul className="space-y-4">
+                    <div className="w-full h-[0.5px] bg-gradient-to-r from-transparent via-secondaryDark/50 to-transparent " />
+
+                    <ul className="mt-5 space-y-4">
                       {(Array.isArray(product.health_benefits)
                         ? product.health_benefits
                         : [product.health_benefits]
@@ -654,9 +691,17 @@ const ProductDetails: React.FC = () => {
                 )}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none  ">
-                {product.name}
-              </h1>
+              <div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-[1.1] hyphens-none">
+                  {productname || product?.name || "Our Product"}
+                </h1>
+
+                {ShortDescription && (
+                  <h3 className="text-lg sm:text-xl text-gray-700 mt-2 font-medium">
+                    {ShortDescription}
+                  </h3>
+                )}
+              </div>
 
               <div className="prose prose-gray text-justify ">
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line break-words hyphens-none">
@@ -702,8 +747,7 @@ const ProductDetails: React.FC = () => {
                     ))}
                   </div>
                 </div>
-
-                <div className="h-px bg-gray-100 w-full" />
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent " />
 
                 <div className="group/item">
                   <div className="flex items-center gap-2.5 mb-1.5">
@@ -717,8 +761,7 @@ const ProductDetails: React.FC = () => {
                     {product.shelf_life || "N/A"}
                   </p>
                 </div>
-
-                <div className="h-px bg-gray-100 w-full" />
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent " />
 
                 <div className="group/item">
                   <div className="flex items-center gap-2.5 mb-1.5">
@@ -732,7 +775,7 @@ const ProductDetails: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="h-px bg-gray-100 w-full" />
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent " />
 
                 <div className="group/item">
                   <div className="flex items-center gap-2.5 mb-1.5">
@@ -758,8 +801,9 @@ const ProductDetails: React.FC = () => {
                 </div>
                 Why Choose Us?
               </h3>
+              <div className="w-full h-[0.5px] bg-gradient-to-r from-transparent via-secondary to-transparent " />
 
-              <div className="grid grid-cols-1 gap-y-3 relative z-10">
+              <div className="mt-5 grid grid-cols-1 gap-y-3 relative z-10">
                 {(Array.isArray(product.why_choose_us)
                   ? product.why_choose_us
                   : [product.why_choose_us]

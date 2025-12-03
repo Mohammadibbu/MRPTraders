@@ -18,7 +18,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     e.stopPropagation();
     navigate(`/products/d/${productid}`);
   };
-
+  const [productname, ShortDescription] = product?.name
+    ? product.name
+        .split("(")
+        .map((part, index) =>
+          index === 1 ? part.replace(")", "").trim() : part.trim()
+        )
+    : ["", ""];
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -41,13 +47,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           {/* Floating Badges */}
           <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
-            <div className="ml-auto backdrop-blur-md bg-white/30 border border-white/20 text-white px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+            <div className="ml-auto backdrop-blur-md bg-secondaryDark/30 border border-secondaryDark/10 text-white px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
               <Award
                 size={14}
                 className={
                   product.quality === "Grade A"
-                    ? "text-amber-300"
-                    : "text-blue-300"
+                    ? "text-amber-500"
+                    : "text-blue-500"
                 }
               />
               <span className="text-[10px] font-bold tracking-wide uppercase text-white drop-shadow-sm">
@@ -69,14 +75,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* ==== CONTENT SECTION ==== */}
         <div className="flex flex-col flex-grow p-4 sm:p-5">
-          {/* Title */}
           <div className="mb-3">
             <h3
               onClick={(e) => handleMoreinfo(e, product.id)}
               className="text-base sm:text-lg font-bold text-gray-800 leading-tight line-clamp-2 group-hover:text-primary transition-colors cursor-pointer"
             >
-              {product.name}
+              {productname || product.name || "product"}
             </h3>
+
+            {ShortDescription && (
+              <p className="text-sm font-medium text-gray-500 mt-1  line-clamp-2">
+                {ShortDescription}
+              </p>
+            )}
           </div>
 
           {/* ---- ORIGIN SECTION ---- */}

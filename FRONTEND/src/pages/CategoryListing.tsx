@@ -153,12 +153,15 @@ const CategoryListings: React.FC = () => {
             <>
               {/* ---  Category Name & Description Header --- */}
 
-              <div className="mb-5">
-                <div className="flex items-center gap-2 mb-2">
+              <div className=" mb-5">
+                <div className=" relative flex items-center gap-2 mb-2">
                   <Tag className="w-5 h-5 text-primary" />
                   <h2 className="text-2xl font-bold text-gray-900">
                     {searchTerm ? "Search Results" : "Shop by Category"}
                   </h2>
+                  <div className="absolute -top-10  text-[4rem] font-black text-gray-300 pointer-events-none select-none leading-none opacity-20 ">
+                    {searchTerm ? "Search Results" : "Shop by Category"}
+                  </div>
                 </div>
                 <p className="text-gray-600 max-w-3xl leading-relaxed">
                   {searchTerm

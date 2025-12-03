@@ -28,7 +28,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 }) => {
   // const [categories, setCategories] = useState<string[]>([]);
   const [origins, setOrigins] = useState<string[]>([]);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
 
   return (
     <div
-      className={`relative bg-white rounded-2xl shadow-lg border border-gray-100 mb-8 overflow-hidden transition-all duration-500 ${
+      className={`relative   mb-8 overflow-hidden transition-all duration-500 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
     >

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useApp } from "../context/AppContext";
 import ProductCard from "../components/Products/ProductCard";
 import ProductFilter from "../components/Products/ProductFilter";
@@ -27,19 +27,18 @@ const ProductListings: React.FC = () => {
   const { categoryName } = useParams<{ categoryName: string }>();
   const navigate = useNavigate();
 
-  // Get category from the categories list
+  const productsTopRef = useRef<HTMLDivElement>(null);
+
   const Thiscategory = categories?.find(
     (cat) => cat.id === categoryName?.toLowerCase().trim()
   );
 
-  // If specific category requested but not found, redirect to 404
   useEffect(() => {
     if (categoryName && !Thiscategory && !loading) {
       navigate("/404");
     }
   }, [categoryName, Thiscategory, navigate, loading]);
 
-  // Return all products if no category selected, otherwise filter by category
   const ThiscatProducts = useMemo(() => {
     if (!products) return [];
     if (Thiscategory) {
@@ -64,6 +63,14 @@ const ProductListings: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => setCurrentPage(1), [filters]);
+
+  useEffect(() => {
+    if (productsTopRef.current) {
+      productsTopRef.current.scrollIntoView({
+        block: "start",
+      });
+    }
+  }, [currentPage]);
 
   // Apply filters
   const filteredProducts = useMemo(() => {
@@ -121,7 +128,6 @@ const ProductListings: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
       {/* --- Breadcrumb Navigation --- */}
-      {/* Added overflow-x-auto for mobile scrolling if path is long */}
       <div className="bg-white/80 border-b sticky top-0 z-30 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center overflow-hidden">
           <nav className="flex items-center text-sm text-gray-500 font-medium w-full overflow-x-auto scrollbar-hide whitespace-nowrap">
@@ -153,7 +159,7 @@ const ProductListings: React.FC = () => {
       </div>
 
       {/* --- Hero Section --- */}
-      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden h-56 sm:h-80 lg:h-96 flex items-center justify-center">
+      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden min-h-[20rem] flex items-center justify-center py-10 sm:py-0">
         <div className="absolute inset-0 z-0">
           <img
             src={heroBgImage}
@@ -169,7 +175,6 @@ const ProductListings: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Adjusted text size for mobile (text-2xl) */}
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 drop-shadow-lg px-2">
               {Thiscategory ? (
                 <>
@@ -192,10 +197,12 @@ const ProductListings: React.FC = () => {
       </div>
 
       {/* --- Main Content --- */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
-        {/* Controls Header: Mobile Responsive Layout */}
+
+      <div
+        ref={productsTopRef}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 scroll-mt-20"
+      >
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          {/* Count Text */}
           <div className="text-gray-600 font-medium text-sm sm:text-base order-2 sm:order-1">
             Showing{" "}
             <span className="text-gray-900 font-bold">
@@ -204,7 +211,6 @@ const ProductListings: React.FC = () => {
             products
           </div>
 
-          {/* Filter Button - Full width on mobile */}
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`order-1 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-xl font-semibold transition-all shadow-sm ${
@@ -312,8 +318,8 @@ const ProductListings: React.FC = () => {
           ) : (
             <>
               {/* --- Category Description Header --- */}
-              <div className="mb-6 sm:mb-8">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="relative mb-6 px-5 sm:mb-8">
+                <div className=" flex items-center gap-2 mb-2">
                   <Tag className="w-5 h-5 text-primary flex-shrink-0" />
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900 break-words">
                     {filters.searchTerm
@@ -323,13 +329,20 @@ const ProductListings: React.FC = () => {
                       : "All Products"}
                   </h2>
                 </div>
-                <p className="text-sm sm:text-base text-gray-600 max-w-3xl leading-relaxed">
+                <div className="absolute -top-10  text-[5rem] font-black text-gray-300 pointer-events-none select-none leading-none opacity-20 ">
+                  {filters.searchTerm
+                    ? "Search Results"
+                    : Thiscategory
+                    ? Thiscategory.name
+                    : "All Products"}
+                </div>
+                <p className="text-sm  sm:text-base text-gray-600 max-w-3xl leading-relaxed">
                   {getShortDescription()}
                 </p>
               </div>
 
               {/* Product Grid - gap-4 on mobile, gap-6 on desktop */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 px-4 sm-px-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
                 {currentProducts.map((product) => (
                   <ProductCard
                     key={product.id}
