@@ -12,6 +12,7 @@ import {
   Package,
   Info,
   PhoneCall,
+  Plane,
 } from "lucide-react";
 import { contactDetails } from "../../utils/ContactDetails";
 import logo from "../../assets/images/logo.png";
@@ -98,20 +99,56 @@ const Header: React.FC = () => {
           </Link>
 
           {/* --- Desktop Navigation --- */}
-          <nav className="hidden lg:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-2">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? "bg-white text-primary shadow-lg"
-                      : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
+                  className={`group relative px-6 rounded-sm mx-1 py-2 text-sm font-semibold transition-all duration-300 flex items-center overflow-hidden
+          ${isActive ? "text-white" : "text-white/70 hover:text-white"}
+        `}
                 >
-                  <span className="drop-shadow-sm">{link.name}</span>
+                  {/* BACKGROUND "SHUTTLE" PLANE */}
+                  <div
+                    className={`absolute pointer-events-none transition-all duration-1000 ease-in-out -z-0
+            ${
+              isActive
+                ? "right-2 top-1 opacity-20 scale-[2.5] rotate-[15deg] translate-x-0 text-white"
+                : "opacity-0 -translate-x-24 group-hover:translate-x-40 group-hover:opacity-20 scale-[2] rotate-[10deg] text-white"
+            }
+          `}
+                  >
+                    <Plane strokeWidth={2} size={10} fill="currentColor" />
+                  </div>
+
+                  {/* Navigation Text */}
+                  <span
+                    className={`relative z-10 transition-transform duration-500 ${
+                      isActive ? "scale-105" : "group-hover:translate-x-0.5"
+                    }`}
+                  >
+                    {link.name}
+                  </span>
+
+                  {/* UNDERLINE ANIMATION */}
+                  <div
+                    className={`absolute bottom-0 left-0 h-[1.5px] transition-all duration-500 ease-out
+    
+    bg-gradient-to-r from-transparent via-white to-transparent 
+    ${
+      isActive
+        ? "w-full opacity-100"
+        : "w-0 opacity-0 group-hover:w-full group-hover:opacity-70"
+    }
+  `}
+                  />
+
+                  {/* Subtle Hover Shimmer */}
+                  {!isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  )}
                 </Link>
               );
             })}
