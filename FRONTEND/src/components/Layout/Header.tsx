@@ -234,9 +234,7 @@ const Header: React.FC = () => {
                     }`}
                   />
                   <span className="flex-grow">{link.name}</span>
-                  {isActive && (
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  )}
+                  {isActive && <Plane className="opacity-20" />}
                 </Link>
               );
             })}
