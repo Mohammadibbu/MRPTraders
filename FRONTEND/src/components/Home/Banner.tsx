@@ -18,7 +18,7 @@ const Banner: React.FC<BannerProps> = ({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Show the banner after a 3-second delay for better UX
+    // Show the banner after a 3-second delay
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 3000);

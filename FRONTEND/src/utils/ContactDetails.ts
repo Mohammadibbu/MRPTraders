@@ -15,9 +15,9 @@ interface companyDetails {
 export const contactDetails: ContactDetails = {
   email: "mrpglobaltraders2004@gmail.com",
   phoneNumber: "+919356380766",
-  linkedin: "#",
-  instagram: "#",
-  facebook: "#",
+  linkedin: "https://www.linkedin.com/in/prashant-uyyalwar-0a9639387/",
+  instagram: "https://www.linkedin.com/in/prashant-uyyalwar-0a9639387/",
+  facebook: "https://www.linkedin.com/in/prashant-uyyalwar-0a9639387/",
   location: "MRP Global Traders , chennai , India",
 };
 

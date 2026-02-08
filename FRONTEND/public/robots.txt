@@ -1,0 +1,23 @@
+# robots.txt for MRP Global Traders
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://mrpglobaltraders.com/sitemap.xml
+
+# Crawl delay (optional)
+# Crawl-delay: 10
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://mrpglobaltraders.com/sitemap.xml
+
+# Block admin pages from search engines
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /admin/products/add
+Disallow: /admin/categories/add
+
+

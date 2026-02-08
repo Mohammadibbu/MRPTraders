@@ -6,7 +6,9 @@ const serviceAccount = {
   type: envfile.FIREBASE_TYPE,
   project_id: envfile.FIREBASE_PROJECT_ID,
   private_key_id: envfile.FIREBASE_PRIVATE_KEY_ID,
-  private_key: envfile.FIREBASE_PRIVATE_KEY,
+  private_key:
+    envfile.FIREBASE_PRIVATE_KEY ||
+    process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
   client_email: envfile.FIREBASE_CLIENT_EMAIL,
   client_id: envfile.FIREBASE_CLIENT_ID,
   auth_uri: envfile.FIREBASE_AUTH_URI,

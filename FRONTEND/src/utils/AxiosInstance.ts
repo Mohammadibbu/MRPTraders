@@ -1,6 +1,8 @@
 import axios from "axios";
 // http://localhost:5000/MRPTraders/v1/
 const baseURL = import.meta.env.VITE_API_URL;
+console.log(baseURL);
+
 const axiosInstance = axios.create({
   baseURL: baseURL,
   headers: {
