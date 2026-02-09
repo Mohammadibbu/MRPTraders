@@ -25,14 +25,14 @@ const AdminHeader = ({ toggleSidebar }: any) => {
       await removeItem("admincategories");
       await removeItem("adminproducts");
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
     navigate("/admin/login");
     showtoast(
       "Logged out",
       "You have been successfully logged out",
       "success",
-      5000
+      5000,
     );
   };
 

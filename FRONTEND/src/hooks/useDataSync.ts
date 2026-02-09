@@ -54,12 +54,12 @@ export const useDataSync = () => {
 
       // If versions match, we are done. No expensive API calls.
       if (localVersion === remoteVersion && remoteVersion) {
-        console.log("✅ Data is up to date (Version match)");
+        // console.log("✅ Data is up to date (Version match)");
         setLoading(false);
         return;
       }
 
-      console.log("⚠️ Version mismatch or first load. Fetching fresh data...");
+      // console.log("⚠️ Version mismatch or first load. Fetching fresh data...");
 
       // --- PHASE 3: Fetch Fresh Data (Parallel Execution) ---
       const [catRes, prodRes] = await Promise.all([
@@ -71,8 +71,8 @@ export const useDataSync = () => {
       const newCategories: Category[] = Array.isArray(catRes?.data?.categories)
         ? catRes.data.categories
         : Array.isArray(catRes?.data)
-        ? catRes.data
-        : [];
+          ? catRes.data
+          : [];
 
       // Normalize Products
       const newProducts: Product[] = Array.isArray(prodRes?.data)

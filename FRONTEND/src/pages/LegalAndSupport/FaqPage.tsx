@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, ChevronRight, MessageCircle, Mail } from "lucide-react";
 import JoinUsSection from "../../components/Home/JoinUsSection";
+import { Helmet } from "react-helmet-async";
 
 const FAQPage: React.FC = () => {
   // Scroll to top on mount
@@ -13,6 +14,23 @@ const FAQPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
+      <Helmet>
+        <title>Frequently Asked Questions | MRP Global Traders</title>
+        <meta
+          name="description"
+          content="Find answers to common questions about MRP Global Traders' agricultural export services, shipping logistics, product quality certifications, and bulk ordering."
+        />
+        <link rel="canonical" href="https://mrpglobaltraders.com/faq" />
+        <meta
+          property="og:title"
+          content="FAQ | MRP Global Traders - Export Support"
+        />
+        <meta
+          property="og:description"
+          content="Have questions about sourcing spices, fruits, or millets? Browse our FAQ for information on global trade and logistics."
+        />
+      </Helmet>
+
       {/* --- Breadcrumb Navigation --- */}
       <div className="bg-white/80 border-b sticky top-0 z-30 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">

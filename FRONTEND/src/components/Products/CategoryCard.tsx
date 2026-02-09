@@ -118,8 +118,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                         {category.itemCount === 0
                           ? "No products – coming soon"
                           : category.itemCount === 1
-                          ? "1 product"
-                          : `${category.itemCount} products`}
+                            ? "1 product"
+                            : `${category.itemCount} products`}
                       </div>
                     )}
 

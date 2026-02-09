@@ -74,7 +74,7 @@ const AddProduct: React.FC = () => {
 
       const encryptedCache = sessionStorage.getItem("catoptions(admin)");
       const cachedCount = Number(
-        sessionStorage.getItem("catoptionscount(admin)")
+        sessionStorage.getItem("catoptionscount(admin)"),
       );
 
       if (encryptedCache && cachedCount === serverCount) {
@@ -94,7 +94,7 @@ const AddProduct: React.FC = () => {
       sessionStorage.setItem("catoptions(admin)", encryptData(options));
       sessionStorage.setItem("catoptionscount(admin)", serverCount.toString());
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       showtoast("Error", "Failed to load categories.", "error");
     } finally {
       setLoadingCategories(false);
@@ -110,7 +110,7 @@ const AddProduct: React.FC = () => {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -136,7 +136,7 @@ const AddProduct: React.FC = () => {
       showtoast(
         "Upload Limit Exceeded",
         `Max 4 images allowed. You already have ${current}.`,
-        "error"
+        "error",
       );
       return;
     }
@@ -228,7 +228,7 @@ const AddProduct: React.FC = () => {
       showtoast(
         "Missing Input",
         "Please add at least one Certification.",
-        "error"
+        "error",
       );
       return;
     }
@@ -240,7 +240,7 @@ const AddProduct: React.FC = () => {
       showtoast(
         "Incomplete Data",
         `Please add at least 3 Health Benefits.`,
-        "error"
+        "error",
       );
       return;
     }
@@ -249,7 +249,7 @@ const AddProduct: React.FC = () => {
       showtoast(
         "Incomplete Data",
         `Please add at least 3 Applications.`,
-        "error"
+        "error",
       );
       return;
     }
@@ -258,7 +258,7 @@ const AddProduct: React.FC = () => {
       showtoast(
         "Incomplete Data",
         `Please add at least 3 'Why Choose Us' points.`,
-        "error"
+        "error",
       );
       return;
     }
@@ -291,7 +291,7 @@ const AddProduct: React.FC = () => {
         showtoast(
           "Error",
           response?.data?.message ?? "Something went wrong.",
-          "error"
+          "error",
         );
       }
     } catch (err: any) {
@@ -307,14 +307,14 @@ const AddProduct: React.FC = () => {
         showtoast(
           "Session Expired",
           "Your session has expired. Please log in again.",
-          "error"
+          "error",
         );
         setTimeout(() => navigate("/admin/login"), 5000);
       } else {
         showtoast(
           "Error",
           err?.response?.data?.message || "Try again later.",
-          "error"
+          "error",
         );
       }
     } finally {

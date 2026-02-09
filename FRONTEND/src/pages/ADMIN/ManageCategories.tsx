@@ -40,7 +40,7 @@ const ManageCategories: React.FC = () => {
 
       // If count matches, load encrypted data from IndexedDB
       if (cachedCount === version) {
-        console.log("N--H--A");
+        // console.log("N--H--A");
 
         const encryptedDB = await getItem<string>("admincategories");
 
@@ -54,7 +54,7 @@ const ManageCategories: React.FC = () => {
         }
       }
 
-      console.log("API call happened (categories)");
+      // console.log("API call happened (categories)");
 
       // Fetch fresh from backend
       const res = await axios.get(getcategoriesApi);
@@ -146,7 +146,7 @@ const ManageCategories: React.FC = () => {
         showtoast(
           "Session Expired",
           "Your session has expired. Please log in again.",
-          "error"
+          "error",
         );
         setTimeout(() => navigate("/admin/login"), 5000);
       } else {
@@ -242,7 +242,7 @@ const ManageCategories: React.FC = () => {
                     <td className="py-3 px-4">
                       {c.createdAt?._seconds
                         ? new Date(
-                            c.createdAt._seconds * 1000
+                            c.createdAt._seconds * 1000,
                           ).toLocaleDateString()
                         : "Unknown"}
                     </td>

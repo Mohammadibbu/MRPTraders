@@ -106,7 +106,7 @@ const ManageProducts: React.FC = () => {
         }
       }
 
-      console.log("API call happened (products)");
+      // console.log("API call happened (products)");
 
       // Fetch fresh from server
       const res = await axios.get(getProductsApi);
@@ -147,7 +147,7 @@ const ManageProducts: React.FC = () => {
 
   // Unique categories
   const categories = Array.from(
-    new Set(products.map((p) => p.category ?? "Uncategorized"))
+    new Set(products.map((p) => p.category ?? "Uncategorized")),
   );
 
   const sortOptions = [
@@ -188,7 +188,7 @@ const ManageProducts: React.FC = () => {
       // Update count
       sessionStorage.setItem(
         "version_For_adminProducts",
-        updatedList.length.toString()
+        updatedList.length.toString(),
       );
       sessionStorage.setItem("categories_count", "0");
       showtoast("Success", "Product deleted successfully.", "success");
@@ -205,7 +205,7 @@ const ManageProducts: React.FC = () => {
         showtoast(
           "Session Expired",
           "Your session has expired. Please log in again.",
-          "error"
+          "error",
         );
         setTimeout(() => navigate("/admin/login"), 5000);
       } else {

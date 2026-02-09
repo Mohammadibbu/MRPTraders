@@ -32,6 +32,7 @@ import ImportExportSection from "../Home/ImportExportSection";
 import Accordion from "../UI/Accordian";
 import JoinUsSection from "../Home/JoinUsSection";
 import { contactDetails } from "../../utils/ContactDetails";
+import { Helmet } from "react-helmet-async";
 
 // --- INTERNAL COMPONENT: LIGHTBOX ---
 interface LightboxProps {
@@ -68,12 +69,12 @@ const ImageLightbox: React.FC<LightboxProps> = ({
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowLeft") {
         onIndexChange(
-          currentIndex === 0 ? images.length - 1 : currentIndex - 1
+          currentIndex === 0 ? images.length - 1 : currentIndex - 1,
         );
       }
       if (e.key === "ArrowRight") {
         onIndexChange(
-          currentIndex === images.length - 1 ? 0 : currentIndex + 1
+          currentIndex === images.length - 1 ? 0 : currentIndex + 1,
         );
       }
     };
@@ -84,7 +85,7 @@ const ImageLightbox: React.FC<LightboxProps> = ({
   // Handle Swipe Gesture
   const onDragEnd = (
     event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
+    info: PanInfo,
   ) => {
     const threshold = 50; // Minimum distance to swipe
     if (info.offset.x > threshold) {
@@ -125,7 +126,7 @@ const ImageLightbox: React.FC<LightboxProps> = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   onIndexChange(
-                    currentIndex === 0 ? images.length - 1 : currentIndex - 1
+                    currentIndex === 0 ? images.length - 1 : currentIndex - 1,
                   );
                 }}
                 className="absolute left-2 md:left-8 p-3 text-white bg-black/40 hover:bg-black/60 rounded-full transition-all z-[110] backdrop-blur-sm border border-white/10 group"
@@ -162,7 +163,7 @@ const ImageLightbox: React.FC<LightboxProps> = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   onIndexChange(
-                    currentIndex === images.length - 1 ? 0 : currentIndex + 1
+                    currentIndex === images.length - 1 ? 0 : currentIndex + 1,
                   );
                 }}
                 className="absolute right-2 md:right-8 p-3 text-white bg-black/40 hover:bg-black/60 rounded-full transition-all z-[110] backdrop-blur-sm border border-white/10 group"
@@ -328,7 +329,7 @@ const ProductDetails: React.FC = () => {
   const handleContactUs = () => {
     const message = `Hello, I am interested in purchasing ${product.name} . Could you please provide a quote?`;
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
+      message,
     )}`;
     window.open(whatsappUrl, "_blank");
   };
@@ -346,7 +347,7 @@ const ProductDetails: React.FC = () => {
           url: window.location.href,
         });
       } catch (error) {
-        console.log("Error sharing", error);
+        // console.log("Error sharing", error);
       }
     } else {
       navigator.clipboard.writeText(window.location.href);
@@ -379,12 +380,30 @@ const ProductDetails: React.FC = () => {
     ? product.name
         .split("(")
         .map((part, index) =>
-          index === 1 ? part.replace(")", "").trim() : part.trim()
+          index === 1 ? part.replace(")", "").trim() : part.trim(),
         )
     : ["", ""];
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
+      {/* SEO Dynamic Helmet */}
+
+      <Helmet>
+        <title>{`${productname || product.name} | Premium Export Quality - MRP Global Traders`}</title>
+        <meta
+          name="description"
+          content={product?.description?.substring(0, 160)}
+        />
+        <meta
+          property="og:title"
+          content={`${productname} | High Quality Indian Produce`}
+        />
+        <meta property="og:image" content={product.photos[0]?.base64} />
+        <link
+          rel="canonical"
+          href={`https://mrpglobaltraders.com/products/${product.id}`}
+        />
+      </Helmet>
       {/* --- Breadcrumb Navigation --- */}
       <div className="bg-white/80 border-b sticky top-0 z-40 backdrop-blur-md transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -407,7 +426,7 @@ const ProductDetails: React.FC = () => {
             <button
               onClick={() =>
                 navigate(
-                  `/products/c/${product?.category.toLowerCase().trim()}`
+                  `/products/c/${product?.category.toLowerCase().trim()}`,
                 )
               }
               className="hover:text-primary transition-colors"

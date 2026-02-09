@@ -185,10 +185,10 @@ const Footer: React.FC = () => {
                   <Mail className="w-3.5 h-3.5 text-primary" />
                 </div>
                 <a
-                  href={`mailto:${contactDetails.email}`}
+                  href={`mailto:${contactDetails.email?.[2] || "support@mrpglobaltraders.com"}`}
                   className="text-sm text-gray-400 hover:text-white transition-colors break-all"
                 >
-                  {contactDetails.email || contactDetails.email}
+                  {contactDetails.email?.[2] || "support@mrpglobaltraders.com"}
                 </a>
               </li>
             </ul>

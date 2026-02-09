@@ -37,9 +37,22 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
     // const uniqueCategories = Array.from(
     //   new Set(products?.map((product) => product.category))
     // );
-    const uniqueOrigins = Array.from(
-      new Set(products?.flatMap((product) => product.origin))
-    );
+    const seen = new Set<string>();
+    const uniqueOrigins: string[] = [];
+
+    products?.forEach((product) => {
+      product.origin.forEach((origin) => {
+        // Normalize: lowercase, remove spaces and commas
+        const normalized = origin.toLowerCase().replace(/[\s,]+/g, "");
+
+        if (!seen.has(normalized)) {
+          seen.add(normalized);
+          uniqueOrigins.push(origin); // keep original formatting
+        }
+      });
+    });
+
+    // console.log(uniqueOrigins);
 
     // setCategories(["All", ...uniqueCategories]);
     setOrigins(["All", ...uniqueOrigins]);

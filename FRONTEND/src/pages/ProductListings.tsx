@@ -4,6 +4,7 @@ import ProductCard from "../components/Products/ProductCard";
 import ProductFilter from "../components/Products/ProductFilter";
 import SkeletonLoader from "../components/UI/SkeletonLoader";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async"; // SEO Support
 import { Product } from "../types";
 import { showtoast } from "../utils/Toast";
 import JoinUsSection from "../components/Home/JoinUsSection";
@@ -30,7 +31,7 @@ const ProductListings: React.FC = () => {
   const productsTopRef = useRef<HTMLDivElement>(null);
 
   const Thiscategory = categories?.find(
-    (cat) => cat.id === categoryName?.toLowerCase().trim()
+    (cat) => cat.id === categoryName?.toLowerCase().trim(),
   );
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const ProductListings: React.FC = () => {
         return [];
       }
       return products.filter((product) =>
-        Thiscategory?.productIds?.includes(product.id)
+        Thiscategory?.productIds?.includes(product.id),
       );
     }
     return products;
@@ -72,7 +73,6 @@ const ProductListings: React.FC = () => {
     }
   }, [currentPage]);
 
-  // Apply filters
   const filteredProducts = useMemo(() => {
     return (
       ThiscatProducts?.filter((product: Product) => {
@@ -90,7 +90,6 @@ const ProductListings: React.FC = () => {
     );
   }, [ThiscatProducts, filters]);
 
-  // Pagination logic
   const totalPages =
     Math.ceil((filteredProducts?.length || 0) / PRODUCTS_PER_PAGE) || 1;
 
@@ -103,7 +102,6 @@ const ProductListings: React.FC = () => {
     showtoast(`Added ${product.name} to inquiry list!`);
   };
 
-  // --- Helper: Truncate Description to 2 sentences ---
   const getShortDescription = () => {
     if (filters.searchTerm) {
       return `Found ${filteredProducts.length} products matching "${filters.searchTerm}".`;
@@ -121,12 +119,27 @@ const ProductListings: React.FC = () => {
     return text;
   };
 
-  // Dynamic Background Image Source
   const heroBgImage =
     Thiscategory?.photos?.[0]?.base64 ?? "/Images/ProductPage.png";
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20">
+    <div className="min-h-screen bg-[#F9FAFB] font-sans selection:bg-primary/20 overflow-x-hidden">
+      {/* SEO Helmet - Dynamic Titles */}
+      <Helmet>
+        <title>
+          {filters.searchTerm
+            ? `Search: ${filters.searchTerm} | MRP Global Traders`
+            : Thiscategory
+              ? `${Thiscategory.name} Export Quality | MRP Global Traders`
+              : "Product Catalog | Premium Agricultural Exports - MRP Global Traders"}
+        </title>
+        <meta name="description" content={getShortDescription()} />
+        <link
+          rel="canonical"
+          href={`https://mrpglobaltraders.com/products${categoryName ? `/c/${categoryName}` : ""}`}
+        />
+      </Helmet>
+
       {/* --- Breadcrumb Navigation --- */}
       <div className="bg-white/80 border-b sticky top-0 z-30 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center overflow-hidden">
@@ -140,9 +153,7 @@ const ProductListings: React.FC = () => {
             <ChevronRight className="w-4 h-4 mx-2 text-gray-300 shrink-0" />
             <Link
               to="/products"
-              className={`hover:text-primary transition-colors ${
-                !Thiscategory ? "text-gray-900 font-semibold" : ""
-              }`}
+              className={`hover:text-primary transition-colors ${!Thiscategory ? "text-gray-900 font-semibold" : ""}`}
             >
               Products
             </Link>
@@ -159,7 +170,7 @@ const ProductListings: React.FC = () => {
       </div>
 
       {/* --- Hero Section --- */}
-      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden min-h-[20rem] flex items-center justify-center py-10 sm:py-0">
+      <div className="relative bg-gray-900 border-b border-gray-200 overflow-hidden min-h-[250px] md:min-h-[20rem] flex items-center justify-center py-12 md:py-0">
         <div className="absolute inset-0 z-0">
           <img
             src={heroBgImage}
@@ -169,43 +180,39 @@ const ProductListings: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-gray-900/30" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
           >
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 drop-shadow-lg px-2">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4 drop-shadow-lg">
               {Thiscategory ? (
                 <>
                   Premium{" "}
-                  <span className="text-primary block sm:inline">
-                    {Thiscategory.name}
-                  </span>
+                  <span className="text-primary">{Thiscategory.name}</span>
                 </>
               ) : (
                 "Our Product Catalog"
               )}
             </h1>
-            <p className="text-sm sm:text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium px-4">
+            <p className="text-sm md:text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed font-medium">
               {Thiscategory
                 ? `Explore our handpicked selection of high-quality ${Thiscategory.name.toLowerCase()}.`
-                : "Browse our complete collection of premium export-quality products tailored for global markets."}
+                : "Browse our complete collection of premium export-quality products."}
             </p>
           </motion.div>
         </div>
       </div>
 
       {/* --- Main Content --- */}
-
       <div
         ref={productsTopRef}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 scroll-mt-20"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 scroll-mt-20"
       >
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <div className="text-gray-600 font-medium text-sm sm:text-base order-2 sm:order-1">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <div className="text-gray-600 font-medium text-sm md:text-base order-2 md:order-1">
             Showing{" "}
-            <span className="text-gray-900 font-bold">
+            <span className="text-primary font-bold">
               {filteredProducts.length}
             </span>{" "}
             products
@@ -213,10 +220,10 @@ const ProductListings: React.FC = () => {
 
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`order-1 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-xl font-semibold transition-all shadow-sm ${
+            className={`order-1 md:order-2 w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shadow-sm ${
               showFilters
-                ? "bg-gray-900 text-white hover:bg-gray-800"
-                : "bg-white text-gray-700 border border-gray-200 hover:border-primary hover:text-primary"
+                ? "bg-gray-900 text-white"
+                : "bg-white text-gray-700 border border-gray-200"
             }`}
           >
             {showFilters ? (
@@ -224,84 +231,67 @@ const ProductListings: React.FC = () => {
             ) : (
               <SlidersHorizontal className="w-4 h-4" />
             )}
-            {showFilters ? "Close Filters" : "Filter Products"}
+            {showFilters ? "Close Filters" : "Filter Selection"}
           </button>
         </div>
 
-        {/* Top Filters Section */}
+        {/* Filters Section */}
         <AnimatePresence>
           {showFilters && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden mb-6 sm:mb-8"
+              className="overflow-hidden mb-8"
             >
-              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-gray-200 shadow-sm">
-                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
+              <div className="bg-white p-5 md:p-8 rounded-2xl border border-gray-200 shadow-sm">
+                <div className="flex items-center gap-2 mb-6 pb-2 border-b border-gray-100">
                   <Filter className="w-4 h-4 text-primary" />
-                  <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wider">
+                  <h3 className="font-bold text-gray-900 text-xs uppercase tracking-widest">
                     Refine Selection
                   </h3>
                 </div>
-                <div className="">
-                  {ThiscatProducts.length > 0 ? (
-                    <ProductFilter
-                      filters={filters}
-                      products={ThiscatProducts}
-                      onFilterChange={setFilters}
-                    />
-                  ) : (
-                    <p className="text-gray-500 italic">
-                      No filters available for this selection.
-                    </p>
-                  )}
-                </div>
+                {ThiscatProducts.length > 0 ? (
+                  <ProductFilter
+                    filters={filters}
+                    products={ThiscatProducts}
+                    onFilterChange={setFilters}
+                  />
+                ) : (
+                  <p className="text-gray-400 italic text-sm">
+                    No filters available.
+                  </p>
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Main Content Area */}
+        {/* Main Grid Area */}
         <div className="w-full">
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               <SkeletonLoader type="product" count={8} />
             </div>
           ) : ThiscatProducts.length === 0 ? (
-            // Empty Category State
-            <div className="bg-white rounded-3xl p-8 sm:p-12 text-center border border-gray-200 shadow-sm">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <PackageX className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
-                No Products Found
+            <div className="bg-white rounded-3xl p-10 text-center border border-gray-100">
+              <PackageX className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                No Products Available
               </h2>
-              <p className="text-gray-500 mb-8 max-w-md mx-auto text-sm sm:text-base">
-                {Thiscategory
-                  ? `We haven't added any products to "${Thiscategory.name}" yet.`
-                  : "Our catalog is currently empty."}
-              </p>
               <Link
                 to="/products"
-                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 text-sm font-bold text-white bg-primary rounded-xl hover:bg-primary/90 transition-all"
+                className="text-primary font-semibold flex items-center justify-center mt-4"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Go back to Product collections
+                <ArrowLeft className="w-4 h-4 mr-2" /> View all collections
               </Link>
             </div>
           ) : filteredProducts.length === 0 ? (
-            // Empty Filter Results State
-            <div className="bg-white rounded-3xl p-8 sm:p-12 text-center border border-gray-200 shadow-sm">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <SearchX className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
+            <div className="bg-white rounded-3xl p-10 text-center border border-gray-100">
+              <SearchX className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
                 No Matches Found
               </h2>
-              <p className="text-gray-500 mb-6 text-sm sm:text-base">
-                We couldn't find any products matching your current filters.
-              </p>
               <button
                 onClick={() =>
                   setFilters({
@@ -310,39 +300,30 @@ const ProductListings: React.FC = () => {
                     availability: "All",
                   })
                 }
-                className="text-primary font-bold hover:underline"
+                className="text-primary font-bold mt-2"
               >
-                Clear All Filters
+                Clear Filters
               </button>
             </div>
           ) : (
             <>
-              {/* --- Category Description Header --- */}
-              <div className="relative mb-6 px-5 sm:mb-8">
-                <div className=" flex items-center gap-2 mb-2">
-                  <Tag className="w-5 h-5 text-primary flex-shrink-0" />
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 break-words">
+              <div className="relative mb-8 px-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <Tag className="w-5 h-5 text-primary shrink-0" />
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900">
                     {filters.searchTerm
                       ? "Search Results"
                       : Thiscategory
-                      ? Thiscategory.name
-                      : "All Products"}
+                        ? Thiscategory.name
+                        : "All Products"}
                   </h2>
                 </div>
-                <div className="absolute -top-10  text-[5rem] font-black text-gray-300 pointer-events-none select-none leading-none opacity-20 ">
-                  {filters.searchTerm
-                    ? "Search Results"
-                    : Thiscategory
-                    ? Thiscategory.name
-                    : "All Products"}
-                </div>
-                <p className="text-sm  sm:text-base text-gray-600 max-w-3xl leading-relaxed">
+                <p className="text-sm md:text-base text-gray-600 max-w-3xl leading-relaxed">
                   {getShortDescription()}
                 </p>
               </div>
 
-              {/* Product Grid - gap-4 on mobile, gap-6 on desktop */}
-              <div className="grid grid-cols-1 px-4 sm-px-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
                 {currentProducts.map((product) => (
                   <ProductCard
                     key={product.id}
@@ -352,42 +333,39 @@ const ProductListings: React.FC = () => {
                 ))}
               </div>
 
-              {/* Responsive Pagination */}
+              {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-center mt-8 sm:mt-12 gap-2">
+                <div className="flex flex-wrap justify-center mt-12 gap-3">
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className="flex-1 sm:flex-none px-4 py-3 sm:py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                    className="flex-1 md:flex-none px-6 py-3 rounded-xl border border-gray-200 text-sm font-bold bg-white disabled:opacity-50"
                   >
                     Previous
                   </button>
-
-                  {/* Hide numbered pages on mobile to save space */}
-                  <div className="hidden sm:flex gap-1">
+                  <div className="hidden md:flex gap-2">
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                       (num) => (
                         <button
                           key={num}
                           onClick={() => setCurrentPage(num)}
-                          className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
+                          className={`w-11 h-11 rounded-xl text-sm font-bold transition-all ${
                             currentPage === num
-                              ? "bg-primary text-white shadow-md shadow-primary/20"
-                              : "text-gray-600 hover:bg-gray-100"
+                              ? "bg-primary text-white shadow-lg"
+                              : "bg-white text-gray-600 border border-gray-200"
                           }`}
                         >
                           {num}
                         </button>
-                      )
+                      ),
                     )}
                   </div>
-
                   <button
                     onClick={() =>
                       setCurrentPage((p) => Math.min(totalPages, p + 1))
                     }
                     disabled={currentPage === totalPages}
-                    className="flex-1 sm:flex-none px-4 py-3 sm:py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                    className="flex-1 md:flex-none px-6 py-3 rounded-xl border border-gray-200 text-sm font-bold bg-white disabled:opacity-50"
                   >
                     Next
                   </button>

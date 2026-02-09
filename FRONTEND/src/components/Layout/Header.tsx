@@ -252,7 +252,7 @@ const Header: React.FC = () => {
                 <span className="text-sm font-medium">Call Us</span>
               </a>
               <a
-                href={`mailto:${contactDetails.email}`}
+                href={`mailto:${contactDetails.email?.[2] || "support@mrpglobaltraders.com"}`}
                 className="flex items-center text-gray-600 hover:text-primary"
               >
                 <Mail className="w-5 h-5 mr-3 text-gray-400" />

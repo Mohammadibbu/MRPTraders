@@ -9,10 +9,13 @@ import {
   CheckCircle2,
   Home,
   ChevronRight,
+  Mail,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async"; // Added SEO Provider
 import JoinUsSection from "../components/Home/JoinUsSection";
 import ImageWithLoader from "../utils/imageLoader";
+import { contactDetails } from "../utils/ContactDetails"; // Added for Email array logic
 
 const certifications = [
   {
@@ -76,14 +79,11 @@ const values = [
   },
 ];
 
-// Animation Variants for Staggered Effects
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
@@ -94,7 +94,19 @@ const itemVariants = {
 
 const About: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-primary/20">
+    <div className="min-h-screen bg-white font-sans selection:bg-primary/20 overflow-x-hidden">
+      {/* SEO Section */}
+      <Helmet>
+        <title>
+          About Us | MRP Global Traders - Leading Export Trading House
+        </title>
+        <meta
+          name="description"
+          content="Learn about MRP Global Traders, your trusted partner in global agricultural trade. Committed to quality, fair trade, and sustainable sourcing of premium Indian produce."
+        />
+        <link rel="canonical" href="https://mrpglobaltraders.com/about" />
+      </Helmet>
+
       {/* --- Breadcrumb Navigation --- */}
       <div className="bg-white/80 border-b sticky top-0 z-30 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
@@ -112,7 +124,7 @@ const About: React.FC = () => {
       </div>
 
       {/* --- Hero Section --- */}
-      <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[40vh] md:h-[50vh] min-h-[350px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="/Images/AboutPage/Hero.png"
@@ -123,25 +135,24 @@ const About: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900/90" />
         </div>
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
           <motion.h1
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight"
+            className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight"
           >
             Cultivating{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-500">
               Trust
             </span>
-            , <br />
-            Delivering Excellence
+            , <br /> Delivering Excellence
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-200 font-medium max-w-2xl mx-auto leading-relaxed"
+            className="text-base md:text-xl text-gray-200 font-medium max-w-2xl mx-auto leading-relaxed"
           >
             Connecting nature’s finest with the world — sustainably, ethically,
             and efficiently.
@@ -150,30 +161,28 @@ const About: React.FC = () => {
       </section>
 
       {/* --- Who We Are Section --- */}
-      <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <section className="py-16 md:py-24 px-6 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent shadow-[0_1px_12px_0_rgba(0,0,0,0.1)]" />
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold uppercase tracking-wider mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs md:text-sm font-bold uppercase tracking-wider mb-6">
               Who We Are
             </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
-              Global Leaders in <br />
+            <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
+              Global Leaders in <br />{" "}
               <span className="text-primary">Agricultural Trade</span>
             </h2>
-            <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
+            <div className="space-y-4 md:space-y-6 text-sm md:text-lg text-gray-600 leading-relaxed">
               <p>
                 MRP GLOBAL Traders is a forward-thinking export company
                 dedicated to delivering high-quality, natural agricultural
                 products to global markets. We partner directly with local
-                farmers, cooperatives, and certified producers across Asia to
-                ensure product integrity.
+                farmers across Asia to ensure product integrity.
               </p>
               <p>
                 Our goal is simple — to create a seamless, trustworthy supply
@@ -183,7 +192,6 @@ const About: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Image Composition */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -191,30 +199,29 @@ const About: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-[8px] border-white z-10">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 md:border-[8px] border-white z-10">
               <ImageWithLoader
                 src="/Images/AboutPage/about1.png"
                 alt="Our Mission"
                 className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
-            {/* Decorative Background Blobs */}
-            <div className="absolute -top-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-0"></div>
-            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -z-0"></div>
+            <div className="absolute -top-10 -right-10 w-32 h-32 md:w-64 md:h-64 bg-primary/10 rounded-full blur-3xl -z-0"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 md:w-64 md:h-64 bg-emerald-500/10 rounded-full blur-3xl -z-0"></div>
           </motion.div>
         </div>
       </section>
 
       {/* --- Core Values Grid --- */}
-      <section className="bg-gray-50 py-20 sm:py-24 relative">
+      <section className="bg-gray-50 py-16 md:py-24 relative">
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent shadow-[0_1px_12px_0_rgba(0,0,0,0.1)]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12 md:mb-16">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4"
+              className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-4"
             >
               Our Core Values
             </motion.h2>
@@ -223,7 +230,7 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-lg text-gray-600 max-w-2xl mx-auto"
+              className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto"
             >
               The principles that guide our mission to build a better, more
               ethical, and sustainable trade ecosystem.
@@ -235,23 +242,25 @@ const About: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
           >
             {values.map((value, index) => (
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
               >
                 <div
-                  className={`w-14 h-14 rounded-xl ${value.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                  className={`w-12 h-12 md:w-14 md:h-14 rounded-xl ${value.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
                 >
-                  <value.icon className={`w-7 h-7 ${value.color}`} />
+                  <value.icon
+                    className={`w-6 h-6 md:w-7 md:h-7 ${value.color}`}
+                  />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
                   {value.title}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
                   {value.description}
                 </p>
               </motion.div>
@@ -261,32 +270,27 @@ const About: React.FC = () => {
       </section>
 
       {/* --- Certifications Section --- */}
-      <section className="relative py-20 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-16 md:py-24 max-w-7xl mx-auto px-4 md:px-8">
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent shadow-[0_1px_12px_0_rgba(0,0,0,0.1)]" />
-        <div className="bg-[#1A1C23] rounded-[2.5rem] p-8 sm:p-12 lg:p-16 relative overflow-hidden shadow-2xl">
-          {/* Background Pattern */}
+        <div className="bg-[#1A1C23] rounded-3xl md:rounded-[2.5rem] p-6 md:p-12 lg:p-16 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-full h-full opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
-            {/* Left: Text */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
+              <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-6">
                 Certified Excellence
               </h2>
-              <p className="text-lg text-gray-300 mb-10 leading-relaxed">
+              <p className="text-sm md:text-lg text-gray-300 mb-8 md:mb-10 leading-relaxed">
                 We take quality and safety seriously. MRP GLOBAL Traders is
-                certified and compliant with international standards, assuring
-                our clients of consistently safe, pure, and high-quality
-                products.
+                certified and compliant with international standards.
               </p>
 
-              {/* Cert Grid */}
-              <div className="grid sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                 {certifications.map((cert, index) => (
                   <div
                     key={index}
@@ -299,7 +303,7 @@ const About: React.FC = () => {
                       <h4 className="text-white font-bold text-sm">
                         {cert.name}
                       </h4>
-                      <p className="text-gray-400 text-xs mt-1 leading-snug">
+                      <p className="text-gray-400 text-[10px] md:text-xs mt-1 leading-snug">
                         {cert.description}
                       </p>
                     </div>
@@ -308,25 +312,62 @@ const About: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Right: Image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="relative h-[350px] lg:h-full rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+              className="relative h-64 md:h-full min-h-[300px] lg:min-h-[450px] rounded-2xl overflow-hidden shadow-2xl border border-white/10"
             >
               <ImageWithLoader
                 src="/Images/AboutPage/about2.png"
-                alt="Certifications & Standards"
+                alt="Certifications"
                 className="w-full h-full object-cover absolute inset-0"
               />
-              {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             </motion.div>
           </div>
         </div>
       </section>
+
+      {/* Dynamic Email Section */}
+      <div className="max-w-7xl mx-auto px-6 pb-16">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-200 text-center sm:text-left"
+        >
+          <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center justify-center sm:justify-start gap-2">
+            <Mail className="w-5 h-5 text-primary" /> Questions about our
+            Mission?
+          </h3>
+          <p className="text-sm md:text-base text-gray-600 mb-6">
+            Reach out to our trade experts directly for compliance or
+            partnership details:
+          </p>
+          <div className="flex flex-wrap justify-center sm:justify-start gap-4">
+            {Array.isArray(contactDetails.email) ? (
+              contactDetails.email.map((email) => (
+                <a
+                  key={email}
+                  href={`mailto:${email}`}
+                  className="text-xs md:text-sm font-semibold text-primary hover:underline break-all"
+                >
+                  {email}
+                </a>
+              ))
+            ) : (
+              <a
+                href={`mailto:${contactDetails.email}`}
+                className="text-xs md:text-sm font-semibold text-primary hover:underline break-all"
+              >
+                {contactDetails.email}
+              </a>
+            )}
+          </div>
+        </motion.div>
+      </div>
 
       <JoinUsSection />
     </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, HelpCircle } from "lucide-react";
+import { contactDetails } from "../../utils/ContactDetails";
 
 const faqData = [
   {
@@ -25,8 +26,7 @@ const faqData = [
   },
   {
     question: "How can I get a quote or place an order?",
-    answer:
-      "You can reach us via email at contact@mrpglobaltraders.com or use our contact form. Our team will respond within 24 hours.",
+    answer: `You can reach us via email at ${contactDetails.email?.[2] || "support@mrpglobaltraders.com"} or use our contact form. Our team will respond within 24 hours.`,
   },
   {
     question: "What is your typical lead time for orders?",

@@ -18,7 +18,7 @@ const AdminHeader: React.FC = () => {
       await removeItem("admincategories");
       await removeItem("adminproducts");
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       alert(e);
     }
     navigate("/admin/login");
@@ -27,7 +27,7 @@ const AdminHeader: React.FC = () => {
       "Logged out",
       "You have been successfully logged out",
       "success",
-      5000
+      5000,
     );
   };
 
