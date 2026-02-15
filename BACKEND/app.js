@@ -40,7 +40,7 @@ app.use(
       }
     },
     credentials: true,
-  })
+  }),
 );
 
 // Rate Limiting
@@ -52,7 +52,7 @@ app.use(
     message: "Too many requests from this IP. Please try again later.",
     standardHeaders: true,
     legacyHeaders: false,
-  })
+  }),
 );
 
 app.use(router);

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Product, Category } from "../types";
 import { useDataSync } from "../hooks/useDataSync";
+// import { useDataSync } from "../hooks/useDataSync copy";
 
 interface AppContextType {
   products: Product[] | null;
@@ -17,6 +18,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   // Use the separated logic hook
+  // const { products, setProducts, categories, loading } = useDataSync();
   const { products, setProducts, categories, loading } = useDataSync();
 
   // UI state remains here

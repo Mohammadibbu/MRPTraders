@@ -5,11 +5,14 @@ import AppRoutes from "./AppRoutes";
 import { Toaster } from "sonner";
 import RouteChangeLoader from "./utils/RouteChangeLoader";
 import LoadingScreen from "./utils/LoadingScreen";
+import TrackPageViews from "./utils/TrackPageViews";
 
 function App() {
   return (
     <AppProvider>
       <Router>
+        <TrackPageViews />
+
         <RouteChangeLoader />
         <AppRoutes />
         <LoadingScreen />

@@ -70,7 +70,7 @@ const addProduct = async (req, res) => {
       {
         productIds: admin.firestore.FieldValue.arrayUnion(productRef.id),
       },
-      { merge: true }
+      { merge: true },
     );
 
     //  Call this ONLY after everything succeeded
@@ -305,9 +305,9 @@ const addbulkproduct = async (req, res) => {
             name: categoryId, // optional — only if name should match ID
             productIds: admin.firestore.FieldValue.arrayUnion(...productIds),
           },
-          { merge: true }
+          { merge: true },
         );
-      }
+      },
     );
 
     await Promise.all(categoryPromises);
