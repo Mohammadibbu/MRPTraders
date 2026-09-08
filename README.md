@@ -4,6 +4,8 @@
 
 # 🌍 MRPTRADERS – Trusted Import & Export Platform
 
+![WE ARE LIVE]([https://user-images.githubusercontent.com/74038190/212750672-2f3f2b50-c84f-4ed8-a60a-849ae69ff9df.gif](https://cdn.pixabay.com/animation/2023/04/29/21/41/21-41-10-9__480.png))
+
 🔗 **Live Website:** [https://www.mrpglobaltraders.com](https://www.mrpglobaltraders.com)
 
 ---
